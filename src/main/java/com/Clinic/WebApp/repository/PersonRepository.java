@@ -1,6 +1,6 @@
 package com.Clinic.WebApp.repository;
 
-import com.Clinic.WebApp.exception.PersonNotFoundException;
+import com.Clinic.WebApp.exception.NotFoundException;
 import com.Clinic.WebApp.model.PersonsModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -45,21 +45,20 @@ public class PersonRepository {
 
     public int delete(int id){
         if (!isElementOfLibrary("Persons", "id", id))
-            throw new PersonNotFoundException(id);
+            throw new NotFoundException("Person", id);
         return jdbcTemplate.update("DELETE FROM Persons WHERE id = ?", id);
     }
 
     private List<PersonsModel> getPersonsByKind(String kind, Object object){
-        System.out.println(" DOSTAJEMY KIND = " + kind + " , Object = " + object);
         List<PersonsModel> persons = jdbcTemplate.query(GET_TASK_PROPERTIES_SQL + " WHERE "
                 + kind + "=?", BeanPropertyRowMapper.newInstance(PersonsModel.class), object);
 
-        if (persons == null || persons.get(0) == null){
+        if (persons == null || persons.isEmpty()){
             if (object.getClass().equals(String.class)) {
-                throw new PersonNotFoundException((String) object);
+                throw new NotFoundException("Person", (String) object);
             }
             else {
-                throw new PersonNotFoundException((Integer) object);
+                throw new NotFoundException("Person", (Integer) object);
             }
         }
         return persons;
