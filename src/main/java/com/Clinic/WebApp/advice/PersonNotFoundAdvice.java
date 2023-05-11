@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @ControllerAdvice
 public class PersonNotFoundAdvice {
     @ResponseBody
-    @ExceptionHandler()
+    @ExceptionHandler(PersonNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ExceptionModel taskNotFoundHandler(PersonNotFoundException ex){
         return new ExceptionModel(LocalDateTime.now(), 404, ex.getMessage());
