@@ -37,23 +37,22 @@ public class VisitsService {
         return visitsRepository.delete(id);
     }
 
-    //pet_id, vet_id, visit_date, description, rate, price
     private int updateOrPatch(int id, VisitsModel updatedVisit, boolean isPatch){
         VisitsModel oldVisit = visitsRepository.getById(id);
 
         if (isPatch) {
-            //if (updatedVisit.getPet_id() != null)
-            //    oldVisit.setPet_id(updatedVisit.getPet_id());
-            //if (updatedVisit.getVet_id() != null)
-            //    oldVisit.setVet_id(updatedVisit.getVet_id());
+            if (updatedVisit.getPet_id() != null)
+                oldVisit.setPet_id(updatedVisit.getPet_id());
+            if (updatedVisit.getVet_id() != null)
+                oldVisit.setVet_id(updatedVisit.getVet_id());
             if (updatedVisit.getVisit_date() != null)
                 oldVisit.setVisit_date(updatedVisit.getVisit_date());
             if (updatedVisit.getDescription() != null)
                 oldVisit.setDescription(updatedVisit.getDescription());
-            //if (updatedVisit.getRate() != null)
-            //    oldVisit.setRate(updatedVisit.getRate());
-            //if (updatedVisit.getPrice() != null)
-            //    oldVisit.setPrice(updatedVisit.getPrice());
+            if (updatedVisit.getRate() != null)
+                oldVisit.setRate(updatedVisit.getRate());
+            if (updatedVisit.getPrice() != null)
+                oldVisit.setPrice(updatedVisit.getPrice());
         }
         else
             oldVisit = updatedVisit;

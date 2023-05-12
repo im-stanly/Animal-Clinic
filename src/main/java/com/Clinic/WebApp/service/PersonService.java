@@ -26,7 +26,6 @@ public class PersonService {
     public List<PersonsModel> getByName(String name){
         if(Character.isLowerCase(name.charAt(0)))
             name = name.substring(0, 1).toUpperCase(Locale.ROOT) + name.substring(1);
-
         return personRepository.getByName(name);
     }
 

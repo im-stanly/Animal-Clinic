@@ -43,22 +43,22 @@ public class PetsService {
         if (isPatch) {
             if (updatedPet.getName() != null)
                 oldPet.setName(updatedPet.getName());
-            //if (updatedPet.getSex() != null)
-            //    oldPet.setSex(updatedPet.getSex());
+            if (updatedPet.getSex() != null)
+                oldPet.setSex(updatedPet.getSex());
             if (updatedPet.getType() != null)
                 oldPet.setType(updatedPet.getType());
             if (updatedPet.getRace() != null)
                 oldPet.setRace(updatedPet.getRace());
-            //if (updatedPet.getBirth_day() != null)
-            //    oldPet.setBirth_day(updatedPet.getBirth_day());
-            //if (updatedPet.getPerson_id() != null)
-            //    oldPet.setPerson_id(updatedPet.getPerson_id());
-            //if (updatedPet.getWeight() != null)
-            // oldPet.setWeight(updatedPet.getWeight());
-            //if (updatedPet.isDangerous() != null)
-            //    oldPet.setDangerous(updatedPet.isDangerous());
-            //if (updatedPet.isEstimate() != null)
-            //    oldPet.setEstimate(updatedPet.isEstimate());
+            if (updatedPet.getBirth_day() != null)
+                oldPet.setBirth_day(updatedPet.getBirth_day());
+            if (updatedPet.getPerson_id() != null)
+                oldPet.setPerson_id(updatedPet.getPerson_id());
+            if (updatedPet.getWeight() != null)
+             oldPet.setWeight(updatedPet.getWeight());
+            if (updatedPet.getDangerous() != null)
+                oldPet.setDangerous(updatedPet.getDangerous());
+            if (updatedPet.getEstimate() != null)
+                oldPet.setEstimate(updatedPet.getEstimate());
         }
         else
             oldPet = updatedPet;

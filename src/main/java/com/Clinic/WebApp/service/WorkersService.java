@@ -41,12 +41,12 @@ public class WorkersService {
         WorkersModel oldWorker = workersRepository.getById(id);
 
         if (isPatch) {
-            //if (updatedWorker.getPerson_id() != null)
-            //    oldWorker.setPerson_id(updatedWorker.getPerson_id());
+            if (updatedWorker.getPerson_id() != null)
+                oldWorker.setPerson_id(updatedWorker.getPerson_id());
             if (updatedWorker.getPosition() != null)
                 oldWorker.setPosition(updatedWorker.getPosition());
-            //if (updatedWorker.getSalary() != null)
-            //    oldWorker.setSalary(updatedWorker.getSalary());
+            if (updatedWorker.getSalary() != null)
+                oldWorker.setSalary(updatedWorker.getSalary());
             if (updatedWorker.getDate_start() != null)
                 oldWorker.setDate_start(updatedWorker.getDate_start());
             if (updatedWorker.getDate_fire() != null)
