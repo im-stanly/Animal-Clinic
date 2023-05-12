@@ -1,9 +1,7 @@
 HELP.md
 <<<<<<< HEAD
 target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+
 *.class
 
 =======
@@ -48,7 +46,6 @@ target/
 *.iws
 *.iml
 *.ipr
-<<<<<<< HEAD
 
 ### NetBeans ###
 /nbproject/private/
@@ -62,5 +59,3 @@ build/
 
 ### VS Code ###
 .vscode/
-=======
->>>>>>> origin/main
