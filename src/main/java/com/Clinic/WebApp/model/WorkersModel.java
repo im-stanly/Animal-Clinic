@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class WorkersModel {
-    private int id;
+    private Integer id;
     private Integer person_id;
     private String position;
     private Integer salary;

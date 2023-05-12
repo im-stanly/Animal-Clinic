@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PetsModel {
-    private int id;
+    private Integer id;
     private String name;
     private Character sex;
     private String type;

@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Vets_SpecialitiesModel {
-    private int vet_id;
+    private Integer vet_id;
     private String name;
     private LocalDate date_start;
 }

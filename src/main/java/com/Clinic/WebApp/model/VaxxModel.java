@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class VaxxModel {
-    private int id;
+    private Integer id;
     private Integer pet_id;
     private LocalDate period_start;
     private LocalDate period_end;
