@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public class PetsRepository {
-    private final String GET_TASK_PROPERTIES_SQL = "SELECT id, name, sex, type, race, birth_day, person_id, " +
+    private final String GET_PERSON_PROPERTIES_SQL = "SELECT id, name, sex, type, race, birth_day, person_id, " +
             "weight, dangerous, estimate FROM Pets";
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -19,7 +19,7 @@ public class PetsRepository {
     private PersonRepository personRepository;
 
     public List<PetsModel> getPets(){
-        return jdbcTemplate.query(GET_TASK_PROPERTIES_SQL + " LIMIT 20",
+        return jdbcTemplate.query(GET_PERSON_PROPERTIES_SQL + " LIMIT 20",
                 BeanPropertyRowMapper.newInstance(PetsModel.class));
     }
     public PetsModel getById(int id){
@@ -54,7 +54,7 @@ public class PetsRepository {
     }
 
     private List<PetsModel> getPetsByKind(String kind, Object object){
-        List<PetsModel> pets = jdbcTemplate.query(GET_TASK_PROPERTIES_SQL + " WHERE "
+        List<PetsModel> pets = jdbcTemplate.query(GET_PERSON_PROPERTIES_SQL + " WHERE "
                 + kind + "=?", BeanPropertyRowMapper.newInstance(PetsModel.class), object);
 
         if (pets == null || pets.get(0) == null){

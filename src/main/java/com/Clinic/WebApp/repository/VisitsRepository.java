@@ -11,14 +11,14 @@ import java.util.List;
 
 @Repository
 public class VisitsRepository {
-    private final String GET_TASK_PROPERTIES_SQL = "SELECT pet_id, vet_id, visit_date, description, rate, price FROM Visits";
+    private final String GET_VISITS_PROPERTIES_SQL = "SELECT pet_id, vet_id, visit_date, description, rate, price FROM Visits";
     @Autowired
     private JdbcTemplate jdbcTemplate;
     @Autowired
     private PersonRepository personRepository;
 
     public List<VisitsModel> getVisits(){
-        return jdbcTemplate.query(GET_TASK_PROPERTIES_SQL + " LIMIT 20",
+        return jdbcTemplate.query(GET_VISITS_PROPERTIES_SQL + " LIMIT 20",
                 BeanPropertyRowMapper.newInstance(VisitsModel.class));
     }
     public VisitsModel getById(int id){
@@ -48,7 +48,7 @@ public class VisitsRepository {
         return jdbcTemplate.update("DELETE FROM Visits WHERE id = ?", id);
     }
     private List<VisitsModel> getVisitesByKind(String kind, Object object){
-        List<VisitsModel> visits = jdbcTemplate.query(GET_TASK_PROPERTIES_SQL + " WHERE "
+        List<VisitsModel> visits = jdbcTemplate.query(GET_VISITS_PROPERTIES_SQL + " WHERE "
                 + kind + "=?", BeanPropertyRowMapper.newInstance(VisitsModel.class), object);
 
         if (visits == null || visits.get(0) == null){

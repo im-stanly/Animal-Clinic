@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public class WorkersRepository {
-    private final String GET_TASK_PROPERTIES_SQL = "SELECT id, person_id, position, salary, date_start, date_fire, " +
+    private final String GET_WORKER_PROPERTIES_SQL = "SELECT id, person_id, position, salary, date_start, date_fire, " +
             "fav_animal FROM Workers";
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -19,7 +19,7 @@ public class WorkersRepository {
     private PersonRepository personRepository;
 
     public List<WorkersModel> getWorkers(){
-        return jdbcTemplate.query(GET_TASK_PROPERTIES_SQL + " LIMIT 20",
+        return jdbcTemplate.query(GET_WORKER_PROPERTIES_SQL + " LIMIT 20",
                 BeanPropertyRowMapper.newInstance(WorkersModel.class));
     }
 
@@ -52,7 +52,7 @@ public class WorkersRepository {
         return jdbcTemplate.update("DELETE FROM Medicine WHERE id = ?", id);
     }
     private List<WorkersModel> getWorkersByKind(String kind, Object object){
-        List<WorkersModel> workers = jdbcTemplate.query(GET_TASK_PROPERTIES_SQL + " WHERE "
+        List<WorkersModel> workers = jdbcTemplate.query(GET_WORKER_PROPERTIES_SQL + " WHERE "
                 + kind + "=?", BeanPropertyRowMapper.newInstance(WorkersModel.class), object);
 
         if (workers == null || workers.get(0) == null){

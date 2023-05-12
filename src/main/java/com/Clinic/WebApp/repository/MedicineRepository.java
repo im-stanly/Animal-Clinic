@@ -10,14 +10,14 @@ import java.util.List;
 
 @Repository
 public class MedicineRepository {
-    private final String GET_TASK_PROPERTIES_SQL = "SELECT id, name, company, type FROM Medicine";
+    private final String GET_MEDICINE_PROPERTIES_SQL = "SELECT id, name, company, type FROM Medicine";
     @Autowired
     private JdbcTemplate jdbcTemplate;
     @Autowired
     private PersonRepository personRepository;
 
     public List<MedicineModel> getMedicines(){
-        return jdbcTemplate.query(GET_TASK_PROPERTIES_SQL + " LIMIT 20",
+        return jdbcTemplate.query(GET_MEDICINE_PROPERTIES_SQL + " LIMIT 20",
                 BeanPropertyRowMapper.newInstance(MedicineModel.class));
     }
     public MedicineModel getById(int id){
@@ -45,7 +45,7 @@ public class MedicineRepository {
         return jdbcTemplate.update("DELETE FROM Medicine WHERE id = ?", id);
     }
     private List<MedicineModel> getMedicinesByKind(String kind, Object object){
-        List<MedicineModel> medicines = jdbcTemplate.query(GET_TASK_PROPERTIES_SQL + " WHERE "
+        List<MedicineModel> medicines = jdbcTemplate.query(GET_MEDICINE_PROPERTIES_SQL + " WHERE "
                 + kind + "=?", BeanPropertyRowMapper.newInstance(MedicineModel.class), object);
 
         if (medicines == null || medicines.get(0) == null){
