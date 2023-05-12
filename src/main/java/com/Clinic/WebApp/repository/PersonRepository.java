@@ -11,12 +11,13 @@ import java.util.List;
 
 @Repository
 public class PersonRepository {
-    private final String GET_TASK_PROPERTIES_SQL = "SELECT id, first_name, last_name, address, city, telephone, email FROM Persons";
+    private final String GET_PERSON_PROPERTIES_SQL = "SELECT id, first_name, last_name, address, city, " +
+            "telephone, email FROM Persons";
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
     public List<PersonsModel> getPersons(){
-        return jdbcTemplate.query(GET_TASK_PROPERTIES_SQL + " LIMIT 20",
+        return jdbcTemplate.query(GET_PERSON_PROPERTIES_SQL + " LIMIT 20",
                 BeanPropertyRowMapper.newInstance(PersonsModel.class));
     }
     public PersonsModel getById(int id){
@@ -38,19 +39,20 @@ public class PersonRepository {
 
     public int update(int oldId, PersonsModel person){
         return jdbcTemplate.update(
-                "UPDATE task SET first_name = ?, last_name = ?, address = ?, city = ?, telephone = ?, email = ? WHERE id=?",
+                "UPDATE Persons SET first_name = ?, last_name = ?, address = ?, city = ?, telephone = ?, " +
+                        "email = ? WHERE id=?",
                 person.getFirst_name(), person.getLast_name(), person.getAddress(), person.getCity(),
-                person.getTelephone(), person.getEmail(), oldId);
+                person.getTelephone(), person.getEmail(), oldId) > 0 ? 202 : 418;
     }
 
     public int delete(int id){
         if (!isElementOfLibrary("Persons", "id", id))
             throw new NotFoundException("Person", id);
-        return jdbcTemplate.update("DELETE FROM Persons WHERE id = ?", id);
+        return jdbcTemplate.update("DELETE FROM Persons WHERE id = ?", id) > 0 ? 202 : 418;
     }
 
     private List<PersonsModel> getPersonsByKind(String kind, Object object){
-        List<PersonsModel> persons = jdbcTemplate.query(GET_TASK_PROPERTIES_SQL + " WHERE "
+        List<PersonsModel> persons = jdbcTemplate.query(GET_PERSON_PROPERTIES_SQL + " WHERE "
                 + kind + "=?", BeanPropertyRowMapper.newInstance(PersonsModel.class), object);
 
         if (persons == null || persons.isEmpty()){

@@ -35,7 +35,7 @@ public class MedicineRepository {
 
     public int update(int oldId, MedicineModel medcine){
         return jdbcTemplate.update(
-                "UPDATE task SET name = ?, company = ?, type = ? WHERE id=?",
+                "UPDATE Medicine SET name = ?, company = ?, type = ? WHERE id=?",
                 medcine.getName(), medcine.getCompany(), medcine.getType(), oldId);
     }
 

@@ -11,7 +11,8 @@ import java.util.List;
 
 @Repository
 public class PetsRepository {
-    private final String GET_TASK_PROPERTIES_SQL = "SELECT id, name, sex, type, race, birth_day, person_id, weight, dangerous, estimate FROM Pets";
+    private final String GET_TASK_PROPERTIES_SQL = "SELECT id, name, sex, type, race, birth_day, person_id, " +
+            "weight, dangerous, estimate FROM Pets";
     @Autowired
     private JdbcTemplate jdbcTemplate;
     @Autowired
@@ -28,20 +29,22 @@ public class PetsRepository {
     public int save(List<PetsModel> pets){
         pets.forEach( singlePer ->
                 jdbcTemplate.update(
-                        "INSERT INTO Pets(name, sex, type, race, birth_day, person_id, weight, dangerous, estimate) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                        "INSERT INTO Pets(name, sex, type, race, birth_day, person_id, weight, dangerous, estimate) " +
+                                "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)",
                         singlePer.getName(), singlePer.getSex(), singlePer.getType(),
                         singlePer.getRace(), singlePer.getBirth_day(), singlePer.getPerson_id(),
-                        singlePer.getWeight(), singlePer.isDangerous(), singlePer.isEstimate()
+                        singlePer.getWeight(), singlePer.getDangerous(), singlePer.getEstimate()
                 ));
         return 202;
     }
 
     public int update(int oldId, PetsModel pets){
         return jdbcTemplate.update(
-                "UPDATE Pets SET name = ?, sex = ?, type = ?, race = ?, birth_day = ?, person_id = ?, weight = ?, dangerous = ?, estimate = ? WHERE id=?",
+                "UPDATE Pets SET name = ?, sex = ?, type = ?, race = ?, birth_day = ?, person_id = ?, weight = ?, " +
+                        "dangerous = ?, estimate = ? WHERE id=?",
                 pets.getName(), pets.getSex(), pets.getType(),
                 pets.getRace(), pets.getBirth_day(), pets.getPerson_id(),
-                pets.getWeight(), pets.isDangerous(), pets.isEstimate(), oldId);
+                pets.getWeight(), pets.getDangerous(), pets.getEstimate(), oldId);
     }
 
     public int delete(int id){
@@ -51,7 +54,6 @@ public class PetsRepository {
     }
 
     private List<PetsModel> getPetsByKind(String kind, Object object){
-        System.out.println(" DOSTAJEMY KIND = " + kind + " , Object = " + object);
         List<PetsModel> pets = jdbcTemplate.query(GET_TASK_PROPERTIES_SQL + " WHERE "
                 + kind + "=?", BeanPropertyRowMapper.newInstance(PetsModel.class), object);
 

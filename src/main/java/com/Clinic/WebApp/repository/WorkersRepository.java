@@ -5,11 +5,14 @@ import com.Clinic.WebApp.model.WorkersModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class WorkersRepository {
-    private final String GET_TASK_PROPERTIES_SQL = "SELECT id, person_id, position, salary, date_start, date_fire, fav_animal FROM Workers";
+    private final String GET_TASK_PROPERTIES_SQL = "SELECT id, person_id, position, salary, date_start, date_fire, " +
+            "fav_animal FROM Workers";
     @Autowired
     private JdbcTemplate jdbcTemplate;
     @Autowired
@@ -27,7 +30,8 @@ public class WorkersRepository {
     public int save(List<WorkersModel> medicines){
         medicines.forEach( singlePer ->
                 jdbcTemplate.update(
-                        "INSERT INTO Workers(person_id, position, salary, date_start, date_fire, fav_animal) VALUES(?, ?, ?, ?, ?, ?)",
+                        "INSERT INTO Workers(person_id, position, salary, date_start, date_fire, fav_animal) " +
+                                "VALUES(?, ?, ?, ?, ?, ?)",
                         singlePer.getPerson_id(), singlePer.getPosition(), singlePer.getSalary(),
                         singlePer.getDate_start(), singlePer.getDate_fire(), singlePer.getFav_animal()
                 ));
@@ -36,7 +40,8 @@ public class WorkersRepository {
 
     public int update(int oldId, WorkersModel worker){
         return jdbcTemplate.update(
-                "UPDATE task SET person_id = ?, position = ?, salary = ?, date_start = ?, date_fire = ?, fav_animal = ? WHERE id=?",
+                "UPDATE Workers SET person_id = ?, position = ?, salary = ?, date_start = ?, date_fire = ?, " +
+                        "fav_animal = ? WHERE id=?",
                 worker.getPerson_id(), worker.getPosition(), worker.getSalary(),
                 worker.getDate_start(), worker.getDate_fire(), worker.getFav_animal(), oldId);
     }

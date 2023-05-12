@@ -28,7 +28,7 @@ public class VisitsRepository {
     public int save(List<VisitsModel> visits){
         visits.forEach( singlePer ->
                 jdbcTemplate.update(
-                        "INSERT INTO Medicine(pet_id, vet_id, visit_date, description, rate, price) VALUES(?, ?, ?, ?, ?, ?)",
+                        "INSERT INTO Visits(pet_id, vet_id, visit_date, description, rate, price) VALUES(?, ?, ?, ?, ?, ?)",
                         singlePer.getPet_id(), singlePer.getVet_id(), singlePer.getVisit_date(),
                         singlePer.getDescription(), singlePer.getRate(), singlePer.getPrice()
                 ));
@@ -37,7 +37,7 @@ public class VisitsRepository {
 
     public int update(int oldId, VisitsModel visit){
         return jdbcTemplate.update(
-                "UPDATE task SET pet_id = ?, vet_id = ?, visit_date = ?, description = ?, rate = ?, price = ? WHERE id=?",
+                "UPDATE Visits SET pet_id = ?, vet_id = ?, visit_date = ?, description = ?, rate = ?, price = ? WHERE id=?",
                 visit.getPet_id(), visit.getVet_id(), visit.getVisit_date(),
                 visit.getDescription(), visit.getRate(), visit.getPrice(), oldId);
     }
