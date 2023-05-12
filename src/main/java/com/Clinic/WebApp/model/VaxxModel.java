@@ -11,9 +11,9 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class VaxxModel {
     private int id;
-    private int pet_id;
+    private Integer pet_id;
     private LocalDate period_start;
     private LocalDate period_end;
-    private boolean done;
+    private Boolean done;
     private String type;
 }

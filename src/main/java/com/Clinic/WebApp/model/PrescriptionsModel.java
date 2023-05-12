@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PrescriptionsModel {
-    private int id_visit;
-    private int med_id;
-    private int amount;
-    private double price;
+    private Integer id_visit;
+    private Integer med_id;
+    private Integer amount;
+    private Double price;
     private String dosing;
 }

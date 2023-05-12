@@ -11,9 +11,9 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class WorkersModel {
     private int id;
-    private int person_id;
+    private Integer person_id;
     private String position;
-    private int salary;
+    private Integer salary;
     private LocalDate date_start;
     private LocalDate date_fire;
     private String fav_animal;
