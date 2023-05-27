@@ -7,21 +7,22 @@ DROP TABLE IF EXISTS Holidays CASCADE;
 DROP TABLE IF EXISTS WorkHours CASCADE;
 DROP TABLE IF EXISTS Pets CASCADE;
 DROP TABLE IF EXISTS Vets CASCADE;
-DROP TABLE IF EXISTS Workers CASCADE;
+DROP TABLE IF EXISTS Employees CASCADE;
 DROP TABLE IF EXISTS Persons CASCADE;
 DROP TABLE IF EXISTS Medicine CASCADE;
+DROP TABLE IF EXISTS Accounts CASCADE;
 
 CREATE TABLE Persons (
     id          SERIAL          PRIMARY KEY,
-    first_name  VARCHAR(255)    NOT NULL,
-    last_name   VARCHAR(255)    NOT NULL,
+    first_name  VARCHAR(30)     NOT NULL,
+    last_name   VARCHAR(50)     NOT NULL,
     address     VARCHAR(255),
     city        VARCHAR(255),
     telephone   VARCHAR(20),
     email       VARCHAR(255)
 );
 
-CREATE TABLE Workers (
+CREATE TABLE Employees (
     id          SERIAL          PRIMARY KEY,
     person_id   INTEGER         REFERENCES Persons(id) NOT NULL,
     position    VARCHAR(255)    NOT NULL,
@@ -32,7 +33,7 @@ CREATE TABLE Workers (
 );
 
 CREATE TABLE Vets (
-    id          INTEGER         PRIMARY KEY REFERENCES Workers(id) NOT NULL UNIQUE,
+    id          INTEGER         PRIMARY KEY REFERENCES Employees(id) NOT NULL UNIQUE,
     office      VARCHAR(255)
 );
 
@@ -75,13 +76,13 @@ CREATE TABLE Prescriptions (
 );
 
 CREATE TABLE Holidays (
-    worker_id   INTEGER         REFERENCES Workers(id) NOT NULL,
+    employee_id   INTEGER       REFERENCES Employees(id) NOT NULL,
     start_date  DATE            CHECK(start_date  < end_date) NOT NULL,
     end_date    DATE
 );
 
 CREATE TABLE WorkHours (
-    worker_id   INTEGER         REFERENCES Workers(id) NOT NULL,
+    employee_id INTEGER         REFERENCES Employees(id) NOT NULL,
     "WeekDay"   VARCHAR(10)     CHECK("WeekDay" IN ('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday')),
     start_time  TIME            CHECK(start_time < end_time) NOT NULL,
     end_time    TIME            NOT NULL
@@ -100,6 +101,14 @@ CREATE TABLE Vets_Specialities (
     vet_id      INTEGER         REFERENCES Vets(id),
     name        VARCHAR(255)    NOT NULL,
     date_start  DATE            NOT NULL
+);
+
+CREATE TABLE Accounts (
+    id          SERIAL          PRIMARY KEY,
+    email       VARCHAR(255)    UNIQUE REFERENCES Accounts (email),
+    username    VARCHAR(50)     NOT NULL,
+    password    VARCHAR(255)    NOT NULL,
+    user_permissions VARCHAR(255)
 );
 
 COPY persons (first_name, last_name, address, city, telephone, email) FROM stdin (Delimiter ',');
@@ -135,7 +144,7 @@ rabies, 2, 2023-03-05, 2023-05-05, 0
 feline calcivirus, 1, 2023-04-17, 2023-06-17, 1
 \.
 
-COPY workers(person_id, position, salary, date_start, fav_animal) FROM stdin (Delimiter ',');
+COPY Employees(person_id, position, salary, date_start, fav_animal) FROM stdin (Delimiter ',');
 2,vet, 37800, 2019-02-01,Bobby
 1,vet, 47100, 2019-03-01,Dog
 6,vet, 42600, 2021-08-01,\N
@@ -145,7 +154,7 @@ COPY workers(person_id, position, salary, date_start, fav_animal) FROM stdin (De
 5,vet, 42000, 2019-04-01,2020_05_17
 \.
 
-COPY Holidays(worker_id, start_date, end_date) FROM stdin (Delimiter ',');
+COPY Holidays(employee_id, start_date, end_date) FROM stdin (Delimiter ',');
 1, 2021-07-01, 2021-07-15
 2, 2021-08-04, 2021-08-16
 1, 2022-11-23, 2022-12-01
@@ -196,7 +205,7 @@ COPY Prescriptions (id_visit, med_id, amount, price, dosing) FROM stdin (Delimit
 5, 3, 16, 12, 1
 \.
 
-COPY workHours(worker_id, "WeekDay", start_time, end_time) FROM stdin (Delimiter '|');
+COPY workHours(employee_id, "WeekDay", start_time, end_time) FROM stdin (Delimiter '|');
 1|Monday|8:00:00|13:00:00
 1|Wednesday|8:00:00|13:00:00
 1|Thursday|8:00:00|13:00:00
