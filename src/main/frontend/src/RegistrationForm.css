@@ -1,0 +1,58 @@
+/* RegistrationForm.css */
+
+.registration-form-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.registration-form-container h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.registration-form-container input[type="text"],
+.registration-form-container input[type="email"],
+.registration-form-container input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 16px;
+}
+
+.registration-form-container button[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  background-color: #f5a623;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.registration-form-container button[type="submit"]:hover {
+  background-color: #e6911f;
+}
+
+.back-link {
+  display: inline-block;
+  padding: 10px 15px;
+  margin-bottom: 20px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #f5a623;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.back-link:hover {
+  background-color: #e6911f;
+}
