@@ -19,9 +19,7 @@ function RegistrationForm() {
 
   const handleRegistrationSubmit = (event) => {
     event.preventDefault();
-    // Wysyłanie żądania rejestracji
     console.log('Rejestracja:', registrationData);
-    // Czyść pola formularza
     setRegistrationData({
       username: '',
       email: '',
