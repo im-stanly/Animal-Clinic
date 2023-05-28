@@ -8,6 +8,7 @@ function RegistrationForm() {
     email: '',
     password: ''
   });
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -20,16 +21,42 @@ function RegistrationForm() {
   const handleRegistrationSubmit = (event) => {
     event.preventDefault();
     console.log('Rejestracja:', registrationData);
-    setRegistrationData({
-      username: '',
-      email: '',
-      password: ''
-    });
+
+    fetch('http://localhost:8080/accounts/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify([registrationData])
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          setErrorMessage('Zarejestrowano pomyślnie.');
+          setRegistrationData({
+            username: '',
+            email: '',
+            password: ''
+          });
+        } else if (response.status === 401) {
+          setErrorMessage('Podany adres email jest już zajęty.');
+        } else if (response.status === 406) {
+            setErrorMessage('Podana nazwa jest już zajęta.');
+        }
+        else {
+          setErrorMessage('Wystąpił błąd serwera.');
+        }
+      })
+      .catch((error) => {
+        console.log('Wystąpił błąd:', error);
+        setErrorMessage('Wystąpił błąd serwera.');
+      });
   };
 
   return (
     <div className="registration-form-container">
-      <Link to="/" className="back-link">Powrót</Link>
+      <Link to="/" className="back-link">
+        Powrót
+      </Link>
       <h2>Zarejestruj się</h2>
       <form onSubmit={handleRegistrationSubmit}>
         <input
@@ -58,6 +85,7 @@ function RegistrationForm() {
         />
         <button type="submit">Zarejestruj</button>
       </form>
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
     </div>
   );
 }
