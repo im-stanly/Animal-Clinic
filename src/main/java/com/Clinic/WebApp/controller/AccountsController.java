@@ -1,7 +1,9 @@
 package com.Clinic.WebApp.controller;
 
 import com.Clinic.WebApp.Security;
+import com.Clinic.WebApp.exception.EmailAlreadyExistsException;
 import com.Clinic.WebApp.exception.InvalidPasswordException;
+import com.Clinic.WebApp.exception.UsernameAlreadyExistsException;
 import com.Clinic.WebApp.exception.UsernameNotFoundException;
 import com.Clinic.WebApp.model.AccountsModel;
 import com.Clinic.WebApp.service.AccountsService;
@@ -31,7 +33,6 @@ public class AccountsController {
         String encryptedPassword = Security.encode(newAccount.get(0).getPassword());
         newAccount.get(0).setPassword(encryptedPassword);
 
-        AccountsModel existingAccount;
         try {
             accountsService.findByUsername(newAccount.get(0).getUsername());
         } catch(UsernameNotFoundException ex) {
@@ -55,6 +56,17 @@ public class AccountsController {
     public ResponseEntity<Map<String, String>> add(@RequestBody List<AccountsModel> newAccount) {
         String encryptedPassword = Security.encode(newAccount.get(0).getPassword());
         newAccount.get(0).setPassword(encryptedPassword);
+
+        try {
+            accountsService.findByEmail(newAccount.get(0).getEmail());
+            accountsService.isUsernameTaken(newAccount.get(0).getUsername());
+        } catch (EmailAlreadyExistsException ex) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(createErrorResponse("Email already exsists."));
+        } catch (UsernameAlreadyExistsException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(createErrorResponse("Username already exsists."));
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(createErrorResponse("Server Error."));
+        }
 
         try {
             accountsService.save(newAccount);

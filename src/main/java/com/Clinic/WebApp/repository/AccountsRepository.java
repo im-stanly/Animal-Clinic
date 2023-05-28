@@ -1,8 +1,6 @@
 package com.Clinic.WebApp.repository;
 
-import com.Clinic.WebApp.exception.InvalidPasswordException;
-import com.Clinic.WebApp.exception.NotFoundException;
-import com.Clinic.WebApp.exception.UsernameNotFoundException;
+import com.Clinic.WebApp.exception.*;
 import com.Clinic.WebApp.model.AccountsModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -29,6 +27,24 @@ public class AccountsRepository {
         return getAccountsByKind("id", id).get(0);
     }
 
+    public boolean isUsernameTaken(String username) {
+        List<AccountsModel> accounts = jdbcTemplate.query(GET_ACCOUNTS_PROPERTIES_SQL + " WHERE "
+                + "username = ?", BeanPropertyRowMapper.newInstance(AccountsModel.class), username);
+        if (!accounts.isEmpty()){
+            throw new UsernameAlreadyExistsException();
+        }
+        return false;
+    }
+
+    public boolean findByEmail(String email){
+        List<AccountsModel> accounts = jdbcTemplate.query(GET_ACCOUNTS_PROPERTIES_SQL + " WHERE "
+                + "email = ?", BeanPropertyRowMapper.newInstance(AccountsModel.class), email);
+        if (!accounts.isEmpty()){
+            throw new EmailAlreadyExistsException();
+        }
+        return false;
+    }
+
     public AccountsModel findByUsername(String username){
         List<AccountsModel> accounts = jdbcTemplate.query(GET_ACCOUNTS_PROPERTIES_SQL + " WHERE "
                 + "username = ?", BeanPropertyRowMapper.newInstance(AccountsModel.class), username);
@@ -43,7 +59,6 @@ public class AccountsRepository {
                 + "username = ? AND password = ?", BeanPropertyRowMapper.newInstance(AccountsModel.class), username, password);
 
         if (accounts.isEmpty()){
-            System.out.printf("euiryrweyui");
             throw new InvalidPasswordException();
         }
         return accounts;
