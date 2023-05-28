@@ -21,7 +21,7 @@ public class AccountsService {
         return accountsRepository.findByUsername(username);
     }
 
-    public AccountsModel findByUsernameAndPassword(String username, String password){
+    public List<AccountsModel> findByUsernameAndPassword(String username, String password){
         return accountsRepository.findByUsernameAndPassword(username, password);
     }
 

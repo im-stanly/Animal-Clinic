@@ -10,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin
@@ -25,33 +27,54 @@ public class AccountsController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestBody List<AccountsModel> newAccount){
+    public ResponseEntity<Map<String, String>> loginUser(@RequestBody List<AccountsModel> newAccount){
         String encryptedPassword = Security.encode(newAccount.get(0).getPassword());
         newAccount.get(0).setPassword(encryptedPassword);
 
+        AccountsModel existingAccount;
         try {
             accountsService.findByUsername(newAccount.get(0).getUsername());
         } catch(UsernameNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account dont exsists.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(createErrorResponse("Account does not exist."));
         } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Server Error.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(createErrorResponse("Server Error."));
         }
 
         try {
             accountsService.findByUsernameAndPassword(newAccount.get(0).getUsername(), newAccount.get(0).getPassword());
-            return ResponseEntity.ok("User authenticated successfully.");
-        } catch (InvalidPasswordException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Wrong password.");
+        } catch(InvalidPasswordException ex) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(createErrorResponse("Wrong password."));
         } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Server Error.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(createErrorResponse("Server Error."));
         }
+
+        return ResponseEntity.ok(createSuccessResponse("User authenticated successfully."));
     }
 
     @PostMapping("/register")
-    public int add(@RequestBody List<AccountsModel> newAccount) {
+    public ResponseEntity<Map<String, String>> add(@RequestBody List<AccountsModel> newAccount) {
         String encryptedPassword = Security.encode(newAccount.get(0).getPassword());
         newAccount.get(0).setPassword(encryptedPassword);
-        return accountsService.save(newAccount);
+
+        try {
+            accountsService.save(newAccount);
+            return ResponseEntity.ok(createSuccessResponse("Account created successfully."));
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(createErrorResponse("Server Error."));
+        }
     }
 
+    private Map<String, String> createSuccessResponse(String message) {
+        Map<String, String> response = new HashMap<>();
+        response.put("success", "true");
+        response.put("message", message);
+        return response;
+    }
+
+    private Map<String, String> createErrorResponse(String errorMessage) {
+        Map<String, String> response = new HashMap<>();
+        response.put("success", "false");
+        response.put("error", errorMessage);
+        return response;
+    }
 }

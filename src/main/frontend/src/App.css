@@ -131,3 +131,11 @@
 .modal-close-button:hover {
   background-color: #e6911f;
 }
+
+.success-message {
+  color: #33ad33;
+}
+
+.error-message {
+  color: #ff3333;
+}

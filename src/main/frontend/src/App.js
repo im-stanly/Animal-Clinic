@@ -1,47 +1,85 @@
+// App.js
+
 import React, { useState } from 'react';
 import './App.css';
 
 function App() {
   const [showLogin, setShowLogin] = useState(false);
-  const [loginData, setLoginData] = useState({
-    username: '',
-    password: ''
-  });
+    const [loginData, setLoginData] = useState({ username: '', password: '' });
+    const [loginResult, setLoginResult] = useState({ success: false, message: '' });
 
-  const handleLoginClick = () => {
-    setShowLogin(true);
-  };
+    const handleLoginClick = () => {
+      setShowLogin(true);
+    };
 
-  const handleCloseModal = () => {
-    setShowLogin(false);
-  };
+    const handleCloseModal = () => {
+      setShowLogin(false);
+    };
 
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setLoginData((prevData) => ({
-      ...prevData,
-      [name]: value
-    }));
-  };
+    const handleInputChange = (event) => {
+      const { name, value } = event.target;
+      setLoginData({ ...loginData, [name]: value });
+    };
 
-  const handleLoginSubmit = (event) => {
-    event.preventDefault();
-    // Wysyłanie żądania logowania
-    console.log('Logowanie:', loginData);
-    // Czyść pola formularza
-    setLoginData({
-      username: '',
-      password: ''
-    });
-  };
+    const handleLoginSubmit = async (event) => {
+      event.preventDefault();
+
+      console.log('Wysyłany JSON:', JSON.stringify([loginData]));
+
+      try {
+        const response = await fetch('http://localhost:8080/accounts/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify([loginData])
+        });
+
+        const data = await response.json();
+
+        if (response.status === 200) {
+          setLoginResult({
+            success: true,
+            message: 'Zalogowano pomyślnie.'
+          });
+        } else if (response.status == 401) {
+          setLoginResult({
+            success: false,
+            message: 'Błędne hasło.'
+          });
+        } else if (response.status === 404) {
+          setLoginResult({
+            success: false,
+            message: 'Konto o podanym loginie nie istnieje.'
+          });
+        } else {
+          setLoginResult({
+            success: false,
+            message: 'Wystąpił błąd serwera.'
+          });
+        }
+        } catch (error) {
+          console.log('Wystąpił błąd:', error);
+           setLoginResult({
+             success: false,
+             message: 'Wystąpił błąd serwera.'
+          });
+        }
+
+      setLoginData({ username: '', password: '' });
+    };
 
   return (
     <div className="app-container">
       <header className="header">
         <h1 className="title">Animal Clinic</h1>
         <div className="links">
-          <a className="link" href="/registration">Zarejestruj się</a>
-          <a className="link" onClick={handleLoginClick}>Zaloguj się</a>
+          <a className="link" href="/registration">
+            Zarejestruj się
+          </a>
+          <a className="link" onClick={handleLoginClick}>
+            Zaloguj się
+          </a>
         </div>
       </header>
       <main className="main-content">
@@ -78,6 +116,9 @@ function App() {
             <button className="modal-close-button" onClick={handleCloseModal}>
               Zamknij
             </button>
+            {loginResult.message && (
+              <p className={loginResult.success ? 'success-message' : 'error-message'}>{loginResult.message}</p>
+            )}
           </div>
         </div>
       )}

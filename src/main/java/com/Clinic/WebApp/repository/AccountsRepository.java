@@ -38,14 +38,15 @@ public class AccountsRepository {
         return accounts.get(0);
     }
 
-    public AccountsModel findByUsernameAndPassword(String username, String password){
+    public List<AccountsModel> findByUsernameAndPassword(String username, String password){
         List<AccountsModel> accounts = jdbcTemplate.query(GET_ACCOUNTS_PROPERTIES_SQL + " WHERE "
                 + "username = ? AND password = ?", BeanPropertyRowMapper.newInstance(AccountsModel.class), username, password);
 
         if (accounts.isEmpty()){
+            System.out.printf("euiryrweyui");
             throw new InvalidPasswordException();
         }
-        return accounts.get(0);
+        return accounts;
     }
 
     public int save(List<AccountsModel> accounts){
