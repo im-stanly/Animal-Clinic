@@ -1,6 +1,8 @@
 package com.Clinic.WebApp.repository;
 
+import com.Clinic.WebApp.exception.InvalidPasswordException;
 import com.Clinic.WebApp.exception.NotFoundException;
+import com.Clinic.WebApp.exception.UsernameNotFoundException;
 import com.Clinic.WebApp.model.AccountsModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -27,19 +29,23 @@ public class AccountsRepository {
         return getAccountsByKind("id", id).get(0);
     }
 
-    public AccountsModel findByEmail(String email){
-        return getAccountsByKind("email", email).get(0);
+    public AccountsModel findByUsername(String username){
+        List<AccountsModel> accounts = jdbcTemplate.query(GET_ACCOUNTS_PROPERTIES_SQL + " WHERE "
+                + "username = ?", BeanPropertyRowMapper.newInstance(AccountsModel.class), username);
+        if (accounts.isEmpty()){
+            throw new UsernameNotFoundException();
+        }
+        return accounts.get(0);
     }
 
     public AccountsModel findByUsernameAndPassword(String username, String password){
         List<AccountsModel> accounts = jdbcTemplate.query(GET_ACCOUNTS_PROPERTIES_SQL + " WHERE "
                 + "username = ? AND password = ?", BeanPropertyRowMapper.newInstance(AccountsModel.class), username, password);
 
-        if (!accounts.isEmpty())
-            return accounts.get(0);
-        else {
-            throw new NotFoundException("Accounts", username);
+        if (accounts.isEmpty()){
+            throw new InvalidPasswordException();
         }
+        return accounts.get(0);
     }
 
     public int save(List<AccountsModel> accounts){
@@ -69,14 +75,8 @@ public class AccountsRepository {
     private List<AccountsModel> getAccountsByKind(String kind, Object object){
         List<AccountsModel> accounts = jdbcTemplate.query(GET_ACCOUNTS_PROPERTIES_SQL + " WHERE "
                 + kind + "=?", BeanPropertyRowMapper.newInstance(AccountsModel.class), object);
-
-        if (accounts == null || accounts.get(0) == null){
-            if (object.getClass().equals(String.class)) {
-                throw new NotFoundException("Accounts", (String) object);
-            }
-            else {
-                throw new NotFoundException("Accounts", (Integer) object);
-            }
+        if (accounts.get(0) == null){
+            throw new UsernameNotFoundException();
         }
         return accounts;
     }

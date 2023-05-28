@@ -17,8 +17,8 @@ public class AccountsService {
         return accountsRepository.getAccounts();
     }
 
-    public AccountsModel findByEmail(String email){
-        return accountsRepository.findByEmail(email);
+    public AccountsModel findByUsername(String username){
+        return accountsRepository.findByUsername(username);
     }
 
     public AccountsModel findByUsernameAndPassword(String username, String password){
@@ -26,7 +26,6 @@ public class AccountsService {
     }
 
     public int save(List<AccountsModel> accountsModel){
-
         return accountsRepository.save(accountsModel);
     }
 
