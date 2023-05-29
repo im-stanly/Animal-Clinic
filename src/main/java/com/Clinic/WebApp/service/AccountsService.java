@@ -17,6 +17,13 @@ public class AccountsService {
         return accountsRepository.getAccounts();
     }
 
+    public boolean findByEmail(String email){
+        return accountsRepository.findByEmail(email);
+    }
+    public boolean isUsernameTaken(String username){
+        return accountsRepository.isUsernameTaken(username);
+    }
+
     public AccountsModel findByUsername(String username){
         return accountsRepository.findByUsername(username);
     }
