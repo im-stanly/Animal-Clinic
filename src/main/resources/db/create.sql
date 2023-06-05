@@ -310,6 +310,22 @@ END;
 $$
 LANGUAGE plpgsql;
 
+--WIZYTY DANEGO DNIA
+
+CREATE OR REPLACE FUNCTION getDoctorAppointments(doctor_id INTEGER, p_target_date DATE)
+RETURNS TABLE (visit_time TIME) AS
+$$
+BEGIN
+    RETURN QUERY
+    SELECT v.visit_time
+    FROM Visits v
+    WHERE v.vet_id = doctor_id AND v.visit_date = p_target_date;
+    RETURN;
+END;
+$$
+LANGUAGE plpgsql;
+
+
 --GENEROWANIE RECEPTY
 
 CREATE OR REPLACE FUNCTION getPrescriptionDataForVisit(p_visit_id INTEGER)
