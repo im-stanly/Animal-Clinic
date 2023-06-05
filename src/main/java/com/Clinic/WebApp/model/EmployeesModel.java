@@ -12,9 +12,8 @@ import java.time.LocalDate;
 public class EmployeesModel {
     private Integer id;
     private Integer person_id;
-    private String position;
-    private Integer salary;
+    private Integer position;
+    private Double salary;
     private LocalDate date_start;
     private LocalDate date_fire;
-    private String fav_animal;
 }

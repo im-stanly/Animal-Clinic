@@ -10,13 +10,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class PetsRepository {
-    private final String GET_PERSON_PROPERTIES_SQL = "SELECT id, name, sex, type, race, birth_day, person_id, " +
-            "weight, dangerous, estimate FROM Pets";
+public class PetsRepository implements RepoInterface{
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    @Autowired
-    private PersonRepository personRepository;
+    private final String GET_PERSON_PROPERTIES_SQL = "SELECT id, name, sex, type, race, birth_day, person_id, " +
+            "weight, dangerous, estimate FROM Pets";
 
     public List<PetsModel> getPets(){
         return jdbcTemplate.query(GET_PERSON_PROPERTIES_SQL + " LIMIT 20",
@@ -48,7 +46,7 @@ public class PetsRepository {
     }
 
     public int delete(int id){
-        if (!personRepository.isElementOfLibrary("Pets", "id", id))
+        if (!isElementOfLibrary(jdbcTemplate, "Pets", "id", id))
             throw new NotFoundException("Pets", id);
         return jdbcTemplate.update("DELETE FROM Pets WHERE id = ?", id);
     }

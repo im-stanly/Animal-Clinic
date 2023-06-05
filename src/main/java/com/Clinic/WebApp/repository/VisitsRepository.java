@@ -10,12 +10,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class VisitsRepository {
-    private final String GET_VISITS_PROPERTIES_SQL = "SELECT pet_id, vet_id, visit_date, description, rate, price FROM Visits";
+public class VisitsRepository implements RepoInterface{
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    @Autowired
-    private PersonRepository personRepository;
+    private final String GET_VISITS_PROPERTIES_SQL = "SELECT pet_id, vet_id, visit_date, description, rate, price FROM Visits";
 
     public List<VisitsModel> getVisits(){
         return jdbcTemplate.query(GET_VISITS_PROPERTIES_SQL + " LIMIT 20",
@@ -43,7 +41,7 @@ public class VisitsRepository {
     }
 
     public int delete(int id){
-        if (!personRepository.isElementOfLibrary("Visits", "id", id))
+        if (!isElementOfLibrary(jdbcTemplate,"Visits", "id", id))
             throw new NotFoundException("Visits", id);
         return jdbcTemplate.update("DELETE FROM Visits WHERE id = ?", id);
     }

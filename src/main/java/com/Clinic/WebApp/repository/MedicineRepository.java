@@ -9,12 +9,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class MedicineRepository {
-    private final String GET_MEDICINE_PROPERTIES_SQL = "SELECT id, name, company, type FROM Medicine";
+public class MedicineRepository implements RepoInterface{
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    @Autowired
-    private PersonRepository personRepository;
+    private final String GET_MEDICINE_PROPERTIES_SQL = "SELECT id, name, company, type FROM Medicine";
 
     public List<MedicineModel> getMedicines(){
         return jdbcTemplate.query(GET_MEDICINE_PROPERTIES_SQL + " LIMIT 20",
@@ -40,7 +38,7 @@ public class MedicineRepository {
     }
 
     public int delete(int id){
-        if (!personRepository.isElementOfLibrary("Medicine", "id", id))
+        if (!isElementOfLibrary(jdbcTemplate,"Medicine", "id", id))
             throw new NotFoundException("Medicine", id);
         return jdbcTemplate.update("DELETE FROM Medicine WHERE id = ?", id);
     }

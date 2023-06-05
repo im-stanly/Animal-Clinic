@@ -15,5 +15,5 @@ public class PersonsModel {
     private String city;
     private String telephone;
     private String email;
-
+    private String favAnimal;
 }

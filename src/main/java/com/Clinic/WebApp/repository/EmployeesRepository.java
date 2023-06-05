@@ -11,14 +11,12 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class EmployeesRepository {
-    private final String GET_EMPLOYEE_PROPERTIES_SQL = "SELECT id, person_id, position, salary, date_start, date_fire, " +
-            "fav_animal FROM Employees";
-    private final String GET_EMPLOYEE_DETAILS_SQL = "SELECT * FROM EmployeeDetails";
+public class EmployeesRepository implements RepoInterface{
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    @Autowired
-    private PersonRepository personRepository;
+    private final String GET_EMPLOYEE_PROPERTIES_SQL = "SELECT id, person_id, position, salary, date_start, date_fire " +
+            " FROM Employees";
+    private final String GET_EMPLOYEE_DETAILS_SQL = "SELECT * FROM EmployeeDetails";
 
     public List<EmployeesModel> getEmployees(){
         return jdbcTemplate.query(GET_EMPLOYEE_PROPERTIES_SQL + " LIMIT 20",
@@ -36,24 +34,24 @@ public class EmployeesRepository {
     public int save(List<EmployeesModel> employees){
         employees.forEach( singlePer ->
                 jdbcTemplate.update(
-                        "INSERT INTO Employees(person_id, position, salary, date_start, date_fire, fav_animal) " +
-                                "VALUES(?, ?, ?, ?, ?, ?)",
+                        "INSERT INTO Employees(person_id, position, salary, date_start, date_fire ) " +
+                                "VALUES(?, ?, ?, ?, ?)",
                         singlePer.getPerson_id(), singlePer.getPosition(), singlePer.getSalary(),
-                        singlePer.getDate_start(), singlePer.getDate_fire(), singlePer.getFav_animal()
+                        singlePer.getDate_start(), singlePer.getDate_fire()
                 ));
         return 202;
     }
 
     public int update(int oldId, EmployeesModel employee){
         return jdbcTemplate.update(
-                "UPDATE Employees SET person_id = ?, position = ?, salary = ?, date_start = ?, date_fire = ?, " +
-                        "fav_animal = ? WHERE id=?",
+                "UPDATE Employees SET person_id = ?, position = ?, salary = ?, date_start = ?, date_fire = ? " +
+                        " WHERE id=?",
                 employee.getPerson_id(), employee.getPosition(), employee.getSalary(),
-                employee.getDate_start(), employee.getDate_fire(), employee.getFav_animal(), oldId);
+                employee.getDate_start(), employee.getDate_fire(), oldId);
     }
 
     public int delete(int id){
-        if (!personRepository.isElementOfLibrary("Employees", "id", id))
+        if (!isElementOfLibrary(jdbcTemplate,"Employees", "id", id))
             throw new NotFoundException("Employees", id);
         return jdbcTemplate.update("DELETE FROM Employees WHERE id = ?", id);
     }
