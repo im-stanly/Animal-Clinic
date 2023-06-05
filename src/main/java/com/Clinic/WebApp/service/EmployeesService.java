@@ -1,5 +1,6 @@
 package com.Clinic.WebApp.service;
 
+import com.Clinic.WebApp.model.EmployeeDetailsDTO;
 import com.Clinic.WebApp.model.EmployeesModel;
 import com.Clinic.WebApp.repository.EmployeesRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,9 @@ public class EmployeesService {
 
     public List<EmployeesModel> getEmployees(){
         return employeesRepository.getEmployees();
+    }
+    public List<EmployeeDetailsDTO> getEmployeesDetails(){
+        return employeesRepository.getEmployeesDetails();
     }
 
     public EmployeesModel getById(int id){

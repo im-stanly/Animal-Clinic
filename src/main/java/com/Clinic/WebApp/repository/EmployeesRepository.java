@@ -1,6 +1,7 @@
 package com.Clinic.WebApp.repository;
 
 import com.Clinic.WebApp.exception.NotFoundException;
+import com.Clinic.WebApp.model.EmployeeDetailsDTO;
 import com.Clinic.WebApp.model.EmployeesModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -13,6 +14,7 @@ import java.util.List;
 public class EmployeesRepository {
     private final String GET_EMPLOYEE_PROPERTIES_SQL = "SELECT id, person_id, position, salary, date_start, date_fire, " +
             "fav_animal FROM Employees";
+    private final String GET_EMPLOYEE_DETAILS_SQL = "SELECT * FROM EmployeeDetails";
     @Autowired
     private JdbcTemplate jdbcTemplate;
     @Autowired
@@ -21,6 +23,10 @@ public class EmployeesRepository {
     public List<EmployeesModel> getEmployees(){
         return jdbcTemplate.query(GET_EMPLOYEE_PROPERTIES_SQL + " LIMIT 20",
                 BeanPropertyRowMapper.newInstance(EmployeesModel.class));
+    }
+    public List<EmployeeDetailsDTO> getEmployeesDetails(){
+        return jdbcTemplate.query(GET_EMPLOYEE_DETAILS_SQL + " LIMIT 20",
+                BeanPropertyRowMapper.newInstance(EmployeeDetailsDTO.class));
     }
 
     public EmployeesModel getById(int id){

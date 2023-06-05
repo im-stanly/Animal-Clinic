@@ -1,5 +1,6 @@
 package com.Clinic.WebApp.controller;
 
+import com.Clinic.WebApp.model.EmployeeDetailsDTO;
 import com.Clinic.WebApp.model.EmployeesModel;
 import com.Clinic.WebApp.service.EmployeesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,11 @@ public class EmployeesController {
     @GetMapping("")
     public List<EmployeesModel> getEmployees(){
         return employeesService.getEmployees();
+    }
+
+    @GetMapping("/details")
+    public List<EmployeeDetailsDTO> getEmployeesDetailed(){
+        return employeesService.getEmployeesDetails();
     }
 
     @GetMapping("/id={id}")
