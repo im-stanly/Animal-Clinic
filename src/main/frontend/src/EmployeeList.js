@@ -25,7 +25,7 @@ const EmployeeList = () => {
 
   const fetchEmployees = async () => {
     try {
-      const response = await fetch('http://localhost:8080/employees');
+      const response = await fetch('http://localhost:8080/employees/details');
       const data = await response.json();
       setEmployees(data);
       setFilteredEmployees(data);
@@ -57,13 +57,8 @@ const EmployeeList = () => {
 
     if (filters.position) {
       filtered = filtered.filter(
-        (employee) => employee.position === filters.position
-      );
-    }
-
-    if (filters.fav_animal) {
-      filtered = filtered.filter(
-        (employee) => employee.fav_animal === filters.fav_animal
+        (employee) =>
+          employee.position.toLowerCase().includes(filters.position.toLowerCase())
       );
     }
 
@@ -143,53 +138,38 @@ const EmployeeList = () => {
         </datalist>
       </div>
 
-      <div>
-        <label htmlFor="fav_animal">Ulubione zwierzę:</label>
-        <input
-          type="text"
-          id="fav_animal"
-          name="fav_animal"
-          value={filters.fav_animal}
-          onChange={handleFilterChange}
-          list="suggestedAnimals"
-        />
-        <datalist id="suggestedAnimals">
-          {suggestedAnimals.map((animal) => (
-            <option key={animal} value={animal} />
-          ))}
-        </datalist>
-      </div>
-
       <table>
         <thead>
           <tr>
-            <th>ID</th>
-            <th>Osoba ID</th>
+            <th>Imię</th>
+            <th>Nazwisko</th>
             <th>Stanowisko</th>
             <th>Wynagrodzenie</th>
+            <th>Ocena</th>
             <th>Data rozpoczęcia</th>
             <th>Data zwolnienia</th>
-            <th>Ulubione zwierzę</th>
             <th>Akcje</th>
           </tr>
         </thead>
         <tbody>
           {filteredEmployees.map((employee) => (
             <tr key={employee.id} className="employee-item">
-              <td>{employee.id}</td>
-              <td>{employee.person_id}</td>
+              <td>{employee.first_name}</td>
+              <td>{employee.last_name}</td>
               <td>{employee.position}</td>
               <td>{employee.salary}</td>
+              <td>{employee.rating}</td>
               <td>{employee.date_start}</td>
               <td>{employee.date_fire}</td>
-              <td>{employee.fav_animal}</td>
               <td className="employee-actions">
-                <button
-                  className="fire-button"
-                  onClick={() => handleFireEmployee(employee.id)}
-                >
-                  Zwolnij!
-                </button>
+                {!employee.date_fire && (
+                  <button
+                    className="fire-button"
+                    onClick={() => handleFireEmployee(employee.id)}
+                  >
+                    Zwolnij!
+                  </button>
+                )}
               </td>
             </tr>
           ))}
@@ -225,7 +205,13 @@ const EmployeeList = () => {
               position: event.target.value
             })
           }
+          list="suggestedPositions"
         />
+        <datalist id="suggestedPositions">
+          {suggestedPositions.map((position) => (
+            <option key={position} value={position} />
+          ))}
+        </datalist>
       </div>
       <div>
         <label htmlFor="salary">Wynagrodzenie:</label>
@@ -270,7 +256,13 @@ const EmployeeList = () => {
               fav_animal: event.target.value
             })
           }
+          list="suggestedAnimals"
         />
+        <datalist id="suggestedAnimals">
+          {suggestedAnimals.map((animal) => (
+            <option key={animal} value={animal} />
+          ))}
+        </datalist>
       </div>
       <button className="add-button" onClick={handleAddEmployee}>
         Dodaj pracownika
