@@ -67,10 +67,10 @@ public class AccountsRepository {
     public int save(List<AccountsModel> accounts){
         accounts.forEach( singlePer ->
                 jdbcTemplate.update(
-                        "INSERT INTO Accounts(email, username, password, user_permissions) " +
-                                "VALUES(?, ?, ?, ?)",
+                        "INSERT INTO Accounts(email, username, password) " +
+                                "VALUES(?, ?, ?)",
                         singlePer.getEmail(), singlePer.getUsername(),
-                        singlePer.getPassword(), singlePer.getUser_permissions()
+                        singlePer.getPassword()
                 ));
         return 202;
     }
@@ -79,7 +79,8 @@ public class AccountsRepository {
         return jdbcTemplate.update(
                 "UPDATE Accounts SET id = ?, email = ?, username = ?, password = ?,  user_permissions = ?, " +
                         "WHERE id=?",
-                account.getId(), account.getEmail(), account.getUsername(), account.getPassword(), account.getUser_permissions(), oldId);
+                account.getId(), account.getEmail(), account.getUsername(), account.getPassword(),
+                account.getUser_permissions(), oldId);
     }
 
     public int delete(int id){
