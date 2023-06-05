@@ -63,7 +63,7 @@ public class AccountsController {
         } catch (EmailAlreadyExistsException ex) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(createErrorResponse("Email already exsists."));
         } catch (UsernameAlreadyExistsException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(createErrorResponse("Username already exsists."));
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(createErrorResponse("Username already exists."));
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(createErrorResponse("Server Error."));
         }
