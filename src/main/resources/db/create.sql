@@ -18,10 +18,8 @@ DROP TABLE IF EXISTS Positions CASCADE;
 DROP TABLE IF EXISTS Pet_Owners CASCADE;
 DROP TABLE IF EXISTS Medicine_type CASCADE;
 DROP TABLE IF EXISTS Races CASCADE;
-DROP TABLE IF EXISTS Vet_converter CASCADE;
 DROP TABLE IF EXISTS Visit_types CASCADE;
 DROP TABLE IF EXISTS Vaxx_type CASCADE;
-DROP TABLE IF EXISTS Med_converter CASCADE;
 
 CREATE TABLE Persons (
     id          SERIAL          PRIMARY KEY,
@@ -120,24 +118,10 @@ CREATE TABLE Medicine (
     type        INTEGER        REFERENCES Medicine_type(id)
 );
 
-CREATE TABLE Med_converter (
-    type_id     INTEGER         REFERENCES Medicine_type(id) NOT NULL,
-    amount	    INTEGER	        NOT NULL,
-    conv_rate   INTEGER         NOT NULL,
-    PRIMARY KEY (type_id, amount)
-);
-
 CREATE TABLE Visit_types (
     id          SERIAL          PRIMARY KEY,
     name        VARCHAR(80)     NOT NULL,
     base_price  INTEGER         NOT NULL
-);
-
-CREATE TABLE Vet_converter (
-    Vet_id      INTEGER         REFERENCES Vets(id) NOT NULL,
-    type_id     INTEGER         REFERENCES Visit_types(id) NOT NULL,
-    conv_rate   INTEGER         NOT NULL,
-    PRIMARY KEY (type_id, Vet_id)
 );
 
 CREATE TABLE Visits (
@@ -205,11 +189,16 @@ CREATE TABLE Accounts (
 );
 
 CREATE VIEW EmployeeDetails AS
-SELECT p.first_name, p.last_name, e.salary, e.date_start, e.date_fire, calculate_vet_rating(p.id)
+SELECT e.id, p.first_name, p.last_name, pos.name AS position, e.salary, e.date_start, e.date_fire, calculate_vet_rating(p.id) AS rating
 FROM Employees e
-JOIN Persons p ON e.person_id = p.id;
+JOIN Persons p ON e.person_id = p.id
+JOIN Positions pos ON e.position = pos.id;
 
-----DAWANIE UPRAWNIEN
+CREATE OR REPLACE VIEW ClinicOffer AS
+SELECT name, base_price
+FROM Visit_types;
+
+--DAWANIE UPRAWNIEN
 
 CREATE OR REPLACE FUNCTION grant_permissions(account_id INT, permission_type PERMISSION_TYPE)
 RETURNS VOID AS $$
@@ -220,8 +209,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-
-----OBLICZNIE OCENY WETERYNARZA
+--OBLICZNIE OCENY WETERYNARZA
 
 CREATE OR REPLACE FUNCTION calculate_vet_rating(search_id INTEGER)
 RETURNS NUMERIC(3, 1) AS $$
@@ -244,33 +232,168 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
---CZY DOKTOR DOSTEPNY W PRZEDZIALE CZASU
+--CZY DOKTOR DOSTEPNY W DANYM CZASIE
 
-CREATE OR REPLACE FUNCTION check_doctor_availability(
-    spec_name VARCHAR(50),
-    start_date DATE,
-    end_date DATE
-)
-RETURNS BOOLEAN AS $$
+CREATE OR REPLACE FUNCTION checkAvailability(emp_id INTEGER, target_date DATE, target_time TIME)
+RETURNS BOOLEAN AS
+$$
 DECLARE
-    doctor_available BOOLEAN;
+    is_available BOOLEAN;
+    target_weekday VARCHAR(10);
 BEGIN
-    SELECT EXISTS (
-        SELECT 1
-        FROM Vets v
-        INNER JOIN Vets_Specialities vs ON v.id = vs.vet_id
-        WHERE vs.name = spec_name
-        AND NOT EXISTS (
-            SELECT 1
-            FROM Visits vi
-            WHERE vi.vet_id = v.id
-            AND (vi.visit_date >= start_date AND vi.visit_date <= end_date)
-        )
-    ) INTO doctor_available;
+    target_weekday := trim(to_char(target_date, 'Day'));
 
-    RETURN doctor_available;
+    SELECT EXISTS (
+        SELECT 1 FROM WorkHours
+        WHERE employee_id = emp_id AND "WeekDay" = target_weekday
+            AND target_time BETWEEN start_time AND end_time
+    ) INTO is_available;
+
+    IF is_available = FALSE THEN
+        RETURN FALSE;
+    END IF;
+
+    SELECT EXISTS (
+        SELECT 1 FROM Holidays
+        WHERE employee_id = emp_id AND target_date BETWEEN start_date AND end_date
+    ) INTO is_available;
+
+    IF is_available = TRUE THEN
+        RETURN FALSE;
+    END IF;
+
+    RETURN TRUE;
+END;
+$$
+LANGUAGE plpgsql;
+
+--DOKTORZY O DANEJ SPECJALIZACJI
+
+CREATE OR REPLACE FUNCTION getDoctorsBySpecialization(p_specialization_name VARCHAR(80))
+RETURNS TABLE (doctor_id INTEGER) AS
+$$
+BEGIN
+    RETURN QUERY
+    SELECT vs.vet_id
+    FROM Vets_Specialities vs
+    WHERE vs.name = p_specialization_name;
+
+    RETURN;
+END;
+$$
+LANGUAGE plpgsql;
+
+--LISTA DOSTEPNYCH DOKTOROW O DANEJ SPECJALIZACJI W DANYM CZASIE
+
+CREATE OR REPLACE FUNCTION getAvailableDoctorsByDateTime(p_specialization_name VARCHAR(80), p_target_date DATE, p_target_time TIME)
+RETURNS TABLE (doctor_id INTEGER) AS
+$$
+DECLARE
+    doctor_ids INTEGER[];
+    available_doctors INTEGER[];
+    emp_id INTEGER;
+BEGIN
+    SELECT ARRAY(SELECT vs.vet_id FROM Vets_Specialities vs WHERE vs.name = p_specialization_name) INTO doctor_ids;
+
+    FOREACH emp_id IN ARRAY doctor_ids
+    LOOP
+        IF checkAvailability(emp_id, p_target_date, p_target_time) THEN
+            available_doctors := array_append(available_doctors, emp_id);
+        END IF;
+    END LOOP;
+
+    RETURN QUERY
+    SELECT unnest(available_doctors);
+
+    RETURN;
+END;
+$$
+LANGUAGE plpgsql;
+
+--WIZYTY DANEGO DNIA
+
+CREATE OR REPLACE FUNCTION getDoctorAppointments(doctor_id INTEGER, p_target_date DATE)
+RETURNS TABLE (visit_time TIME) AS
+$$
+BEGIN
+    RETURN QUERY
+    SELECT v.visit_time
+    FROM Visits v
+    WHERE v.vet_id = doctor_id AND v.visit_date = p_target_date;
+    RETURN;
+END;
+$$
+LANGUAGE plpgsql;
+
+
+--GENEROWANIE RECEPTY
+
+CREATE OR REPLACE FUNCTION getPrescriptionDataForVisit(p_visit_id INTEGER)
+RETURNS TABLE (
+    visit_id INTEGER,
+    visit_date DATE,
+    visit_time TIME,
+    total_cost NUMERIC(10, 2),
+    medicine_names TEXT,
+    medicine_companies TEXT
+) AS
+$$
+BEGIN
+    RETURN QUERY
+    SELECT
+        v.id AS visit_id,
+        v.visit_date,
+        v.visit_time,
+        SUM(p.amount * p.price) AS total_cost,
+        STRING_AGG(m.name, ', ') AS medicine_names,
+        STRING_AGG(m.company, ', ') AS medicine_companies
+    FROM
+        Prescriptions p
+        INNER JOIN Visits v ON p.id_visit = v.id
+        INNER JOIN Medicine m ON p.med_id = m.id
+    WHERE
+        v.id = p_visit_id
+    GROUP BY
+        v.id,
+        v.visit_date,
+        v.visit_time;
+END;
+$$
+LANGUAGE plpgsql;
+
+--DODAJ OD RAZU PRACOWNIKA
+
+CREATE OR REPLACE FUNCTION add_employee_with_person(
+  p_first_name VARCHAR(20),
+  p_last_name VARCHAR(40),
+  p_address VARCHAR(200),
+  p_city VARCHAR(40),
+  p_telephone VARCHAR(20),
+  p_email VARCHAR(60),
+  p_fav_animal VARCHAR(40),
+  p_position INTEGER,
+  p_salary NUMERIC(10, 2),
+  p_date_start DATE
+) RETURNS VOID AS $$
+DECLARE
+  v_person_id INTEGER;
+  v_employee_id INTEGER;
+BEGIN
+  INSERT INTO Persons (first_name, last_name, address, city, telephone, email, fav_animal)
+  VALUES (p_first_name, p_last_name, p_address, p_city, p_telephone, p_email, p_fav_animal)
+  RETURNING id INTO v_person_id;
+
+  SELECT COALESCE(MAX(id), 0) + 1 INTO v_employee_id FROM Employees;
+
+  IF v_employee_id = 1 THEN
+    ALTER SEQUENCE employees_id_seq RESTART;
+  END IF;
+
+  INSERT INTO Employees (id, person_id, position, salary, date_start)
+  VALUES (v_employee_id, v_person_id, p_position, p_salary, p_date_start);
 END;
 $$ LANGUAGE plpgsql;
+
 
 COPY Persons (first_name, last_name, address, city, telephone, email, fav_animal) FROM stdin (Delimiter ',');
 David,O Connor,65 Hudson St,Dulford,070218230685,daveoc@gmail.com,Bobby
@@ -391,7 +514,7 @@ COPY Employees (id,person_id,position,salary,date_start) FROM stdin (Delimiter '
 3,3,1,4500.00,2021-03-10
 4,4,2,5500.00,2021-04-05
 5,5,3,6500.00,2021-05-20
-6,6,1,4000.00,2021-06-15
+6,6,4,4000.00,2021-06-15
 7,7,2,5500.00,2021-07-10
 8,8,3,7000.00,2021-08-25
 9,9,1,4200.00,2021-09-20
@@ -400,7 +523,7 @@ COPY Employees (id,person_id,position,salary,date_start) FROM stdin (Delimiter '
 12,12,1,4300.00,2021-12-05
 13,13,2,6100.00,2022-01-20
 14,14,3,7500.00,2022-02-15
-15,15,1,4400.00,2022-03-10
+15,15,4,4400.00,2022-03-10
 16,16,2,6300.00,2022-04-25
 17,17,3,7800.00,2022-05-20
 18,18,1,4600.00,2022-06-15

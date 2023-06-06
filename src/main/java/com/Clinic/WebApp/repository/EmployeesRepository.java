@@ -21,7 +21,7 @@ public class EmployeesRepository implements RepoInterface{
     private final String GET_EMPLOYEE_DETAILS_SQL = "SELECT * FROM EmployeeDetails";
 
     public List<EmployeesModel> getEmployees(){
-        return jdbcTemplate.query(GET_EMPLOYEE_PROPERTIES_SQL + " LIMIT 20",
+        return jdbcTemplate.query(GET_EMPLOYEE_PROPERTIES_SQL,
                 BeanPropertyRowMapper.newInstance(EmployeesModel.class));
     }
     public int addEmployeeByFunc(RegisterEmployeeModel registerE){
@@ -32,7 +32,7 @@ public class EmployeesRepository implements RepoInterface{
         return 202;
     }
     public List<EmployeeDetailsDTO> getEmployeesDetails(){
-        return jdbcTemplate.query(GET_EMPLOYEE_DETAILS_SQL + " LIMIT 20",
+        return jdbcTemplate.query(GET_EMPLOYEE_DETAILS_SQL,
                 BeanPropertyRowMapper.newInstance(EmployeeDetailsDTO.class));
     }
 
