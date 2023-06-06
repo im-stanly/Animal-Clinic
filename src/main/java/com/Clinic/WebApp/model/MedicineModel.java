@@ -11,5 +11,6 @@ public class MedicineModel {
     private Integer id;
     private String name;
     private String company;
+    private Integer basePrice;
     private String type;
 }
