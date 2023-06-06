@@ -16,5 +16,4 @@ public class EmployeesModel {
     private Double salary;
     private LocalDate date_start;
     private LocalDate date_fire;
-    private String Fav_animal;
 }

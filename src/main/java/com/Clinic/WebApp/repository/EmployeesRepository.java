@@ -19,7 +19,7 @@ public class EmployeesRepository implements RepoInterface{
     private final String GET_EMPLOYEE_DETAILS_SQL = "SELECT * FROM EmployeeDetails";
 
     public List<EmployeesModel> getEmployees(){
-        return jdbcTemplate.query(GET_EMPLOYEE_PROPERTIES_SQL + " LIMIT 20",
+        return jdbcTemplate.query(GET_EMPLOYEE_PROPERTIES_SQL,
                 BeanPropertyRowMapper.newInstance(EmployeesModel.class));
     }
     public List<EmployeeDetailsDTO> getEmployeesDetails(){
