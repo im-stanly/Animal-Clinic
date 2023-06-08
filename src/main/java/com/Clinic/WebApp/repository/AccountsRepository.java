@@ -57,7 +57,7 @@ public class AccountsRepository implements RepoInterface{
                 + "username = ? AND password = ?", BeanPropertyRowMapper.newInstance(AccountsModel.class), username, password);
 
         if (accounts.isEmpty()){
-            throw new InvalidPasswordException();
+            throw new UsernameNotFoundException();
         }
         return accounts;
     }

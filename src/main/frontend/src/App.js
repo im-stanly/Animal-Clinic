@@ -1,77 +1,117 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
+import { useNavigate } from 'react-router-dom';
 
 function App() {
-    const [showLogin, setShowLogin] = useState(false);
-    const [loginData, setLoginData] = useState({ username: '', password: '' });
-    const [loginResult, setLoginResult] = useState({ success: false, message: '' });
-    const [searchData, setSearchData] = useState({ specialization: '', date: '' });
+  const [showLogin, setShowLogin] = useState(false);
+  const [loginData, setLoginData] = useState({ username: '', password: '' });
+  const [loginResult, setLoginResult] = useState({ success: false, message: '' });
+  const [searchData, setSearchData] = useState({ specialization: '', date: '' });
+  const [token, setToken] = useState(null);
+  const navigate = useNavigate();
 
-    const handleLoginClick = () => {
-      setShowLogin(true);
-    };
+  const handleLoginClick = () => {
+    setShowLogin(true);
+  };
 
-    const handleCloseModal = () => {
-      setShowLogin(false);
-    };
+  const handleCloseModal = () => {
+    setShowLogin(false);
+  };
 
-    const handleInputChange = (event) => {
-      const { name, value } = event.target;
-      setLoginData({ ...loginData, [name]: value });
-    };
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setLoginData({ ...loginData, [name]: value });
+  };
 
-    const handleSearchChange = (event) => {
-      const { name, value } = event.target;
-      setSearchData({ ...searchData, [name]: value });
-    };
+  const handleSearchChange = (event) => {
+    const { name, value } = event.target;
+    setSearchData({ ...searchData, [name]: value });
+  };
 
-    const handleLoginSubmit = async (event) => {
-      event.preventDefault();
+  function decodeRoleFromToken(token) {
+    try {
+      const tokenParts = token.split('.');
+      const payload = JSON.parse(atob(tokenParts[1]));
 
-      console.log('Wysyłany JSON:', JSON.stringify([loginData]));
+      return payload.role;
+    } catch (error) {
+      console.error('Błąd dekodowania tokenu:', error);
+      return null;
+    }
+  }
 
-      try {
-        const response = await fetch('http://localhost:8080/accounts/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify([loginData])
+  const handleLoginSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      const response = await fetch('http://localhost:8080/accounts/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify([loginData])
+      });
+
+      const data = await response.json();
+
+      if (response.status === 200) {
+        localStorage.setItem('token', data.token);
+        setToken(data.token);
+
+        const role = decodeRoleFromToken(data.token);
+        console.log(role);
+        if (role === 'admin') {
+          navigate('/employees');
+        }
+
+        setLoginResult({
+          success: true,
+          message: 'Zalogowano pomyślnie.'
         });
+      } else if (response.status === 401) {
+        setLoginResult({
+          success: false,
+          message: 'Błędne hasło.'
+        });
+      } else if (response.status === 404) {
+        setLoginResult({
+          success: false,
+          message: 'Konto o podanym loginie nie istnieje.'
+        });
+      } else {
+        setLoginResult({
+          success: false,
+          message: 'Wystąpił błąd serwera.'
+        });
+      }
+    } catch (error) {
+      console.log('Wystąpił błąd:', error);
+      setLoginResult({
+        success: false,
+        message: 'Wystąpił błąd serwera.'
+      });
+    }
 
-        const data = await response.json();
+    setLoginData({ username: '', password: '' });
+  };
 
-        if (response.status === 200) {
-          setLoginResult({
-            success: true,
-            message: 'Zalogowano pomyślnie.'
-          });
-        } else if (response.status == 401) {
-          setLoginResult({
-            success: false,
-            message: 'Błędne hasło.'
-          });
-        } else if (response.status === 404) {
-          setLoginResult({
-            success: false,
-            message: 'Konto o podanym loginie nie istnieje.'
-          });
-        } else {
-          setLoginResult({
-            success: false,
-            message: 'Wystąpił błąd serwera.'
-          });
-        }
-        } catch (error) {
-          console.log('Wystąpił błąd:', error);
-           setLoginResult({
-             success: false,
-             message: 'Wystąpił błąd serwera.'
-          });
-        }
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setToken(null);
+  };
 
-      setLoginData({ username: '', password: '' });
-    };
+  useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+
+    if (storedToken) {
+      setToken(storedToken);
+
+      const role = decodeRoleFromToken(storedToken);
+      if (role === 'admin') {
+        navigate('/employees');
+      }
+    }
+  }, []);
 
   return (
     <div className="app-container">
@@ -81,9 +121,15 @@ function App() {
           <a className="link" href="/registration">
             Zarejestruj się
           </a>
-          <a className="link" onClick={handleLoginClick}>
-            Zaloguj się
-          </a>
+          {!token ? (
+            <a className="link" onClick={handleLoginClick}>
+              Zaloguj się
+            </a>
+          ) : (
+            <a className="link" onClick={handleLogout}>
+              Wyloguj się
+            </a>
+          )}
         </div>
       </header>
       <main className="main-content">
