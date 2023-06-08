@@ -1,0 +1,81 @@
+/* Vets.css */
+
+.app-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.title {
+  font-size: 32px;
+  margin: 0;
+  color: #333;
+}
+
+.search-container {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 20px;
+}
+
+.input-container {
+  margin-right: 20px;
+}
+
+label {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+select,
+input[type="date"] {
+  width: 200px;
+  height: 30px;
+  margin-top: 5px;
+}
+
+.search-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: #f5a623;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.search-button:hover {
+  background-color: #e6911f;
+}
+
+.main-content {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.result-container {
+  margin-top: 10px;
+}
+
+.weterynarz {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.name {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.info {
+  margin-top: 5px;
+}
+
+.no-results {
+  font-style: italic;
+  color: #888;
+}

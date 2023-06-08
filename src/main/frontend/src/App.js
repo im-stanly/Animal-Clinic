@@ -1,12 +1,11 @@
-// App.js
-
 import React, { useState } from 'react';
 import './App.css';
 
 function App() {
-  const [showLogin, setShowLogin] = useState(false);
+    const [showLogin, setShowLogin] = useState(false);
     const [loginData, setLoginData] = useState({ username: '', password: '' });
     const [loginResult, setLoginResult] = useState({ success: false, message: '' });
+    const [searchData, setSearchData] = useState({ specialization: '', date: '' });
 
     const handleLoginClick = () => {
       setShowLogin(true);
@@ -19,6 +18,11 @@ function App() {
     const handleInputChange = (event) => {
       const { name, value } = event.target;
       setLoginData({ ...loginData, [name]: value });
+    };
+
+    const handleSearchChange = (event) => {
+      const { name, value } = event.target;
+      setSearchData({ ...searchData, [name]: value });
     };
 
     const handleLoginSubmit = async (event) => {

@@ -198,6 +198,13 @@ CREATE OR REPLACE VIEW ClinicOffer AS
 SELECT name, base_price
 FROM Visit_types;
 
+CREATE VIEW VetSchedule AS
+SELECT v.id, p.first_name, p.last_name, vs.name AS specialization
+FROM Employees e
+JOIN Persons p ON e.person_id = p.id
+JOIN Vets v ON v.id = e.id
+JOIN Vets_Specialities vs ON vs.vet_id = v.id;
+
 --DAWANIE UPRAWNIEN
 
 CREATE OR REPLACE FUNCTION grant_permissions(account_id INT, permission_type PERMISSION_TYPE)
