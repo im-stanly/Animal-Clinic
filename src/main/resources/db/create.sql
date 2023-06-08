@@ -368,6 +368,38 @@ END;
 $$
 LANGUAGE plpgsql;
 
+--DODAJ OD RAZU PRACOWNIKA
+
+CREATE OR REPLACE FUNCTION add_employee_with_person(
+  p_first_name VARCHAR(20),
+  p_last_name VARCHAR(40),
+  p_address VARCHAR(200),
+  p_city VARCHAR(40),
+  p_telephone VARCHAR(20),
+  p_email VARCHAR(60),
+  p_fav_animal VARCHAR(40),
+  p_position INTEGER,
+  p_salary NUMERIC(10, 2),
+  p_date_start DATE
+) RETURNS VOID AS $$
+DECLARE
+  v_person_id INTEGER;
+  v_employee_id INTEGER;
+BEGIN
+  INSERT INTO Persons (first_name, last_name, address, city, telephone, email, fav_animal)
+  VALUES (p_first_name, p_last_name, p_address, p_city, p_telephone, p_email, p_fav_animal)
+  RETURNING id INTO v_person_id;
+
+  SELECT COALESCE(MAX(id), 0) + 1 INTO v_employee_id FROM Employees;
+
+  IF v_employee_id = 1 THEN
+    ALTER SEQUENCE employees_id_seq RESTART;
+  END IF;
+
+  INSERT INTO Employees (id, person_id, position, salary, date_start)
+  VALUES (v_employee_id, v_person_id, p_position, p_salary, p_date_start);
+END;
+$$ LANGUAGE plpgsql;
 
 
 COPY Persons (first_name, last_name, address, city, telephone, email, fav_animal) FROM stdin (Delimiter ',');

@@ -55,8 +55,6 @@ public class EmployeesService {
                 oldEmployee.setDate_start(updatedEmplyee.getDate_start());
             if (updatedEmplyee.getDate_fire() != null)
                 oldEmployee.setDate_fire(updatedEmplyee.getDate_fire());
-            if (updatedEmplyee.getFav_animal() != null)
-                oldEmployee.setFav_animal(updatedEmplyee.getFav_animal());
         }
         else
             oldEmployee = updatedEmplyee;
