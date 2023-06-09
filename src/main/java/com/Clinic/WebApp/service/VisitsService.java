@@ -22,6 +22,10 @@ public class VisitsService {
         return visitsRepository.getById(id);
     }
 
+    public List<VisitsModel> getNextVisits(int id){
+        return visitsRepository.getNextVisits(id);
+    }
+
     public int save(List<VisitsModel> medicineModels){
         return visitsRepository.save(medicineModels);
     }

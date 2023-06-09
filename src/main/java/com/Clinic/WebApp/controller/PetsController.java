@@ -1,7 +1,9 @@
 package com.Clinic.WebApp.controller;
 
 import com.Clinic.WebApp.model.PetsModel;
+import com.Clinic.WebApp.model.VisitsModel;
 import com.Clinic.WebApp.service.PetsService;
+import com.Clinic.WebApp.service.VisitsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +16,9 @@ public class PetsController {
     @Autowired
     private PetsService petsService;
 
+    @Autowired
+    private VisitsService visitsService;
+
     @GetMapping("")
     public List<PetsModel> getPets(){
         return petsService.getPets();
@@ -22,6 +27,11 @@ public class PetsController {
     @GetMapping("/id={id}")
     public PetsModel getPets(@PathVariable("id") int id){
         return petsService.getById(id);
+    }
+
+    @GetMapping("/next-visits/id={id}")
+    public List<VisitsModel> getNextVisitsForPet(@PathVariable("id") int id){
+        return visitsService.getNextVisits(id);
     }
 
     @PostMapping("")

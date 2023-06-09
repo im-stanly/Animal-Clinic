@@ -19,6 +19,12 @@ public class VisitsRepository implements RepoInterface{
         return jdbcTemplate.query(GET_VISITS_PROPERTIES_SQL + " LIMIT 20",
                 BeanPropertyRowMapper.newInstance(VisitsModel.class));
     }
+
+    public List<VisitsModel> getNextVisits(int id){
+        return jdbcTemplate.query(GET_VISITS_PROPERTIES_SQL +
+                        " WHERE pet_id = ? AND visit_date >= (SELECT NOW())",
+                BeanPropertyRowMapper.newInstance(VisitsModel.class), id);
+    }
     public VisitsModel getById(int id){
         return getVisitesByKind("id", id).get(0);
     }
