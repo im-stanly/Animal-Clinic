@@ -204,76 +204,8 @@ CREATE TABLE Accounts (
     user_permissions VARCHAR(255)   DEFAULT 'user'
 );
 
-CREATE VIEW EmployeeDetails AS
-SELECT p.first_name, p.last_name, e.salary, e.date_start, e.date_fire, calculate_vet_rating(p.id)
-FROM Employees e
-JOIN Persons p ON e.person_id = p.id;
-
-----DAWANIE UPRAWNIEN
-
-CREATE OR REPLACE FUNCTION grant_permissions(account_id INT, permission_type PERMISSION_TYPE)
-RETURNS VOID AS $$
-BEGIN
-    UPDATE Accounts
-    SET user_permissions = permission_type
-    WHERE id = account_id;
-END;
-$$ LANGUAGE plpgsql;
-
-
-----OBLICZNIE OCENY WETERYNARZA
-
-CREATE OR REPLACE FUNCTION calculate_vet_rating(search_id INTEGER)
-RETURNS NUMERIC(3, 1) AS $$
-DECLARE
-    total_rating INTEGER := 0;
-    total_visits INTEGER := 0;
-    avg_rating NUMERIC(3, 1);
-BEGIN
-    SELECT COUNT(*), COALESCE(SUM(rate), 0)
-    INTO total_visits, total_rating
-    FROM Visits
-    WHERE search_id = vet_id;
-
-    IF total_visits > 0 THEN
-        avg_rating := total_rating::NUMERIC / total_visits::NUMERIC;
-        RETURN ROUND(avg_rating, 1);
-    ELSE
-        RETURN 0.0;
-    END IF;
-END;
-$$ LANGUAGE plpgsql;
-
---CZY DOKTOR DOSTEPNY W PRZEDZIALE CZASU
-
-CREATE OR REPLACE FUNCTION check_doctor_availability(
-    spec_name VARCHAR(50),
-    start_date DATE,
-    end_date DATE
-)
-RETURNS BOOLEAN AS $$
-DECLARE
-    doctor_available BOOLEAN;
-BEGIN
-    SELECT EXISTS (
-        SELECT 1
-        FROM Vets v
-        INNER JOIN Vets_Specialities vs ON v.id = vs.vet_id
-        WHERE vs.name = spec_name
-        AND NOT EXISTS (
-            SELECT 1
-            FROM Visits vi
-            WHERE vi.vet_id = v.id
-            AND (vi.visit_date >= start_date AND vi.visit_date <= end_date)
-        )
-    ) INTO doctor_available;
-
-    RETURN doctor_available;
-END;
-$$ LANGUAGE plpgsql;
-
 COPY Persons (first_name, last_name, address, city, telephone, email, fav_animal) FROM stdin (Delimiter ',');
-David,O Connor,65 Hudson St,Dulford,070218230685,daveoc@gmail.com,Bobby
+David, O Connor,65 Hudson St,Dulford,070218230685,daveoc@gmail.com,Bobby
 Elisabeth,Kowalski,79 Holgate Rd,Rannoch School,07789721317,LizSmith743@yahoo.com,Dog
 Rishi,Sunak,10 Downing St,London,02072195437,rishi.sunak.mp@parliament.uk,Cos
 Barbara,Richards,90 Balsham St,Harrogate,07017505023,barbararichards1937@gmail.com,Triss
@@ -377,6 +309,7 @@ Pet Oasis,357 Ash Street,Houston,555678901,info@petoasis.com
 Paw Prints Animal Clinic,852 Elm St,New York City,555789012,info@pawprintsanimalclinic.com
 \.
 
+
 COPY Positions (name,min_salary) FROM stdin (Delimiter ',');
 Veterinarian,5000.00
 Veterinary Assistant,2500.00
@@ -457,7 +390,6 @@ COPY Vets_Specialities(vet_id,name,date_start) FROM stdin (Delimiter ',');
 15,Internal Medicine,2023-01-15
 15,Endocrinology,2023-05-10
 \.
-
 
 COPY WorkHours(employee_id,"WeekDay",start_time,end_time) FROM stdin (Delimiter ',');
 1,Monday,09:00:00,17:00:00
@@ -688,6 +620,7 @@ Lola,F,3,2020-03-25,7.2,false,false
 Rocky,M,4,2017-01-08,5.9,false,false
 Bella,F,5,2018-08-03,3.5,false,false
 \.
+
 
 COPY Positions (name,min_salary) FROM stdin (Delimiter ',');
 Veterinarian,5000.00
@@ -1088,5 +1021,108 @@ COPY Vaxx (pet_id, period_start, period_end, done, type) FROM stdin (Delimiter '
 14, 2027-02-15, 2027-03-15, false, 3
 26, 2027-03-10, 2027-04-10, false, 1
 \.
+
+----OBLICZNIE OCENY WETERYNARZA
+
+CREATE OR REPLACE FUNCTION calculate_vet_rating(search_id INTEGER)
+RETURNS NUMERIC(3, 1) AS $$
+DECLARE
+    total_rating INTEGER := 0;
+    total_visits INTEGER := 0;
+    avg_rating NUMERIC(3, 1);
+BEGIN
+    SELECT COUNT(*), COALESCE(SUM(rate), 0)
+    INTO total_visits, total_rating
+    FROM Visits
+    WHERE search_id = vet_id;
+
+    IF total_visits > 0 THEN
+        avg_rating := total_rating::NUMERIC / total_visits::NUMERIC;
+        RETURN ROUND(avg_rating, 1);
+    ELSE
+        RETURN 0.0;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE VIEW EmployeeDetails AS
+SELECT p.first_name, p.last_name, e.salary, e.date_start, e.date_fire, calculate_vet_rating(p.id)
+FROM Employees e
+JOIN Persons p ON e.person_id = p.id;
+
+----DAWANIE UPRAWNIEN
+
+CREATE OR REPLACE FUNCTION grant_permissions(account_id INT, permission_type PERMISSION_TYPE)
+RETURNS VOID AS $$
+BEGIN
+    UPDATE Accounts
+    SET user_permissions = permission_type
+    WHERE id = account_id;
+END;
+$$ LANGUAGE plpgsql;
+
+
+--CZY DOKTOR DOSTEPNY W PRZEDZIALE CZASU
+
+CREATE OR REPLACE FUNCTION check_doctor_availability(
+    spec_name VARCHAR(50),
+    start_date DATE,
+    end_date DATE
+)
+RETURNS BOOLEAN AS $$
+DECLARE
+    doctor_available BOOLEAN;
+BEGIN
+    SELECT EXISTS (
+        SELECT 1
+        FROM Vets v
+        INNER JOIN Vets_Specialities vs ON v.id = vs.vet_id
+        WHERE vs.name = spec_name
+        AND NOT EXISTS (
+            SELECT 1
+            FROM Visits vi
+            WHERE vi.vet_id = v.id
+            AND (vi.visit_date >= start_date AND vi.visit_date <= end_date)
+        )
+    ) INTO doctor_available;
+
+    RETURN doctor_available;
+END;
+$$ LANGUAGE plpgsql;
+
+-- DODAJ PRACOWNIKA FUNKAJA
+CREATE OR REPLACE FUNCTION add_employee_with_person(
+  p_first_name VARCHAR(20),
+  p_last_name VARCHAR(40),
+  p_address VARCHAR(200),
+  p_city VARCHAR(40),
+  p_telephone VARCHAR(20),
+  p_email VARCHAR(60),
+  p_fav_animal VARCHAR(40),
+  p_position INTEGER,
+  p_salary NUMERIC(10, 2),
+  p_date_start DATE
+) RETURNS VOID AS $$
+DECLARE
+  v_person_id INTEGER;
+  v_employee_id INTEGER;
+BEGIN
+  -- Dodaj osobę
+  INSERT INTO Persons (first_name, last_name, address, city, telephone, email, fav_animal)
+  VALUES (p_first_name, p_last_name, p_address, p_city, p_telephone, p_email, p_fav_animal)
+  RETURNING id INTO v_person_id;
+
+  SELECT COALESCE(MAX(id), 0) + 1 INTO v_employee_id FROM Employees;
+
+  IF v_employee_id = 1 THEN
+    ALTER SEQUENCE employees_id_seq RESTART;
+  END IF;
+
+
+  INSERT INTO Employees (id, person_id, position, salary, date_start)
+  VALUES (v_employee_id, v_person_id, p_position, p_salary, p_date_start);
+END;
+$$ LANGUAGE plpgsql;
+
 
 commit;

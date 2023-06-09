@@ -3,14 +3,16 @@ package com.Clinic.WebApp.repository;
 import com.Clinic.WebApp.exception.NotFoundException;
 import com.Clinic.WebApp.model.EmployeeDetailsDTO;
 import com.Clinic.WebApp.model.EmployeesModel;
-import com.Clinic.WebApp.model.RegisterEmployeeModel;
+import com.Clinic.WebApp.model.RegisterEmployeeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class EmployeesRepository implements RepoInterface{
@@ -24,11 +26,22 @@ public class EmployeesRepository implements RepoInterface{
         return jdbcTemplate.query(GET_EMPLOYEE_PROPERTIES_SQL + " LIMIT 20",
                 BeanPropertyRowMapper.newInstance(EmployeesModel.class));
     }
-    public int addEmployeeByFunc(RegisterEmployeeModel registerE){
-        jdbcTemplate.queryForList("SELECT add_employee_with_person( ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )",
-        registerE.getP_first_name(), registerE.getP_last_name(), registerE.getP_address(), registerE.getP_city(),
-                registerE.getP_telephone(), registerE.getP_email(), registerE.getP_fav_animal(), registerE.getP_position(),
-                registerE.getP_salary(), registerE.getP_date_start());
+    public int addEmployeeByFunc(RegisterEmployeeDTO registerE){
+        final SimpleJdbcCall dbCall = new SimpleJdbcCall(jdbcTemplate).withFunctionName("add_employee_with_person");
+        final Map<String, Object> params = new HashMap<>();
+
+        params.put("p_first_name", registerE.getP_first_name());
+        params.put("p_last_name", registerE.getP_last_name());
+        params.put("p_address", registerE.getP_address());
+        params.put("p_city", registerE.getP_city());
+        params.put("p_telephone", registerE.getP_telephone());
+        params.put("p_email", registerE.getP_email());
+        params.put("p_fav_animal", registerE.getP_fav_animal());
+        params.put("p_position", registerE.getP_position());
+        params.put("p_salary", registerE.getP_salary());
+        params.put("p_date_start", registerE.getP_date_start());
+
+        dbCall.execute(params);
         return 202;
     }
     public List<EmployeeDetailsDTO> getEmployeesDetails(){
