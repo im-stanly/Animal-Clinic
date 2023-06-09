@@ -62,6 +62,8 @@ function App() {
         console.log(role);
         if (role === 'admin') {
           navigate('/employees');
+        } else if (role === 'user') {
+          navigate('/userPage');
         }
 
         setLoginResult({
@@ -71,12 +73,7 @@ function App() {
       } else if (response.status === 401) {
         setLoginResult({
           success: false,
-          message: 'Błędne hasło.'
-        });
-      } else if (response.status === 404) {
-        setLoginResult({
-          success: false,
-          message: 'Konto o podanym loginie nie istnieje.'
+          message: 'Login lub haslo sa niepoprawne.'
         });
       } else {
         setLoginResult({
@@ -109,6 +106,8 @@ function App() {
       const role = decodeRoleFromToken(storedToken);
       if (role === 'admin') {
         navigate('/employees');
+      } else if (role === 'user') {
+        navigate('/userPage');
       }
     }
   }, []);

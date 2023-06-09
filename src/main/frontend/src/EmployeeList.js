@@ -7,32 +7,46 @@ const EmployeeList = () => {
   const [token, setToken] = useState(localStorage.getItem('token'));
   const navigate = useNavigate();
 
-    function decodeRoleFromToken(token) {
-        try {
-          const tokenParts = token.split('.');
-          const payload = JSON.parse(atob(tokenParts[1]));
+  function decodeRoleFromToken(token) {
+    try {
+      const tokenParts = token.split('.');
+      const payload = JSON.parse(atob(tokenParts[1]));
 
-          return payload.role;
-        } catch (error) {
-          console.error('Błąd dekodowania tokenu:', error);
-          return null;
-        }
-      }
+      return payload.role;
+    } catch (error) {
+      console.error('Błąd dekodowania tokenu:', error);
+      return null;
+    }
+  }
 
   useEffect(() => {
-      if (!token) {
-        navigate("/");
-      } else if(decodeRoleFromToken(token) !== 'admin') {
-        navigate("/");
-      }else {
-        fetchEmployees();
-      }
-    }, [token]);
+    if (!token) {
+      navigate("/");
+    } else if(decodeRoleFromToken(token) !== 'admin') {
+      navigate("/");
+    }else {
+      fetchEmployees();
+    }
+  }, [token]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     setToken(null);
   };
+
+  const handleStorageChange = (event) => {
+    if (event.key === 'token' && event.newValue === null) {
+      handleLogout();
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
 
   const [employees, setEmployees] = useState([]);
   const [filteredEmployees, setFilteredEmployees] = useState([]);
