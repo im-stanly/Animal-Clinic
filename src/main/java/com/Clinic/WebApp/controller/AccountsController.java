@@ -33,7 +33,7 @@ public class AccountsController {
 
         try {
             AccountsModel account = accountsService.findByUsernameAndPassword(newAccount.get(0).getUsername(), newAccount.get(0).getPassword()).get(0);
-            String token = TokenUtils.generateToken(account.getUsername(), account.getUser_permissions());
+            String token = TokenUtils.generateToken(account.getEmail(), account.getUsername(), account.getUser_permissions());
 
             Map<String, String> response = new HashMap<>();
             response.put("success", "true");

@@ -14,6 +14,7 @@ public class EmployeeDetailsDTO{
     private Integer id;
     private String first_name;
     private String last_name;
+    private String email;
     private String position;
     private Integer salary;
     private LocalDate date_start;
