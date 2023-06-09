@@ -189,7 +189,7 @@ CREATE TABLE Accounts (
 );
 
 CREATE VIEW EmployeeDetails AS
-SELECT e.id, p.first_name, p.last_name, pos.name AS position, e.salary, e.date_start, e.date_fire, calculate_vet_rating(p.id) AS rating
+SELECT e.id, p.first_name, p.last_name, pos.name AS position, p.email, e.salary, e.date_start, e.date_fire, calculate_vet_rating(p.id) AS rating
 FROM Employees e
 JOIN Persons p ON e.person_id = p.id
 JOIN Positions pos ON e.position = pos.id;
