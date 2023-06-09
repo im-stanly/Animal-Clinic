@@ -2,7 +2,7 @@ package com.Clinic.WebApp.controller;
 
 import com.Clinic.WebApp.model.EmployeeDetailsDTO;
 import com.Clinic.WebApp.model.EmployeesModel;
-import com.Clinic.WebApp.model.RegisterEmployeeModel;
+import com.Clinic.WebApp.model.RegisterEmployeeDTO;
 import com.Clinic.WebApp.service.EmployeesService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,7 +21,7 @@ public class EmployeesController {
 
     @GetMapping("")
     public List<EmployeesModel> getEmployees(){
-        log.info("");
+        log.info("Request for all employees");
         return employeesService.getEmployees();
     }
 
@@ -30,8 +30,8 @@ public class EmployeesController {
         return employeesService.getEmployeesDetails();
     }
 
-    @GetMapping("/register")
-    public int registerEmp(@RequestBody RegisterEmployeeModel regisEmp){
+    @PostMapping("/register")
+    public int registerEmp(@RequestBody RegisterEmployeeDTO regisEmp){
         return employeesService.addEmployeeByFunc(regisEmp);
     }
 
