@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -22,10 +23,12 @@ public class VisitsService {
         return visitsRepository.getById(id);
     }
 
-    public List<VisitsModel> getNextVisits(int id){
-        return visitsRepository.getNextVisits(id);
+    public List<VisitsModel> getPetsNextVisits(int id){
+        return visitsRepository.getPetsNextVisits(id);
     }
-
+    public List<VisitsModel> getVetNextVisits(int id, LocalDate date){
+        return visitsRepository.getVetNextVisits(id, date);
+    }
     public int save(List<VisitsModel> medicineModels){
         return visitsRepository.save(medicineModels);
     }

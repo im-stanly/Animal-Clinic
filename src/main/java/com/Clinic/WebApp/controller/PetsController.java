@@ -31,7 +31,7 @@ public class PetsController {
 
     @GetMapping("/next-visits/id={id}")
     public List<VisitsModel> getNextVisitsForPet(@PathVariable("id") int id){
-        return visitsService.getNextVisits(id);
+        return visitsService.getPetsNextVisits(id);
     }
 
     @PostMapping("")

@@ -3,8 +3,10 @@ package com.Clinic.WebApp.controller;
 import com.Clinic.WebApp.model.VisitsModel;
 import com.Clinic.WebApp.service.VisitsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -17,6 +19,12 @@ public class VisitsController {
     @GetMapping("")
     public List<VisitsModel> getVisits(){
         return visitsService.getVisits();
+    }
+
+    @GetMapping("/vet-next-visits/id={id}/{date}")
+    public List<VisitsModel> getVetNextVisits(@PathVariable("id") int id,
+                  @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date){
+        return visitsService.getVetNextVisits(id, date);
     }
 
     @GetMapping("/id={id}")
