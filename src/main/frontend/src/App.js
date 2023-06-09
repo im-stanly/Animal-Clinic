@@ -8,6 +8,7 @@ function App() {
   const [loginResult, setLoginResult] = useState({ success: false, message: '' });
   const [searchData, setSearchData] = useState({ specialization: '', date: '' });
   const [token, setToken] = useState(null);
+  const [funFact, setFunFact] = useState('');
   const navigate = useNavigate();
 
   const handleLoginClick = () => {
@@ -35,7 +36,7 @@ function App() {
 
       return payload.role;
     } catch (error) {
-      console.error('Błąd dekodowania tokenu:', error);
+      console.error('Token decoding error:', error);
       return null;
     }
   }
@@ -64,28 +65,30 @@ function App() {
           navigate('/employees');
         } else if (role === 'user') {
           navigate('/userPage');
+        } else if (role === 'employee') {
+          navigate('/vetPage');
         }
 
         setLoginResult({
           success: true,
-          message: 'Zalogowano pomyślnie.'
+          message: 'Logged in successfully.'
         });
       } else if (response.status === 401) {
         setLoginResult({
           success: false,
-          message: 'Login lub haslo sa niepoprawne.'
+          message: 'Invalid username or password.'
         });
       } else {
         setLoginResult({
           success: false,
-          message: 'Wystąpił błąd serwera.'
+          message: 'Server error occurred.'
         });
       }
     } catch (error) {
-      console.log('Wystąpił błąd:', error);
+      console.log('An error occurred:', error);
       setLoginResult({
         success: false,
-        message: 'Wystąpił błąd serwera.'
+        message: 'Server error occurred.'
       });
     }
 
@@ -112,32 +115,53 @@ function App() {
     }
   }, []);
 
+  const fetchRandomFunFact = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/funfacts2/amount=1');
+      const data = await response.json();
+
+      if (response.status === 200 && Array.isArray(data) && data.length > 0) {
+        setFunFact(data[0].text);
+      } else {
+        setFunFact('Failed to fetch a fun fact.');
+      }
+    } catch (error) {
+      console.error('Error fetching fun fact:', error);
+      setFunFact('Error fetching fun fact.');
+    }
+  };
+
+  useEffect(() => {
+    fetchRandomFunFact();
+  }, []);
+
   return (
     <div className="app-container">
       <header className="header">
         <h1 className="title">Animal Clinic</h1>
         <div className="links">
           <a className="link" href="/registration">
-            Zarejestruj się
+            Sign Up
           </a>
           {!token ? (
             <a className="link" onClick={handleLoginClick}>
-              Zaloguj się
+              Log In
             </a>
           ) : (
             <a className="link" onClick={handleLogout}>
-              Wyloguj się
+              Log Out
             </a>
           )}
         </div>
       </header>
       <main className="main-content">
         <p className="description">
-          Witaj w naszej przytulnej klinice weterynaryjnej, gdzie dbamy o zdrowie i dobro zwierząt.
+          Welcome to our cozy veterinary clinic, where we care about the health and well-being of animals.
         </p>
+        <p className="fun-fact">Fun fact of the day: {funFact}</p>
         <img className="animal-image" src="/animal-image.png" alt="Animal" />
         <p className="contact-info">
-          Skontaktuj się z nami pod numerem telefonu: 123-456-789 lub za pomocą adresu email: info@animalclinic.com
+          Contact us at phone number: 123-456-789 or via email address: info@animalclinic.com
         </p>
       </main>
       {showLogin && (
@@ -149,7 +173,7 @@ function App() {
                 name="username"
                 value={loginData.username}
                 onChange={handleInputChange}
-                placeholder="Nazwa użytkownika"
+                placeholder="Username"
                 required
               />
               <input
@@ -157,13 +181,13 @@ function App() {
                 name="password"
                 value={loginData.password}
                 onChange={handleInputChange}
-                placeholder="Hasło"
+                placeholder="Password"
                 required
               />
-              <button type="submit">Zaloguj</button>
+              <button type="submit">Log In</button>
             </form>
             <button className="modal-close-button" onClick={handleCloseModal}>
-              Zamknij
+              Close
             </button>
             {loginResult.message && (
               <p className={loginResult.success ? 'success-message' : 'error-message'}>{loginResult.message}</p>
@@ -172,7 +196,7 @@ function App() {
         </div>
       )}
       <footer className="footer">
-        &copy; {new Date().getFullYear()} Animal Clinic. Wszelkie prawa zastrzeżone.
+        &copy; {new Date().getFullYear()} Animal Clinic. All rights reserved.
       </footer>
     </div>
   );
