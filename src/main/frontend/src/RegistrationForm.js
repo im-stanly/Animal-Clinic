@@ -20,7 +20,7 @@ function RegistrationForm() {
 
   const handleRegistrationSubmit = (event) => {
     event.preventDefault();
-    console.log('Rejestracja:', registrationData);
+    console.log('Registration:', registrationData);
 
     fetch('http://localhost:8080/accounts/register', {
       method: 'POST',
@@ -31,40 +31,39 @@ function RegistrationForm() {
     })
       .then((response) => {
         if (response.status === 200) {
-          setErrorMessage('Zarejestrowano pomyślnie.');
+          setErrorMessage('Registration successful.');
           setRegistrationData({
             username: '',
             email: '',
             password: ''
           });
         } else if (response.status === 401) {
-          setErrorMessage('Podany adres email jest już zajęty.');
+          setErrorMessage('The provided email address is already taken.');
         } else if (response.status === 406) {
-            setErrorMessage('Podana nazwa jest już zajęta.');
-        }
-        else {
-          setErrorMessage('Wystąpił błąd serwera.');
+          setErrorMessage('The provided username is already taken.');
+        } else {
+          setErrorMessage('An error occurred on the server.');
         }
       })
       .catch((error) => {
-        console.log('Wystąpił błąd:', error);
-        setErrorMessage('Wystąpił błąd serwera.');
+        console.log('An error occurred:', error);
+        setErrorMessage('An error occurred on the server.');
       });
   };
 
   return (
     <div className="registration-form-container">
       <Link to="/" className="back-link">
-        Powrót
+        Back
       </Link>
-      <h2>Zarejestruj się</h2>
+      <h2>Register</h2>
       <form onSubmit={handleRegistrationSubmit}>
         <input
           type="text"
           name="username"
           value={registrationData.username}
           onChange={handleInputChange}
-          placeholder="Nazwa użytkownika"
+          placeholder="Username"
           required
         />
         <input
@@ -72,7 +71,7 @@ function RegistrationForm() {
           name="email"
           value={registrationData.email}
           onChange={handleInputChange}
-          placeholder="Adres email"
+          placeholder="Email address"
           required
         />
         <input
@@ -80,10 +79,10 @@ function RegistrationForm() {
           name="password"
           value={registrationData.password}
           onChange={handleInputChange}
-          placeholder="Hasło"
+          placeholder="Password"
           required
         />
-        <button type="submit">Zarejestruj</button>
+        <button type="submit">Register</button>
       </form>
       {errorMessage && <p className="error-message">{errorMessage}</p>}
     </div>

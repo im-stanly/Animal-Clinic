@@ -1,7 +1,53 @@
 import React, { useEffect, useState } from 'react';
+import { Link, Redirect } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './EmployeesList.css';
 
 const EmployeeList = () => {
+  const [token, setToken] = useState(localStorage.getItem('token'));
+  const navigate = useNavigate();
+
+  function decodeRoleFromToken(token) {
+    try {
+      const tokenParts = token.split('.');
+      const payload = JSON.parse(atob(tokenParts[1]));
+
+      return payload.role;
+    } catch (error) {
+      console.error('Błąd dekodowania tokenu:', error);
+      return null;
+    }
+  }
+
+  useEffect(() => {
+    if (!token) {
+      navigate("/");
+    } else if(decodeRoleFromToken(token) !== 'admin') {
+      navigate("/");
+    }else {
+      fetchEmployees();
+    }
+  }, [token]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setToken(null);
+  };
+
+  const handleStorageChange = (event) => {
+    if (event.key === 'token' && event.newValue === null) {
+      handleLogout();
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
+
   const [employees, setEmployees] = useState([]);
   const [filteredEmployees, setFilteredEmployees] = useState([]);
   const [filters, setFilters] = useState({
@@ -101,7 +147,7 @@ const EmployeeList = () => {
 
   const handleFireEmployee = async (id) => {
     try {
-      const date_fire = new Date().toISOString().split('T')[0]; // Używamy tylko daty bez godziny
+      const date_fire = new Date().toISOString().split('T')[0];
       const data = {
         date_fire: date_fire
       };
@@ -125,6 +171,10 @@ const EmployeeList = () => {
   return (
     <div className="employee-list-container">
       <h1>Lista Pracowników</h1>
+
+        <Link to="/" className="back-link" onClick={handleLogout}>
+            Wyloguj
+        </Link>
 
       <div>
         <label htmlFor="position">Stanowisko:</label>

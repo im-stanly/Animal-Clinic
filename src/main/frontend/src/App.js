@@ -1,73 +1,139 @@
-// App.js
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
+import { useNavigate } from 'react-router-dom';
 
 function App() {
   const [showLogin, setShowLogin] = useState(false);
-    const [loginData, setLoginData] = useState({ username: '', password: '' });
-    const [loginResult, setLoginResult] = useState({ success: false, message: '' });
+  const [loginData, setLoginData] = useState({ username: '', password: '' });
+  const [loginResult, setLoginResult] = useState({ success: false, message: '' });
+  const [searchData, setSearchData] = useState({ specialization: '', date: '' });
+  const [token, setToken] = useState(null);
+  const [funFact, setFunFact] = useState('');
+  const navigate = useNavigate();
 
-    const handleLoginClick = () => {
-      setShowLogin(true);
-    };
+  const handleLoginClick = () => {
+    setShowLogin(true);
+  };
 
-    const handleCloseModal = () => {
-      setShowLogin(false);
-    };
+  const handleCloseModal = () => {
+    setShowLogin(false);
+  };
 
-    const handleInputChange = (event) => {
-      const { name, value } = event.target;
-      setLoginData({ ...loginData, [name]: value });
-    };
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setLoginData({ ...loginData, [name]: value });
+  };
 
-    const handleLoginSubmit = async (event) => {
-      event.preventDefault();
+  const handleSearchChange = (event) => {
+    const { name, value } = event.target;
+    setSearchData({ ...searchData, [name]: value });
+  };
 
-      console.log('Wysyłany JSON:', JSON.stringify([loginData]));
+  function decodeRoleFromToken(token) {
+    try {
+      const tokenParts = token.split('.');
+      const payload = JSON.parse(atob(tokenParts[1]));
 
-      try {
-        const response = await fetch('http://localhost:8080/accounts/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify([loginData])
+      return payload.role;
+    } catch (error) {
+      console.error('Token decoding error:', error);
+      return null;
+    }
+  }
+
+  const handleLoginSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      const response = await fetch('http://localhost:8080/accounts/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify([loginData])
+      });
+
+      const data = await response.json();
+
+      if (response.status === 200) {
+        localStorage.setItem('token', data.token);
+        setToken(data.token);
+
+        const role = decodeRoleFromToken(data.token);
+        console.log(role);
+        if (role === 'admin') {
+          navigate('/employees');
+        } else if (role === 'user') {
+          navigate('/userPage');
+        } else if (role === 'employee') {
+          navigate('/vetPage');
+        }
+
+        setLoginResult({
+          success: true,
+          message: 'Logged in successfully.'
         });
+      } else if (response.status === 401) {
+        setLoginResult({
+          success: false,
+          message: 'Invalid username or password.'
+        });
+      } else {
+        setLoginResult({
+          success: false,
+          message: 'Server error occurred.'
+        });
+      }
+    } catch (error) {
+      console.log('An error occurred:', error);
+      setLoginResult({
+        success: false,
+        message: 'Server error occurred.'
+      });
+    }
 
-        const data = await response.json();
+    setLoginData({ username: '', password: '' });
+  };
 
-        if (response.status === 200) {
-          setLoginResult({
-            success: true,
-            message: 'Zalogowano pomyślnie.'
-          });
-        } else if (response.status == 401) {
-          setLoginResult({
-            success: false,
-            message: 'Błędne hasło.'
-          });
-        } else if (response.status === 404) {
-          setLoginResult({
-            success: false,
-            message: 'Konto o podanym loginie nie istnieje.'
-          });
-        } else {
-          setLoginResult({
-            success: false,
-            message: 'Wystąpił błąd serwera.'
-          });
-        }
-        } catch (error) {
-          console.log('Wystąpił błąd:', error);
-           setLoginResult({
-             success: false,
-             message: 'Wystąpił błąd serwera.'
-          });
-        }
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setToken(null);
+  };
 
-      setLoginData({ username: '', password: '' });
-    };
+  useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+
+    if (storedToken) {
+      setToken(storedToken);
+
+      const role = decodeRoleFromToken(storedToken);
+      if (role === 'admin') {
+        navigate('/employees');
+      } else if (role === 'user') {
+        navigate('/userPage');
+      }
+    }
+  }, []);
+
+  const fetchRandomFunFact = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/funfacts2/amount=1');
+      const data = await response.json();
+
+      if (response.status === 200 && Array.isArray(data) && data.length > 0) {
+        setFunFact(data[0].text);
+      } else {
+        setFunFact('Failed to fetch a fun fact.');
+      }
+    } catch (error) {
+      console.error('Error fetching fun fact:', error);
+      setFunFact('Error fetching fun fact.');
+    }
+  };
+
+  useEffect(() => {
+    fetchRandomFunFact();
+  }, []);
 
   return (
     <div className="app-container">
@@ -75,20 +141,27 @@ function App() {
         <h1 className="title">Animal Clinic</h1>
         <div className="links">
           <a className="link" href="/registration">
-            Zarejestruj się
+            Sign Up
           </a>
-          <a className="link" onClick={handleLoginClick}>
-            Zaloguj się
-          </a>
+          {!token ? (
+            <a className="link" onClick={handleLoginClick}>
+              Log In
+            </a>
+          ) : (
+            <a className="link" onClick={handleLogout}>
+              Log Out
+            </a>
+          )}
         </div>
       </header>
       <main className="main-content">
         <p className="description">
-          Witaj w naszej przytulnej klinice weterynaryjnej, gdzie dbamy o zdrowie i dobro zwierząt.
+          Welcome to our cozy veterinary clinic, where we care about the health and well-being of animals.
         </p>
+        <p className="fun-fact">Fun fact of the day: {funFact}</p>
         <img className="animal-image" src="/animal-image.png" alt="Animal" />
         <p className="contact-info">
-          Skontaktuj się z nami pod numerem telefonu: 123-456-789 lub za pomocą adresu email: info@animalclinic.com
+          Contact us at phone number: 123-456-789 or via email address: info@animalclinic.com
         </p>
       </main>
       {showLogin && (
@@ -100,7 +173,7 @@ function App() {
                 name="username"
                 value={loginData.username}
                 onChange={handleInputChange}
-                placeholder="Nazwa użytkownika"
+                placeholder="Username"
                 required
               />
               <input
@@ -108,13 +181,13 @@ function App() {
                 name="password"
                 value={loginData.password}
                 onChange={handleInputChange}
-                placeholder="Hasło"
+                placeholder="Password"
                 required
               />
-              <button type="submit">Zaloguj</button>
+              <button type="submit">Log In</button>
             </form>
             <button className="modal-close-button" onClick={handleCloseModal}>
-              Zamknij
+              Close
             </button>
             {loginResult.message && (
               <p className={loginResult.success ? 'success-message' : 'error-message'}>{loginResult.message}</p>
@@ -123,7 +196,7 @@ function App() {
         </div>
       )}
       <footer className="footer">
-        &copy; {new Date().getFullYear()} Animal Clinic. Wszelkie prawa zastrzeżone.
+        &copy; {new Date().getFullYear()} Animal Clinic. All rights reserved.
       </footer>
     </div>
   );

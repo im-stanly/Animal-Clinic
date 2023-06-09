@@ -139,3 +139,14 @@
 .error-message {
   color: #ff3333;
 }
+
+.fun-fact {
+  font-size: 18px;
+  margin-top: 20px;
+  color: #ff66cc;
+  border: 2px solid #ff66cc;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #fde4f2;
+}
+
