@@ -18,10 +18,8 @@ DROP TABLE IF EXISTS Positions CASCADE;
 DROP TABLE IF EXISTS Pet_Owners CASCADE;
 DROP TABLE IF EXISTS Medicine_type CASCADE;
 DROP TABLE IF EXISTS Races CASCADE;
-DROP TABLE IF EXISTS Vet_converter CASCADE;
 DROP TABLE IF EXISTS Visit_types CASCADE;
 DROP TABLE IF EXISTS Vaxx_type CASCADE;
-DROP TABLE IF EXISTS Med_converter CASCADE;
 
 CREATE TABLE Persons (
     id          SERIAL          PRIMARY KEY,
@@ -120,24 +118,10 @@ CREATE TABLE Medicine (
     type        INTEGER        REFERENCES Medicine_type(id)
 );
 
-CREATE TABLE Med_converter (
-    type_id     INTEGER         REFERENCES Medicine_type(id) NOT NULL,
-    amount	    INTEGER	        NOT NULL,
-    conv_rate   INTEGER         NOT NULL,
-    PRIMARY KEY (type_id, amount)
-);
-
 CREATE TABLE Visit_types (
     id          SERIAL          PRIMARY KEY,
     name        VARCHAR(80)     NOT NULL,
     base_price  INTEGER         NOT NULL
-);
-
-CREATE TABLE Vet_converter (
-    Vet_id      INTEGER         REFERENCES Vets(id) NOT NULL,
-    type_id     INTEGER         REFERENCES Visit_types(id) NOT NULL,
-    conv_rate   INTEGER         NOT NULL,
-    PRIMARY KEY (type_id, Vet_id)
 );
 
 CREATE TABLE Visits (
