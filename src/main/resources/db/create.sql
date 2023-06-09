@@ -178,14 +178,14 @@ CREATE TABLE Vets_Specialities (
 );
 
 DROP TYPE IF EXISTS PERMISSION_TYPE CASCADE;
-CREATE TYPE PERMISSION_TYPE AS ENUM ('admin', 'employee', 'user');
+CREATE TYPE PERMISSION_TYPE AS ENUM ('ADMIN', 'EMPLOYEE', 'USER');
 
 CREATE TABLE Accounts (
     id              SERIAL          PRIMARY KEY,
     email           VARCHAR(255)    NOT NULL UNIQUE,
     username        VARCHAR(50)     NOT NULL UNIQUE,
     password        VARCHAR(250)    NOT NULL,
-    user_permissions VARCHAR(255)   DEFAULT 'user'
+    user_permissions PERMISSION_TYPE   DEFAULT 'USER'
 );
 
 COPY Persons (first_name, last_name, address, city, telephone, email, fav_animal) FROM stdin (Delimiter ',');
@@ -1030,9 +1030,17 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE VIEW EmployeeDetails AS
-SELECT p.first_name, p.last_name, e.salary, e.date_start, e.date_fire, calculate_vet_rating(p.id)
+SELECT e.id, p.first_name, p.last_name, pos.name AS position, p.email, e.salary,
+    e.date_start, e.date_fire, calculate_vet_rating(p.id) AS rating
 FROM Employees e
 JOIN Persons p ON e.person_id = p.id;
+
+CREATE VIEW VetSchedule AS
+SELECT v.id, p.first_name, p.last_name, vs.name AS specialization
+FROM Employees e
+JOIN Persons p ON e.person_id = p.id
+JOIN Vets v ON v.id = e.id
+JOIN Vets_Specialities vs ON vs.vet_id = v.id;
 
 ----DAWANIE UPRAWNIEN
 
