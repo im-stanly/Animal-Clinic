@@ -10,8 +10,9 @@ import java.util.Map;
 public class TokenUtils {
     private static final long EXPIRATION_TIME = 3600000; // 1 hour
 
-    public static String generateToken(String username, String role) {
+    public static String generateToken(String email, String username, String role) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("email", email);
         claims.put("username", username);
         claims.put("role", role);
 
