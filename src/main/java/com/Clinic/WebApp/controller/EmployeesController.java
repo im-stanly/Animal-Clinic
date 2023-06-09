@@ -2,7 +2,10 @@ package com.Clinic.WebApp.controller;
 
 import com.Clinic.WebApp.model.EmployeeDetailsDTO;
 import com.Clinic.WebApp.model.EmployeesModel;
+import com.Clinic.WebApp.model.RegisterEmployeeModel;
 import com.Clinic.WebApp.service.EmployeesService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,15 +17,22 @@ import java.util.List;
 public class EmployeesController {
     @Autowired
     private EmployeesService employeesService;
+    private static final Logger log = LogManager.getLogger(AccountsController.class);
 
     @GetMapping("")
     public List<EmployeesModel> getEmployees(){
+        log.info("");
         return employeesService.getEmployees();
     }
 
     @GetMapping("/details")
     public List<EmployeeDetailsDTO> getEmployeesDetailed(){
         return employeesService.getEmployeesDetails();
+    }
+
+    @GetMapping("/register")
+    public int registerEmp(@RequestBody RegisterEmployeeModel regisEmp){
+        return employeesService.addEmployeeByFunc(regisEmp);
     }
 
     @GetMapping("/id={id}")

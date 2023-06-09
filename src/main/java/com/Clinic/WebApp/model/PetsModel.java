@@ -13,10 +13,8 @@ public class PetsModel {
     private Integer id;
     private String name;
     private Character sex;
-    private String type;
-    private String race;
+    private Integer type;
     private LocalDate birth_day;
-    private Integer person_id;
     private Double weight;
     private Boolean dangerous;
     private Boolean estimate;

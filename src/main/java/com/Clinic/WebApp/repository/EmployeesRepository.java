@@ -3,11 +3,13 @@ package com.Clinic.WebApp.repository;
 import com.Clinic.WebApp.exception.NotFoundException;
 import com.Clinic.WebApp.model.EmployeeDetailsDTO;
 import com.Clinic.WebApp.model.EmployeesModel;
+import com.Clinic.WebApp.model.RegisterEmployeeModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -21,6 +23,13 @@ public class EmployeesRepository implements RepoInterface{
     public List<EmployeesModel> getEmployees(){
         return jdbcTemplate.query(GET_EMPLOYEE_PROPERTIES_SQL,
                 BeanPropertyRowMapper.newInstance(EmployeesModel.class));
+    }
+    public int addEmployeeByFunc(RegisterEmployeeModel registerE){
+        jdbcTemplate.queryForList("SELECT add_employee_with_person( ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )",
+        registerE.getP_first_name(), registerE.getP_last_name(), registerE.getP_address(), registerE.getP_city(),
+                registerE.getP_telephone(), registerE.getP_email(), registerE.getP_fav_animal(), registerE.getP_position(),
+                registerE.getP_salary(), registerE.getP_date_start());
+        return 202;
     }
     public List<EmployeeDetailsDTO> getEmployeesDetails(){
         return jdbcTemplate.query(GET_EMPLOYEE_DETAILS_SQL,

@@ -51,8 +51,6 @@ public class VisitsService {
                 oldVisit.setDescription(updatedVisit.getDescription());
             if (updatedVisit.getRate() != null)
                 oldVisit.setRate(updatedVisit.getRate());
-            if (updatedVisit.getPrice() != null)
-                oldVisit.setPrice(updatedVisit.getPrice());
         }
         else
             oldVisit = updatedVisit;

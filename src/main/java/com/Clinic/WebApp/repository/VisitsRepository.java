@@ -13,7 +13,7 @@ import java.util.List;
 public class VisitsRepository implements RepoInterface{
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    private final String GET_VISITS_PROPERTIES_SQL = "SELECT pet_id, vet_id, visit_date, description, rate, price FROM Visits";
+    private final String GET_VISITS_PROPERTIES_SQL = "SELECT pet_id, vet_id, visit_date, visit_time, type_id, description, rate FROM Visits";
 
     public List<VisitsModel> getVisits(){
         return jdbcTemplate.query(GET_VISITS_PROPERTIES_SQL + " LIMIT 20",
@@ -26,18 +26,19 @@ public class VisitsRepository implements RepoInterface{
     public int save(List<VisitsModel> visits){
         visits.forEach( singlePer ->
                 jdbcTemplate.update(
-                        "INSERT INTO Visits(pet_id, vet_id, visit_date, description, rate, price) VALUES(?, ?, ?, ?, ?, ?)",
+                        "INSERT INTO Visits(pet_id, vet_id, visit_date, visit_time, type_id, description, rate) VALUES(?, ?, ?, ?, ?, ?, ?)",
                         singlePer.getPet_id(), singlePer.getVet_id(), singlePer.getVisit_date(),
-                        singlePer.getDescription(), singlePer.getRate(), singlePer.getPrice()
+                        singlePer.getVisit_time(), singlePer.getType_id(), singlePer.getDescription(),
+                        singlePer.getRate()
                 ));
         return 202;
     }
 
     public int update(int oldId, VisitsModel visit){
         return jdbcTemplate.update(
-                "UPDATE Visits SET pet_id = ?, vet_id = ?, visit_date = ?, description = ?, rate = ?, price = ? WHERE id=?",
+                "UPDATE Visits SET pet_id = ?, vet_id = ?, visit_date = ?, visit_time = ?, type_id = ?, description = ?, rate = ? WHERE id=?",
                 visit.getPet_id(), visit.getVet_id(), visit.getVisit_date(),
-                visit.getDescription(), visit.getRate(), visit.getPrice(), oldId);
+                visit.getVisit_time(), visit.getType_id(), visit.getDescription(), visit.getRate(), oldId);
     }
 
     public int delete(int id){

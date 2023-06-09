@@ -10,11 +10,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class PersonRepository {
-    private final String GET_PERSON_PROPERTIES_SQL = "SELECT id, first_name, last_name, address, city, " +
-            "telephone, email FROM Persons";
+public class PersonRepository implements RepoInterface {
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    private final String GET_PERSON_PROPERTIES_SQL = "SELECT id, first_name, last_name, address, city, " +
+            "telephone, email, fav_animal FROM Persons";
 
     public List<PersonsModel> getPersons(){
         return jdbcTemplate.query(GET_PERSON_PROPERTIES_SQL + " LIMIT 20",
@@ -30,9 +30,10 @@ public class PersonRepository {
     public int save(List<PersonsModel> persons){
         persons.forEach( singlePer ->
             jdbcTemplate.update(
-                    "INSERT INTO Persons(first_name, last_name, address, city, telephone, email) VALUES(?, ?, ?, ?, ?, ?)",
+                    "INSERT INTO Persons(first_name, last_name, address, city, telephone, email, fav_animal) " +
+                            "VALUES(?, ?, ?, ?, ?, ?, ?)",
                     singlePer.getFirst_name(), singlePer.getLast_name(), singlePer.getAddress(),
-                    singlePer.getCity(), singlePer.getTelephone(), singlePer.getEmail()
+                    singlePer.getCity(), singlePer.getTelephone(), singlePer.getEmail(), singlePer.getFavAnimal()
             ));
         return 202;
     }
@@ -40,15 +41,15 @@ public class PersonRepository {
     public int update(int oldId, PersonsModel person){
         return jdbcTemplate.update(
                 "UPDATE Persons SET first_name = ?, last_name = ?, address = ?, city = ?, telephone = ?, " +
-                        "email = ? WHERE id=?",
+                        "email = ?, fav_animal = ? WHERE id=?",
                 person.getFirst_name(), person.getLast_name(), person.getAddress(), person.getCity(),
-                person.getTelephone(), person.getEmail(), oldId) > 0 ? 202 : 418;
+                person.getTelephone(), person.getEmail(), person.getFavAnimal(), oldId) > 0 ? 202 : 418;
     }
 
     public int delete(int id){
-        if (!isElementOfLibrary("Persons", "id", id))
+        if (!isElementOfLibrary(jdbcTemplate,"Persons", "id", id))
             throw new NotFoundException("Person", id);
-        return jdbcTemplate.update("DELETE FROM Persons WHERE id = ?", id) > 0 ? 202 : 418;
+        return jdbcTemplate.update("DELETE FROM Persons WHERE id = " + id) > 0 ? 202 : 418;
     }
 
     private List<PersonsModel> getPersonsByKind(String kind, Object object){
@@ -64,12 +65,5 @@ public class PersonRepository {
             }
         }
         return persons;
-    }
-    protected boolean isElementOfLibrary(String nameOfTableInDB, String kind, Object object){
-        var elementsInDB = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM "
-                        + nameOfTableInDB + " WHERE " + kind + " = ?",
-                Integer.class, object);
-
-        return elementsInDB != null;
     }
 }

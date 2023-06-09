@@ -2,6 +2,7 @@ package com.Clinic.WebApp.service;
 
 import com.Clinic.WebApp.model.EmployeeDetailsDTO;
 import com.Clinic.WebApp.model.EmployeesModel;
+import com.Clinic.WebApp.model.RegisterEmployeeModel;
 import com.Clinic.WebApp.repository.EmployeesRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class EmployeesService {
     }
     public List<EmployeeDetailsDTO> getEmployeesDetails(){
         return employeesRepository.getEmployeesDetails();
+    }
+    public int addEmployeeByFunc(RegisterEmployeeModel registerEmployeeModel){
+        return employeesRepository.addEmployeeByFunc(registerEmployeeModel);
     }
 
     public EmployeesModel getById(int id){

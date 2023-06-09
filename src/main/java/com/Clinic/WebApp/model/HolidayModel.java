@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class HolidayModel {
-    private Integer worker_id;
+    private Integer employee_id;
     private LocalDate start_date;
     private LocalDate end_date;
 }

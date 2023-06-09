@@ -13,7 +13,7 @@ import java.util.List;
 public class PetsRepository implements RepoInterface{
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    private final String GET_PERSON_PROPERTIES_SQL = "SELECT id, name, sex, type, race, birth_day, person_id, " +
+    private final String GET_PERSON_PROPERTIES_SQL = "SELECT id, name, sex, type, birth_day, " +
             "weight, dangerous, estimate FROM Pets";
 
     public List<PetsModel> getPets(){
@@ -27,10 +27,10 @@ public class PetsRepository implements RepoInterface{
     public int save(List<PetsModel> pets){
         pets.forEach( singlePer ->
                 jdbcTemplate.update(
-                        "INSERT INTO Pets(name, sex, type, race, birth_day, person_id, weight, dangerous, estimate) " +
-                                "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                        "INSERT INTO Pets(name, sex, type, birth_day, weight, dangerous, estimate) " +
+                                "VALUES(?, ?, ?, ?, ?, ?, ?)",
                         singlePer.getName(), singlePer.getSex(), singlePer.getType(),
-                        singlePer.getRace(), singlePer.getBirth_day(), singlePer.getPerson_id(),
+                        singlePer.getBirth_day(),
                         singlePer.getWeight(), singlePer.getDangerous(), singlePer.getEstimate()
                 ));
         return 202;
@@ -38,10 +38,10 @@ public class PetsRepository implements RepoInterface{
 
     public int update(int oldId, PetsModel pets){
         return jdbcTemplate.update(
-                "UPDATE Pets SET name = ?, sex = ?, type = ?, race = ?, birth_day = ?, person_id = ?, weight = ?, " +
+                "UPDATE Pets SET name = ?, sex = ?, type = ?, birth_day = ?, weight = ?, " +
                         "dangerous = ?, estimate = ? WHERE id=?",
                 pets.getName(), pets.getSex(), pets.getType(),
-                pets.getRace(), pets.getBirth_day(), pets.getPerson_id(),
+                pets.getBirth_day(),
                 pets.getWeight(), pets.getDangerous(), pets.getEstimate(), oldId);
     }
 

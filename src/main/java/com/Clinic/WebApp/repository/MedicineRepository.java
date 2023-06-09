@@ -12,7 +12,7 @@ import java.util.List;
 public class MedicineRepository implements RepoInterface{
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    private final String GET_MEDICINE_PROPERTIES_SQL = "SELECT id, name, company, type FROM Medicine";
+    private final String GET_MEDICINE_PROPERTIES_SQL = "SELECT id, name, company, basePrice, type FROM Medicine";
 
     public List<MedicineModel> getMedicines(){
         return jdbcTemplate.query(GET_MEDICINE_PROPERTIES_SQL + " LIMIT 20",
@@ -25,16 +25,16 @@ public class MedicineRepository implements RepoInterface{
     public int save(List<MedicineModel> medicines){
         medicines.forEach( singlePer ->
                 jdbcTemplate.update(
-                        "INSERT INTO Medicine(name, company, type) VALUES(?, ?, ?)",
-                        singlePer.getName(), singlePer.getCompany(), singlePer.getType()
+                        "INSERT INTO Medicine(name, company, basePrice, type) VALUES(?, ?, ?, ?)",
+                        singlePer.getName(), singlePer.getCompany(), singlePer.getBasePrice(), singlePer.getType()
                 ));
         return 202;
     }
 
     public int update(int oldId, MedicineModel medcine){
         return jdbcTemplate.update(
-                "UPDATE Medicine SET name = ?, company = ?, type = ? WHERE id=?",
-                medcine.getName(), medcine.getCompany(), medcine.getType(), oldId);
+                "UPDATE Medicine SET name = ?, company = ?, basePrice = ?, type = ? WHERE id=?",
+                medcine.getName(), medcine.getCompany(), medcine.getBasePrice(), medcine.getType(), oldId);
     }
 
     public int delete(int id){

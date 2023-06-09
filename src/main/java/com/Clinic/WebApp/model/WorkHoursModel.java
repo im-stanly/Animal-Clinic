@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class WorkHoursModel {
     private Integer worker_id;
+    private String weekDay;
     private LocalDate start_date;
     private LocalDate end_date;
 }
