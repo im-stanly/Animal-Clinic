@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -18,6 +19,14 @@ public class VisitsRepository implements RepoInterface{
     public List<VisitsModel> getVisits(){
         return jdbcTemplate.query(GET_VISITS_PROPERTIES_SQL + " LIMIT 20",
                 BeanPropertyRowMapper.newInstance(VisitsModel.class));
+    }
+
+    public List<VisitsModel> getPetsNextVisits(int id){
+        return getNextVisits("pet_id", id, " >= (SELECT NOW())");
+    }
+
+    public List<VisitsModel> getVetNextVisits(int id, LocalDate date){
+        return getNextVisits("vet_id", id, " = '" + date + "'");
     }
     public VisitsModel getById(int id){
         return getVisitesByKind("id", id).get(0);
@@ -59,5 +68,11 @@ public class VisitsRepository implements RepoInterface{
             }
         }
         return visits;
+    }
+
+    private List<VisitsModel> getNextVisits(String dbProperty, int id, String equality){
+        return jdbcTemplate.query(GET_VISITS_PROPERTIES_SQL +
+                        " WHERE " + dbProperty + "= ? AND visit_date " + equality,
+                BeanPropertyRowMapper.newInstance(VisitsModel.class), id);
     }
 }
