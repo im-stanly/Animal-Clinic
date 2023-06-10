@@ -178,14 +178,14 @@ CREATE TABLE Vets_Specialities (
 );
 
 DROP TYPE IF EXISTS PERMISSION_TYPE CASCADE;
-CREATE TYPE PERMISSION_TYPE AS ENUM ('admin', 'employee', 'user');
+CREATE TYPE PERMISSION_TYPE AS ENUM ('ADMIN', 'EMPLOYEE', 'USER');
 
 CREATE TABLE Accounts (
     id              SERIAL          PRIMARY KEY,
     email           VARCHAR(255)    NOT NULL UNIQUE,
     username        VARCHAR(50)     NOT NULL UNIQUE,
     password        VARCHAR(250)    NOT NULL,
-    user_permissions VARCHAR(255)   DEFAULT 'user'
+    user_permissions VARCHAR(10)   DEFAULT 'USER'
 );
 
 COPY Persons (first_name, last_name, address, city, telephone, email, fav_animal) FROM stdin (Delimiter ',');
@@ -581,7 +581,6 @@ Leo,M,4,2017-04-09,9.1,false,true
 Lucky,M,1,2018-07-23,6.8,false,false
 Luna,F,2,2019-04-17,4.5,false,true
 Rocky,M,3,2020-01-10,7.3,false,false
-Bella,F,4,2017-08-05,8.1,false,false
 Charlie,M,5,2016-05-20,3.6,false,false
 Molly,F,1,2019-11-12,5.2,false,false
 Max,M,2,2018-03-28,9.7,false,true
@@ -1030,13 +1029,22 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE VIEW EmployeeDetails AS
-SELECT p.first_name, p.last_name, e.salary, e.date_start, e.date_fire, calculate_vet_rating(p.id)
+SELECT e.id, p.first_name, p.last_name, pos.name AS position, p.email, e.salary,
+    e.date_start, e.date_fire, calculate_vet_rating(p.id) AS rating
 FROM Employees e
-JOIN Persons p ON e.person_id = p.id;
+JOIN Persons p ON e.person_id = p.id
+JOIN Positions pos ON e.position = pos.id;
+
+CREATE VIEW VetSchedule AS
+SELECT v.id, p.first_name, p.last_name, vs.name AS specialization
+FROM Employees e
+JOIN Persons p ON e.person_id = p.id
+JOIN Vets v ON v.id = e.id
+JOIN Vets_Specialities vs ON vs.vet_id = v.id;
 
 ----DAWANIE UPRAWNIEN
 
-CREATE OR REPLACE FUNCTION grant_permissions(account_id INT, permission_type PERMISSION_TYPE)
+CREATE OR REPLACE FUNCTION grant_permissions(account_id INT, permission_type VARCHAR(10))
 RETURNS VOID AS $$
 BEGIN
     UPDATE Accounts
