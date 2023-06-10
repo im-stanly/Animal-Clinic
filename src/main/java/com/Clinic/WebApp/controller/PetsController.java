@@ -55,6 +55,6 @@ public class PetsController {
 
     @DeleteMapping("/id={id}")
     public int delete(@PathVariable("id") int id){
-        return petsService.delete(id);
+        return petsService.delete(id) != 1 ? 202 : 500;
     }
 }

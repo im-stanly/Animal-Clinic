@@ -52,6 +52,6 @@ public class PersonController {
 
     @DeleteMapping("/id={id}")
     public int delete(@PathVariable("id") int id){
-        return personService.delete(id);
+        return personService.delete(id) != 1 ? 202 : 500;
     }
 }
