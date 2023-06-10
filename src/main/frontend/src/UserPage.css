@@ -1,0 +1,92 @@
+/* UserPage.css */
+
+.app-container {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.header {
+  background-color: #f5dca4;
+  padding: 20px;
+}
+
+.title {
+  font-size: 32px;
+  margin: 0;
+  color: #333;
+}
+
+.main-content {
+  margin-top: 40px;
+}
+
+.description {
+  font-size: 18px;
+  color: #666;
+}
+
+.animal-image {
+  max-width: 300px;
+  margin-top: 20px;
+}
+
+.contact-info {
+  font-size: 16px;
+  margin-top: 20px;
+  color: #555;
+}
+
+.footer {
+  background-color: #f5dca4;
+  padding: 10px;
+  font-size: 14px;
+  color: #666;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.pet-button {
+  display: inline-block;
+  padding: 10px;
+  margin-left: 10px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #f5a623;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.pet-button:hover {
+  background-color: #e6911f;
+}
+
+.links {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.link {
+  display: inline-block;
+  padding: 10px;
+  margin-left: 10px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #f5a623;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.link:hover {
+  background-color: #e6911f;
+}

@@ -26,19 +26,39 @@ function PrescriptionPage() {
     const selectedMedicine = medicineData.find((medicine) => medicine.name === medicineName);
 
     if (selectedMedicine) {
-      const newPrescription = {
-        medicineName,
-        medicineType: selectedMedicine.type,
-        medicineCompany: selectedMedicine.company,
-        dosage,
-        price: selectedMedicine.basePrice,
-        id: Date.now().toString()
-      };
+          const newPrescription = {
+            medicineName,
+            medicineType: selectedMedicine.type,
+            medicineCompany: selectedMedicine.company,
+            dosage,
+            price: selectedMedicine.basePrice,
+            id: Date.now().toString()
+          };
 
-      setPrescriptions([...prescriptions, newPrescription]);
-    }
+          const prescriptionData = {
+            id_visit: visitId,
+            med_id: selectedMedicine.id,
+            amount: 1,
+            price: selectedMedicine.basePrice,
+            dosing: dosage
+          };
 
-    // Reset form inputs
+          fetch('http://localhost:8080/visits/prescription', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(prescriptionData)
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log(data);
+            })
+            .catch((error) => console.log(error));
+
+          setPrescriptions([...prescriptions, newPrescription]);
+        }
+
     setMedicineName('');
     setDosage('');
     setSuggestions([]);
@@ -49,8 +69,17 @@ function PrescriptionPage() {
   };
 
   const handleRemovePrescription = (id) => {
-    const updatedPrescriptions = prescriptions.filter((prescription) => prescription.id !== id);
+        const updatedPrescriptions = prescriptions.filter((prescription) => prescription.id !== id);
     setPrescriptions(updatedPrescriptions);
+
+    fetch(`http://localhost:8080/visits/prescription/id-visit=${visitId}`, {
+      method: 'DELETE'
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => console.log(error));
   };
 
   const handleInputChange = (event) => {
