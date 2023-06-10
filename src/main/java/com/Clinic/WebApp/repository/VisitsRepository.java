@@ -53,6 +53,11 @@ public class VisitsRepository implements RepoInterface{
         return getRecordByKind(jdbcTemplate, GET_PRESCRIPTION_PROPERTIES_SQL,
                 "Prescriptions", PrescriptionsModel.class, "id", id).get(0);
     }
+
+    public PrescriptionsModel getPrescriptionByVisitID(int id){
+        return getRecordByKind(jdbcTemplate, GET_PRESCRIPTION_PROPERTIES_SQL,
+                "Prescriptions", PrescriptionsModel.class, "id_visit", id).get(0);
+    }
     public int save(List<VisitsModel> visits){
         visits.forEach( singlePer ->
                 jdbcTemplate.update(
