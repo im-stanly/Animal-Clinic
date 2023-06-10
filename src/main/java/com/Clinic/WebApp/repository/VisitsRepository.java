@@ -19,7 +19,7 @@ public class VisitsRepository implements RepoInterface{
     private final String GET_PRESCRIPTION_PROPERTIES_SQL = "SELECT id, id_visit, med_id, amount, price, dosing FROM Prescriptions";
 
     public List<VisitsModel> getVisits(){
-        return jdbcTemplate.query(GET_VISITS_PROPERTIES_SQL + " LIMIT 20",
+        return jdbcTemplate.query(GET_VISITS_PROPERTIES_SQL,
                 BeanPropertyRowMapper.newInstance(VisitsModel.class));
     }
 
