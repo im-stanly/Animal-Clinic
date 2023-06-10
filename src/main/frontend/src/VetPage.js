@@ -100,7 +100,14 @@ function VetPage() {
         <p className="no-visits-text">No scheduled visits for today.</p>
       )}
 
-      <button className="logout-button" onClick={handleLogout}>Logout</button>
+      <div className="links">
+        <a className="link" href="/">
+          Go to Home Page
+        </a>
+        <a className="link" onClick={handleLogout}>
+          Logout
+        </a>
+      </div>
     </div>
   );
 }
