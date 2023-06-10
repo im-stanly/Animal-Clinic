@@ -39,7 +39,7 @@ public class VisitsController {
     }
 
     @GetMapping("/prescription/visit-id={id}")
-    public PrescriptionsModel getPrescriptionByVisitID(@PathVariable("id") int visitID){
+    public List<PrescriptionsModel> getPrescriptionByVisitID(@PathVariable("id") int visitID){
         return visitsService.getPrescriptionByVisitID(visitID);
     }
 

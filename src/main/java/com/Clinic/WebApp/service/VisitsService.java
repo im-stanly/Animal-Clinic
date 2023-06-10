@@ -35,7 +35,7 @@ public class VisitsService {
         return visitsRepository.getPrescriptionByID(id);
     }
 
-    public PrescriptionsModel getPrescriptionByVisitID(int id){
+    public List<PrescriptionsModel> getPrescriptionByVisitID(int id){
         return visitsRepository.getPrescriptionByVisitID(id);
     }
     public int addPrescription(PrescriptionsModel prescription){
