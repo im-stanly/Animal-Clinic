@@ -152,6 +152,9 @@ function App() {
           Welcome to our cozy veterinary clinic, where we care about the health and well-being of animals.
         </p>
         <p className="fun-fact">Fun fact of the day: {funFact}</p>
+        <div className="search-vets-button">
+          <a className="link appointment-button" href="/vets">Schedule Appointment</a>
+        </div>
         <img className="animal-image" src="/animal-image.png" alt="Animal" />
         <p className="contact-info">
           Contact us at phone number: 123-456-789 or via email address: info@animalclinic.com
