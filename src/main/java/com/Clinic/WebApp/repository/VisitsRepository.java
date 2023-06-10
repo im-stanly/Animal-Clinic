@@ -14,7 +14,7 @@ import java.util.List;
 public class VisitsRepository implements RepoInterface{
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    private final String GET_VISITS_PROPERTIES_SQL = "SELECT pet_id, vet_id, visit_date, visit_time, type_id, description, rate FROM Visits";
+    private final String GET_VISITS_PROPERTIES_SQL = "SELECT id, pet_id, vet_id, visit_date, visit_time, type_id, description, rate FROM Visits";
 
     public List<VisitsModel> getVisits(){
         return jdbcTemplate.query(GET_VISITS_PROPERTIES_SQL + " LIMIT 20",
@@ -72,7 +72,7 @@ public class VisitsRepository implements RepoInterface{
 
     private List<VisitsModel> getNextVisits(String dbProperty, int id, String equality){
         return jdbcTemplate.query(GET_VISITS_PROPERTIES_SQL +
-                        " WHERE " + dbProperty + "= ? AND visit_date " + equality,
+                        " WHERE " + dbProperty + "= ? AND visit_date " + equality + " ORDER BU ",
                 BeanPropertyRowMapper.newInstance(VisitsModel.class), id);
     }
 }
