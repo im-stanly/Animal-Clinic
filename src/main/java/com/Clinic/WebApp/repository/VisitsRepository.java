@@ -93,7 +93,7 @@ public class VisitsRepository implements RepoInterface{
 
     private List<VisitsModel> getNextVisits(String dbProperty, int id, String equality){
         return jdbcTemplate.query(GET_VISITS_PROPERTIES_SQL +
-                        " WHERE " + dbProperty + "= ? AND visit_date " + equality,
+                        " WHERE " + dbProperty + "= ? AND visit_date " + equality + " ORDER BY 1",
                 BeanPropertyRowMapper.newInstance(VisitsModel.class), id);
     }
 }
