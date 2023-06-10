@@ -1,5 +1,6 @@
 package com.Clinic.WebApp.controller;
 
+import com.Clinic.WebApp.model.PrescriptionsModel;
 import com.Clinic.WebApp.model.VisitsModel;
 import com.Clinic.WebApp.service.VisitsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,11 @@ public class VisitsController {
     @PostMapping("")
     public int add(@RequestBody List<VisitsModel> newVisit){
         return visitsService.save(newVisit);
+    }
+
+    @PostMapping("/add-prescription")
+    public int addPrescription(@RequestBody PrescriptionsModel prescription){
+        return visitsService.addPrescription(prescription);
     }
 
     @PatchMapping("/id={id}")

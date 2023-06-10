@@ -26,8 +26,6 @@ public class PetsRepository implements RepoInterface{
     }
 
     public List<Integer> getPetsByOwnerID(int ownerID){
-//        return jdbcTemplate.query(GET_OWNER_PROP + ownerID,
-//                BeanPropertyRowMapper.newInstance(Integer.class));
         return jdbcTemplate.queryForList(GET_OWNER_PROP + ownerID, Integer.class);
     }
     public int save(List<PetsModel> pets){

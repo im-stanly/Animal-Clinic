@@ -1,5 +1,6 @@
 package com.Clinic.WebApp.service;
 
+import com.Clinic.WebApp.model.PrescriptionsModel;
 import com.Clinic.WebApp.model.VisitsModel;
 import com.Clinic.WebApp.repository.VisitsRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,10 @@ public class VisitsService {
     }
     public List<VisitsModel> getVetNextVisits(int id, LocalDate date){
         return visitsRepository.getVetNextVisits(id, date);
+    }
+
+    public int addPrescription(PrescriptionsModel prescription){
+        return visitsRepository.savePrescription(prescription);
     }
     public int save(List<VisitsModel> medicineModels){
         return visitsRepository.save(medicineModels);

@@ -1,6 +1,7 @@
 package com.Clinic.WebApp.repository;
 
 import com.Clinic.WebApp.exception.NotFoundException;
+import com.Clinic.WebApp.model.PrescriptionsModel;
 import com.Clinic.WebApp.model.VisitsModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -14,17 +15,31 @@ import java.util.List;
 public class VisitsRepository implements RepoInterface{
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    private final String GET_VISITS_PROPERTIES_SQL = "SELECT pet_id, vet_id, visit_date, visit_time, type_id, description, rate FROM Visits";
+    private final String GET_VISITS_PROPERTIES_SQL = "SELECT id, pet_id, vet_id, visit_date, visit_time, type_id, description, rate FROM Visits";
 
     public List<VisitsModel> getVisits(){
         return jdbcTemplate.query(GET_VISITS_PROPERTIES_SQL + " LIMIT 20",
                 BeanPropertyRowMapper.newInstance(VisitsModel.class));
     }
 
+    public List<VisitsModel> getPetVisitsHistory(int petID){
+        return jdbcTemplate.query(GET_VISITS_PROPERTIES_SQL +
+                        " WHERE pet_id = ? AND visit_date < (SELECT NOW())",
+                BeanPropertyRowMapper.newInstance(VisitsModel.class), petID);
+    }
+
     public List<VisitsModel> getPetsNextVisits(int id){
         return getNextVisits("pet_id", id, " >= (SELECT NOW())");
     }
 
+    public int savePrescription(PrescriptionsModel pres){
+        jdbcTemplate.update("INSERT INTO Prescriptions(id_visit, med_id, amount, price, dosing) " +
+                " VALUES(?, ?, ?, ?, ?)",
+                pres.getId_visit(), pres.getMed_id(), pres.getAmount(),
+                pres.getPrice(), pres.getDosing());
+
+        return 202;
+    }
     public List<VisitsModel> getVetNextVisits(int id, LocalDate date){
         return getNextVisits("vet_id", id, " = '" + date + "'");
     }
