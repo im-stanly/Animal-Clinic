@@ -1,13 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import './PetPage.css';
 
 function PetPage() {
   const { petId } = useParams();
+  const navigate = useNavigate();
   const [petData, setPetData] = useState(null);
+  const [visitHistory, setVisitHistory] = useState([]);
+  const [nextVisits, setNextVisits] = useState([]);
+  const [showVisitHistory, setShowVisitHistory] = useState(false);
+  const [showNextVisits, setShowNextVisits] = useState(false);
 
   useEffect(() => {
     fetchPetData();
+    fetchVisitHistory();
+    fetchNextVisits();
   }, []);
 
   const fetchPetData = () => {
@@ -17,8 +24,35 @@ function PetPage() {
       .catch(error => console.error('Error fetching pet data:', error));
   };
 
+  const fetchVisitHistory = () => {
+    fetch(`http://localhost:8080/pets/visits-history/id=${petId}`)
+      .then(response => response.json())
+      .then(data => setVisitHistory(data))
+      .catch(error => console.error('Error fetching visit history:', error));
+  };
+
+  const fetchNextVisits = () => {
+    fetch(`http://localhost:8080/pets/next-visits/id=${petId}`)
+      .then(response => response.json())
+      .then(data => setNextVisits(data))
+      .catch(error => console.error('Error fetching upcoming visits:', error));
+  };
+
+  const toggleVisitHistory = () => {
+    setShowVisitHistory(!showVisitHistory);
+  };
+
+  const toggleNextVisits = () => {
+    setShowNextVisits(!showNextVisits);
+  };
+
+  const goBack = () => {
+    navigate(-1);
+  };
+
   return (
     <div className="pet-page">
+      <button className="back-button" onClick={goBack}>Go Back</button>
       {petData ? (
         <>
           <h2 className="pet-name">{petData.name}</h2>
@@ -33,6 +67,44 @@ function PetPage() {
       ) : (
         <p>Loading pet data...</p>
       )}
+
+      <div className="visit-history">
+        <h3 className="toggle-button" onClick={toggleVisitHistory}>
+          Visit History <span className="arrow">{showVisitHistory ? '▲' : '▼'}</span>
+        </h3>
+        {showVisitHistory && visitHistory.length > 0 ? (
+          <ul>
+            {visitHistory.map(visit => (
+              <li key={visit.id}>
+                <p><strong>Date:</strong> {visit.visit_date}</p>
+                <p><strong>Reason:</strong> {visit.description}</p>
+                <p><strong>Doctor:</strong> {visit.vet_id}</p>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          showVisitHistory && <p className="no-data">No visit history available.</p>
+        )}
+      </div>
+
+      <div className="next-visits">
+        <h3 className="toggle-button" onClick={toggleNextVisits}>
+          Upcoming Visits <span className="arrow">{showNextVisits ? '▲' : '▼'}</span>
+        </h3>
+        {showNextVisits && nextVisits.length > 0 ? (
+          <ul>
+            {nextVisits.map(visit => (
+              <li key={visit.id}>
+                <p><strong>Date:</strong> {visit.visit_date}</p>
+                <p><strong>Reason:</strong> {visit.description}</p>
+                <p><strong>Doctor:</strong> {visit.vet_id}</p>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          showNextVisits && <p className="no-data">No upcoming visits scheduled.</p>
+        )}
+      </div>
     </div>
   );
 }
