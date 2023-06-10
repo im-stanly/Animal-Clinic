@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import { useNavigate } from 'react-router-dom';
+import { decodeRoleFromToken } from './utils/tokenUtils';
 
 function App() {
   const [showLogin, setShowLogin] = useState(false);
@@ -28,18 +29,6 @@ function App() {
     const { name, value } = event.target;
     setSearchData({ ...searchData, [name]: value });
   };
-
-  function decodeRoleFromToken(token) {
-    try {
-      const tokenParts = token.split('.');
-      const payload = JSON.parse(atob(tokenParts[1]));
-
-      return payload.role;
-    } catch (error) {
-      console.error('Token decoding error:', error);
-      return null;
-    }
-  }
 
   const handleLoginSubmit = async (event) => {
     event.preventDefault();

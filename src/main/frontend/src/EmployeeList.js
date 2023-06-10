@@ -2,22 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import './EmployeesList.css';
+import { decodeRoleFromToken } from './utils/tokenUtils';
 
 const EmployeeList = () => {
   const [token, setToken] = useState(localStorage.getItem('token'));
   const navigate = useNavigate();
-
-  function decodeRoleFromToken(token) {
-    try {
-      const tokenParts = token.split('.');
-      const payload = JSON.parse(atob(tokenParts[1]));
-
-      return payload.role;
-    } catch (error) {
-      console.error('Błąd dekodowania tokenu:', error);
-      return null;
-    }
-  }
 
   useEffect(() => {
     if (!token) {

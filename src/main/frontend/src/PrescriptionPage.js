@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import './PrescriptionPage.css';
+import { decodeRoleFromToken } from './utils/tokenUtils';
 
 function PrescriptionPage() {
   const [medicineName, setMedicineName] = useState('');
@@ -69,6 +70,15 @@ function PrescriptionPage() {
   const handlePrintPrescription = () => {
     navigate('/vetPage');
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const role = decodeRoleFromToken(token);
+
+    if (role !== 'admin' && role !== 'employee') {
+      navigate('/');
+    }
+  }, []);
 
   return (
     <div className="prescription-page">
