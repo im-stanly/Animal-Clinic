@@ -44,9 +44,13 @@ public class VisitsRepository implements RepoInterface{
         return getNextVisits("vet_id", id, " = '" + date + "'");
     }
     public VisitsModel getById(int id){
-        return getVisitesByKind("id", id).get(0);
+        return getRecordByKind(jdbcTemplate, GET_VISITS_PROPERTIES_SQL,
+                "Visits", VisitsModel.class, "id", id).get(0);
     }
 
+    public PrescriptionsModel getPrescriptionByVisitID(int visitID){
+        return new PrescriptionsModel();
+    }
     public int save(List<VisitsModel> visits){
         visits.forEach( singlePer ->
                 jdbcTemplate.update(
@@ -75,20 +79,6 @@ public class VisitsRepository implements RepoInterface{
         if(!isElementOfLibrary(jdbcTemplate, "Prescriptions", "id_visit", visitID))
             throw new NotFoundException("Prescriptions", visitID);
         return jdbcTemplate.update("DELETE FROM Prescriptions WHERE id_visit = ?", visitID);
-    }
-    private List<VisitsModel> getVisitesByKind(String kind, Object object){
-        List<VisitsModel> visits = jdbcTemplate.query(GET_VISITS_PROPERTIES_SQL + " WHERE "
-                + kind + "=?", BeanPropertyRowMapper.newInstance(VisitsModel.class), object);
-
-        if (visits == null || visits.get(0) == null){
-            if (object.getClass().equals(String.class)) {
-                throw new NotFoundException("Visits", (String) object);
-            }
-            else {
-                throw new NotFoundException("Visits", (Integer) object);
-            }
-        }
-        return visits;
     }
 
     private List<VisitsModel> getNextVisits(String dbProperty, int id, String equality){

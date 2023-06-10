@@ -19,7 +19,8 @@ public class MedicineRepository implements RepoInterface{
                 BeanPropertyRowMapper.newInstance(MedicineModel.class));
     }
     public MedicineModel getById(int id){
-        return getMedicinesByKind("id", id).get(0);
+        return getRecordByKind(jdbcTemplate, GET_MEDICINE_PROPERTIES_SQL, "Medicine",
+                MedicineModel.class, "id", id).get(0);
     }
 
     public int save(List<MedicineModel> medicines){
@@ -41,19 +42,5 @@ public class MedicineRepository implements RepoInterface{
         if (!isElementOfLibrary(jdbcTemplate,"Medicine", "id", id))
             throw new NotFoundException("Medicine", id);
         return jdbcTemplate.update("DELETE FROM Medicine WHERE id = ?", id);
-    }
-    private List<MedicineModel> getMedicinesByKind(String kind, Object object){
-        List<MedicineModel> medicines = jdbcTemplate.query(GET_MEDICINE_PROPERTIES_SQL + " WHERE "
-                + kind + "=?", BeanPropertyRowMapper.newInstance(MedicineModel.class), object);
-
-        if (medicines == null || medicines.get(0) == null){
-            if (object.getClass().equals(String.class)) {
-                throw new NotFoundException("Medicine", (String) object);
-            }
-            else {
-                throw new NotFoundException("Medicine", (Integer) object);
-            }
-        }
-        return medicines;
     }
 }

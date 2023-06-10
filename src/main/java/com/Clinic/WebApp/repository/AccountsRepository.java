@@ -19,6 +19,7 @@ public class AccountsRepository implements RepoInterface{
     private JdbcTemplate jdbcTemplate;
     private final String GET_ACCOUNTS_PROPERTIES_SQL = "SELECT id, email, username, password, " +
             "user_permissions FROM Accounts";
+    private final String TABLE_NAME = "Accounts";
 
     public List<AccountsModel> getAccounts(){
         return jdbcTemplate.query(GET_ACCOUNTS_PROPERTIES_SQL + " LIMIT 20",
@@ -26,7 +27,8 @@ public class AccountsRepository implements RepoInterface{
     }
 
     public AccountsModel getById(int id){
-        return getAccountsByKind("id", id).get(0);
+        return getRecordByKind(jdbcTemplate, GET_ACCOUNTS_PROPERTIES_SQL,
+                TABLE_NAME, AccountsModel.class, "id", id).get(0);
     }
 
     public boolean isUsernameTaken(String username) {
@@ -41,6 +43,7 @@ public class AccountsRepository implements RepoInterface{
     public boolean findByEmail(String email){
         List<AccountsModel> accounts = jdbcTemplate.query(GET_ACCOUNTS_PROPERTIES_SQL + " WHERE "
                 + "email = ?", BeanPropertyRowMapper.newInstance(AccountsModel.class), email);
+
         if (!accounts.isEmpty()){
             throw new EmailAlreadyExistsException();
         }
@@ -105,13 +108,5 @@ public class AccountsRepository implements RepoInterface{
             throw new UsernameNotFoundException();
         }
         return 202;
-    }
-    private List<AccountsModel> getAccountsByKind(String kind, Object object){
-        List<AccountsModel> accounts = jdbcTemplate.query(GET_ACCOUNTS_PROPERTIES_SQL + " WHERE "
-                + kind + "=?", BeanPropertyRowMapper.newInstance(AccountsModel.class), object);
-        if (accounts.get(0) == null){
-            throw new UsernameNotFoundException();
-        }
-        return accounts;
     }
 }

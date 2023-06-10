@@ -15,16 +15,19 @@ public class PersonRepository implements RepoInterface {
     private JdbcTemplate jdbcTemplate;
     private final String GET_PERSON_PROPERTIES_SQL = "SELECT id, first_name, last_name, address, city, " +
             "telephone, email, fav_animal FROM Persons";
+    private final String TABLE_NAME = "Persons";
 
     public List<PersonsModel> getPersons(){
         return jdbcTemplate.query(GET_PERSON_PROPERTIES_SQL + " LIMIT 20",
                 BeanPropertyRowMapper.newInstance(PersonsModel.class));
     }
     public PersonsModel getById(int id){
-        return getPersonsByKind("id", id).get(0);
+        return getRecordByKind(jdbcTemplate, GET_PERSON_PROPERTIES_SQL, TABLE_NAME,
+                PersonsModel.class, "id", id).get(0);
     }
     public List<PersonsModel> getByName(String name){
-        return getPersonsByKind("first_name", name);
+        return getRecordByKind(jdbcTemplate, GET_PERSON_PROPERTIES_SQL, TABLE_NAME,
+                PersonsModel.class,"first_name", name);
     }
 
     public int save(List<PersonsModel> persons){
@@ -50,20 +53,5 @@ public class PersonRepository implements RepoInterface {
         if (!isElementOfLibrary(jdbcTemplate,"Persons", "id", id))
             throw new NotFoundException("Person", id);
         return jdbcTemplate.update("DELETE FROM Persons WHERE id = " + id) > 0 ? 202 : 418;
-    }
-
-    private List<PersonsModel> getPersonsByKind(String kind, Object object){
-        List<PersonsModel> persons = jdbcTemplate.query(GET_PERSON_PROPERTIES_SQL + " WHERE "
-                + kind + "=?", BeanPropertyRowMapper.newInstance(PersonsModel.class), object);
-
-        if (persons == null || persons.isEmpty()){
-            if (object.getClass().equals(String.class)) {
-                throw new NotFoundException("Person", (String) object);
-            }
-            else {
-                throw new NotFoundException("Person", (Integer) object);
-            }
-        }
-        return persons;
     }
 }
