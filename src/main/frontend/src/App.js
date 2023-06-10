@@ -10,6 +10,7 @@ function App() {
   const [searchData, setSearchData] = useState({ specialization: '', date: '' });
   const [token, setToken] = useState(null);
   const [funFact, setFunFact] = useState('');
+  const [role, setRole] = useState('');
   const navigate = useNavigate();
 
   const handleLoginClick = () => {
@@ -49,14 +50,7 @@ function App() {
         setToken(data.token);
 
         const role = decodeRoleFromToken(data.token);
-        console.log(role);
-        if (role === 'admin') {
-          navigate('/employees');
-        } else if (role === 'user') {
-          navigate('/userPage');
-        } else if (role === 'employee') {
-          navigate('/vetPage');
-        }
+        setRole(role);
 
         setLoginResult({
           success: true,
@@ -87,6 +81,7 @@ function App() {
   const handleLogout = () => {
     localStorage.removeItem('token');
     setToken(null);
+    setRole('');
   };
 
   useEffect(() => {
@@ -96,11 +91,7 @@ function App() {
       setToken(storedToken);
 
       const role = decodeRoleFromToken(storedToken);
-      if (role === 'admin') {
-        navigate('/employees');
-      } else if (role === 'user') {
-        navigate('/userPage');
-      }
+      setRole(role);
     }
   }, []);
 
@@ -124,6 +115,16 @@ function App() {
     fetchRandomFunFact();
   }, []);
 
+  const handleRedirect = () => {
+    if (role === 'admin') {
+      navigate('/employees');
+    } else if (role === 'employee') {
+      navigate('/vetPage');
+    } else if (role === 'user') {
+      navigate('/userPage');
+    }
+  };
+
   return (
     <div className="app-container">
       <header className="header">
@@ -141,6 +142,9 @@ function App() {
               Log Out
             </a>
           )}
+          {role === 'admin' && <a className="link" href="/employees">Employees</a>}
+          {role === 'employee' && <a className="link" href="/vetPage">Vet Page</a>}
+          {role === 'user' && <a className="link" href="/userPage">User Page</a>}
         </div>
       </header>
       <main className="main-content">
