@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './VetPage.css';
 
 function VetPage() {
   const [token, setToken] = useState(localStorage.getItem('token'));
-  const [userData, setUserData] = useState(null); // Stan dla przechowywania danych użytkownika
-  const [vetVisits, setVetVisits] = useState([]); // Stan dla przechowywania wizyt weterynarza
+  const [userData, setUserData] = useState(null);
+  const [vetVisits, setVetVisits] = useState([]);
   const navigate = useNavigate();
+  const sortedVisits = vetVisits.sort((a, b) => new Date(a.visit_time) - new Date(b.visit_time));
 
   function decodeRoleFromToken(token) {
     try {
@@ -14,7 +16,7 @@ function VetPage() {
 
       return payload.role;
     } catch (error) {
-      console.error('Błąd dekodowania tokenu:', error);
+      console.error('Token decoding error:', error);
       return null;
     }
   }
@@ -26,7 +28,7 @@ function VetPage() {
 
       return payload.email;
     } catch (error) {
-      console.error('Błąd dekodowania tokenu:', error);
+      console.error('Token decoding error:', error);
       return null;
     }
   }
@@ -38,7 +40,6 @@ function VetPage() {
       navigate('/');
     } else {
       fetchUserData();
-      fetchVetVisits();
     }
   }, [token]);
 
@@ -49,18 +50,21 @@ function VetPage() {
         const userEmail = decodeEmailFromToken(token);
         const matchingUser = data.find(user => user.email === userEmail);
         setUserData(matchingUser);
+        if (matchingUser) {
+          fetchVetVisits(matchingUser.id);
+        }
       })
-      .catch(error => console.error('Błąd pobierania danych użytkownika:', error));
+      .catch(error => console.error('Error fetching user data:', error));
   };
 
-  const fetchVetVisits = () => {
-    const today = new Date().toISOString().split('T')[0]; // Dzisiejsza data w formacie YYYY-MM-DD
-    const vetId = userData && userData.id;
+  const fetchVetVisits = (vetId) => {
+    const today = new Date().toISOString().split('T')[0];
+    console.log(vetId);
     if (vetId) {
       fetch(`http://localhost:8080/visits/vet-next-visits/id=${vetId}/${today}`)
         .then(response => response.json())
         .then(data => setVetVisits(data))
-        .catch(error => console.error('Błąd pobierania wizyt:', error));
+        .catch(error => console.error('Error fetching visits:', error));
     }
   };
 
@@ -70,34 +74,45 @@ function VetPage() {
   };
 
   const redirectToPrescriptionPage = (visitId) => {
-    navigate(`/prescription/${visitId}`);
+    navigate(`/prescriptionPage/${visitId}`);
+  };
+
+  const redirectToPetPage = (petId) => {
+    navigate(`/petPage/${petId}`);
   };
 
   return (
-    <div>
+    <div className="vet-page">
       {userData && (
-        <h2>Witaj {userData.first_name} {userData.last_name}:</h2>
+        <h2 className="welcome-text">Welcome {userData.first_name} {userData.last_name}:</h2>
       )}
 
-      <h3>Wizyty na dzisiaj:</h3>
+      <h3 className="visits-heading">Visits for today:</h3>
       {vetVisits.length > 0 ? (
-        <ul>
+        <ul className="visit-list">
           {vetVisits.map(visit => (
-            <li key={visit.id}>
-              {visit.description}
+            <li className="visit-item" key={visit.id}>
+              <div className="visit-description">
+                {visit.description} ({visit.visit_time})
+              </div>
+              <button className="pet-page-button" onClick={() => redirectToPetPage(visit.pet_id)}>
+                View Pet
+              </button>
               {!visit.prescription ? (
-                <button onClick={() => redirectToPrescriptionPage(visit.id)}>Wypisz receptę</button>
+                <button className="prescription-button" onClick={() => redirectToPrescriptionPage(visit.id)}>
+                  Issue Prescription
+                </button>
               ) : (
-                <p>Recepta wypisana</p>
+                <p className="prescription-text">Prescription Issued</p>
               )}
             </li>
           ))}
         </ul>
       ) : (
-        <p>Brak zaplanowanych wizyt na dzisiaj.</p>
+        <p className="no-visits-text">No scheduled visits for today.</p>
       )}
 
-      <button onClick={handleLogout}>Wyloguj się</button>
+      <button className="logout-button" onClick={handleLogout}>Logout</button>
     </div>
   );
 }
