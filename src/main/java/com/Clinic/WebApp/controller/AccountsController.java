@@ -3,6 +3,7 @@ package com.Clinic.WebApp.controller;
 import com.Clinic.WebApp.Security;
 import com.Clinic.WebApp.TokenUtils;
 import com.Clinic.WebApp.exception.*;
+import com.Clinic.WebApp.model.AccountPermissionDTO;
 import com.Clinic.WebApp.model.AccountsModel;
 import com.Clinic.WebApp.service.AccountsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +70,11 @@ public class AccountsController {
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(createErrorResponse("Server Error."));
         }
+    }
+
+    @PatchMapping("/permission")
+    public int changePermissions(@RequestBody AccountPermissionDTO permissionDTO){
+        return accountsService.changePermissions(permissionDTO);
     }
 
     private Map<String, String> createErrorResponse(String errorMessage) {

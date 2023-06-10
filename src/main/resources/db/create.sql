@@ -581,7 +581,6 @@ Leo,M,4,2017-04-09,9.1,false,true
 Lucky,M,1,2018-07-23,6.8,false,false
 Luna,F,2,2019-04-17,4.5,false,true
 Rocky,M,3,2020-01-10,7.3,false,false
-Bella,F,4,2017-08-05,8.1,false,false
 Charlie,M,5,2016-05-20,3.6,false,false
 Molly,F,1,2019-11-12,5.2,false,false
 Max,M,2,2018-03-28,9.7,false,true

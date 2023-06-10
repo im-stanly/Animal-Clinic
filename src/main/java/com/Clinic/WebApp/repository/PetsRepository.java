@@ -15,6 +15,7 @@ public class PetsRepository implements RepoInterface{
     private JdbcTemplate jdbcTemplate;
     private final String GET_PERSON_PROPERTIES_SQL = "SELECT id, name, sex, type, birth_day, " +
             "weight, dangerous, estimate FROM Pets";
+    private final String GET_OWNER_PROP = "SELECT Pet_id FROM Pet_Owners WHERE Person_id = ";
 
     public List<PetsModel> getPets(){
         return jdbcTemplate.query(GET_PERSON_PROPERTIES_SQL + " LIMIT 20",
@@ -24,6 +25,11 @@ public class PetsRepository implements RepoInterface{
         return getPetsByKind("id", id).get(0);
     }
 
+    public List<Integer> getPetsByOwnerID(int ownerID){
+//        return jdbcTemplate.query(GET_OWNER_PROP + ownerID,
+//                BeanPropertyRowMapper.newInstance(Integer.class));
+        return jdbcTemplate.queryForList(GET_OWNER_PROP + ownerID, Integer.class);
+    }
     public int save(List<PetsModel> pets){
         pets.forEach( singlePer ->
                 jdbcTemplate.update(
