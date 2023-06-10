@@ -16,6 +16,7 @@ public class VisitsRepository implements RepoInterface{
     @Autowired
     private JdbcTemplate jdbcTemplate;
     private final String GET_VISITS_PROPERTIES_SQL = "SELECT id, pet_id, vet_id, visit_date, visit_time, type_id, description, rate FROM Visits";
+    private final String GET_PRESCRIPTION_PROPERTIES_SQL = "SELECT id, id_visit, med_id, amount, price, dosing FROM Prescriptions";
 
     public List<VisitsModel> getVisits(){
         return jdbcTemplate.query(GET_VISITS_PROPERTIES_SQL + " LIMIT 20",
@@ -48,8 +49,9 @@ public class VisitsRepository implements RepoInterface{
                 "Visits", VisitsModel.class, "id", id).get(0);
     }
 
-    public PrescriptionsModel getPrescriptionByVisitID(int visitID){
-        return new PrescriptionsModel();
+    public PrescriptionsModel getPrescriptionByID(int id){
+        return getRecordByKind(jdbcTemplate, GET_PRESCRIPTION_PROPERTIES_SQL,
+                "Prescriptions", PrescriptionsModel.class, "id", id).get(0);
     }
     public int save(List<VisitsModel> visits){
         visits.forEach( singlePer ->
@@ -75,10 +77,10 @@ public class VisitsRepository implements RepoInterface{
         return jdbcTemplate.update("DELETE FROM Visits WHERE id = ?", id);
     }
 
-    public int deletePrescription(int visitID){
-        if(!isElementOfLibrary(jdbcTemplate, "Prescriptions", "id_visit", visitID))
-            throw new NotFoundException("Prescriptions", visitID);
-        return jdbcTemplate.update("DELETE FROM Prescriptions WHERE id_visit = ?", visitID);
+    public int deletePrescription(int id){
+        if(!isElementOfLibrary(jdbcTemplate, "Prescriptions", "id", id))
+            throw new NotFoundException("Prescriptions", id);
+        return jdbcTemplate.update("DELETE FROM Prescriptions WHERE id = ?", id);
     }
 
     private List<VisitsModel> getNextVisits(String dbProperty, int id, String equality){

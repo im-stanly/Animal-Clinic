@@ -31,6 +31,9 @@ public class VisitsService {
         return visitsRepository.getVetNextVisits(id, date);
     }
 
+    public PrescriptionsModel getPrescriptionByID(int id){
+        return visitsRepository.getPrescriptionByID(id);
+    }
     public int addPrescription(PrescriptionsModel prescription){
         return visitsRepository.savePrescription(prescription);
     }
@@ -48,8 +51,8 @@ public class VisitsService {
     public int delete(int id){
         return visitsRepository.delete(id);
     }
-    public int deletePrescription(int visitID){
-        return visitsRepository.deletePrescription(visitID);
+    public int deletePrescription(int id){
+        return visitsRepository.deletePrescription(id);
     }
     private int updateOrPatch(int id, VisitsModel updatedVisit, boolean isPatch){
         VisitsModel oldVisit = visitsRepository.getById(id);

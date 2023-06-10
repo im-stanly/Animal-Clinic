@@ -136,6 +136,7 @@ CREATE TABLE Visits (
 );
 
 CREATE TABLE Prescriptions (
+    id           SERIAL         PRIMARY KEY,
     id_visit    INTEGER         REFERENCES Visits(id) NOT NULL,
     med_id      INTEGER         REFERENCES Medicine(id) NOT NULL,
     amount      INTEGER         NOT NULL,

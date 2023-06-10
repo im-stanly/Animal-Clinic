@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PrescriptionsModel {
+    private Integer id;
     private Integer id_visit;
     private Integer med_id;
     private Integer amount;
