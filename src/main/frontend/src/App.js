@@ -144,7 +144,7 @@ function App() {
           )}
           {role === 'admin' && <a className="link" href="/employees">Employees</a>}
           {role === 'employee' && <a className="link" href="/vetPage">Vet Page</a>}
-          {role === 'user' && <a className="link" href="/userPage">User Page</a>}
+          {role === 'user' || role === 'employee' && (<a className="link" href="/userPage">User Page</a> )}
         </div>
       </header>
       <main className="main-content">

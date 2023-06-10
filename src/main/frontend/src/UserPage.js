@@ -21,9 +21,7 @@ function UserPage() {
   }
 
   useEffect(() => {
-    if (!token) {
-      navigate('/');
-    } else if (decodeRoleFromToken(token) !== 'user') {
+    if (!token || (decodeRoleFromToken(token) !== 'user' && decodeRoleFromToken(token) !== 'employee')) {
       navigate('/');
     } else {
       fetchUserData();
