@@ -28,6 +28,10 @@ public class AccountsService {
         return accountsRepository.findByUsername(username);
     }
 
+    public AccountsModel getByID(int id){
+        return accountsRepository.getById(id);
+    }
+
     public List<AccountsModel> findByUsernameAndPassword(String username, String password){
         return accountsRepository.findByUsernameAndPassword(username, password);
     }

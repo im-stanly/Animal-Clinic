@@ -23,7 +23,7 @@ public class EmployeesRepository implements RepoInterface{
     private final String GET_EMPLOYEE_DETAILS_SQL = "SELECT * FROM EmployeeDetails";
 
     public List<EmployeesModel> getEmployees(){
-        return jdbcTemplate.query(GET_EMPLOYEE_PROPERTIES_SQL + " LIMIT 20",
+        return jdbcTemplate.query(GET_EMPLOYEE_PROPERTIES_SQL,
                 BeanPropertyRowMapper.newInstance(EmployeesModel.class));
     }
     public int addEmployeeByFunc(RegisterEmployeeDTO registerE){
@@ -45,12 +45,13 @@ public class EmployeesRepository implements RepoInterface{
         return 202;
     }
     public List<EmployeeDetailsDTO> getEmployeesDetails(){
-        return jdbcTemplate.query(GET_EMPLOYEE_DETAILS_SQL + " LIMIT 20",
+        return jdbcTemplate.query(GET_EMPLOYEE_DETAILS_SQL,
                 BeanPropertyRowMapper.newInstance(EmployeeDetailsDTO.class));
     }
 
     public EmployeesModel getById(int id){
-        return getEmployeesByKind("id", id).get(0);
+        return getRecordByKind(jdbcTemplate, GET_EMPLOYEE_PROPERTIES_SQL, "Employees",
+                EmployeesModel.class ,"id", id).get(0);
     }
 
     public int save(List<EmployeesModel> employees){
@@ -76,19 +77,5 @@ public class EmployeesRepository implements RepoInterface{
         if (!isElementOfLibrary(jdbcTemplate,"Employees", "id", id))
             throw new NotFoundException("Employees", id);
         return jdbcTemplate.update("DELETE FROM Employees WHERE id = ?", id);
-    }
-    private List<EmployeesModel> getEmployeesByKind(String kind, Object object){
-        List<EmployeesModel> employees = jdbcTemplate.query(GET_EMPLOYEE_PROPERTIES_SQL + " WHERE "
-                + kind + "=?", BeanPropertyRowMapper.newInstance(EmployeesModel.class), object);
-
-        if (employees == null || employees.get(0) == null){
-            if (object.getClass().equals(String.class)) {
-                throw new NotFoundException("Employees", (String) object);
-            }
-            else {
-                throw new NotFoundException("Employees", (Integer) object);
-            }
-        }
-        return employees;
     }
 }

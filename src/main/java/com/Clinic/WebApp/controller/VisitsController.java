@@ -33,6 +33,11 @@ public class VisitsController {
         return visitsService.getById(id);
     }
 
+    @GetMapping("/prescription/id={id}")
+    public PrescriptionsModel getPrescription(@PathVariable("id") int id){
+        return visitsService.getPrescriptionByID(id);
+    }
+
     @PostMapping("")
     public int add(@RequestBody List<VisitsModel> newVisit){
         return visitsService.save(newVisit);
@@ -58,8 +63,8 @@ public class VisitsController {
         return visitsService.delete(id) != 1 ? 202 : 500;
     }
 
-    @DeleteMapping("/prescription/id-visit={id}")
-    public int deletePrescription(@PathVariable("id") int visitID){
-        return visitsService.deletePrescription(visitID) != 1 ? 202 : 500;
+    @DeleteMapping("/prescription/id={id}")
+    public int deletePrescription(@PathVariable("id") int id){
+        return visitsService.deletePrescription(id) != 1 ? 202 : 500;
     }
 }

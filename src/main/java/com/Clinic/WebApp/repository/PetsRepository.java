@@ -22,7 +22,8 @@ public class PetsRepository implements RepoInterface{
                 BeanPropertyRowMapper.newInstance(PetsModel.class));
     }
     public PetsModel getById(int id){
-        return getPetsByKind("id", id).get(0);
+        return getRecordByKind(jdbcTemplate, GET_PERSON_PROPERTIES_SQL,
+                "Pets", PetsModel.class,"id", id).get(0);
     }
 
     public List<Integer> getPetsByOwnerID(int ownerID){
@@ -53,20 +54,5 @@ public class PetsRepository implements RepoInterface{
         if (!isElementOfLibrary(jdbcTemplate, "Pets", "id", id))
             throw new NotFoundException("Pets", id);
         return jdbcTemplate.update("DELETE FROM Pets WHERE id = ?", id);
-    }
-
-    private List<PetsModel> getPetsByKind(String kind, Object object){
-        List<PetsModel> pets = jdbcTemplate.query(GET_PERSON_PROPERTIES_SQL + " WHERE "
-                + kind + "=?", BeanPropertyRowMapper.newInstance(PetsModel.class), object);
-
-        if (pets == null || pets.get(0) == null){
-            if (object.getClass().equals(String.class)) {
-                throw new NotFoundException("Pets", (String) object);
-            }
-            else {
-                throw new NotFoundException("Pets", (Integer) object);
-            }
-        }
-        return pets;
     }
 }

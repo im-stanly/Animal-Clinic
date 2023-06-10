@@ -16,6 +16,7 @@ public class VisitsRepository implements RepoInterface{
     @Autowired
     private JdbcTemplate jdbcTemplate;
     private final String GET_VISITS_PROPERTIES_SQL = "SELECT id, pet_id, vet_id, visit_date, visit_time, type_id, description, rate FROM Visits";
+    private final String GET_PRESCRIPTION_PROPERTIES_SQL = "SELECT id, id_visit, med_id, amount, price, dosing FROM Prescriptions";
 
     public List<VisitsModel> getVisits(){
         return jdbcTemplate.query(GET_VISITS_PROPERTIES_SQL + " LIMIT 20",
@@ -44,9 +45,14 @@ public class VisitsRepository implements RepoInterface{
         return getNextVisits("vet_id", id, " = '" + date + "'");
     }
     public VisitsModel getById(int id){
-        return getVisitesByKind("id", id).get(0);
+        return getRecordByKind(jdbcTemplate, GET_VISITS_PROPERTIES_SQL,
+                "Visits", VisitsModel.class, "id", id).get(0);
     }
 
+    public PrescriptionsModel getPrescriptionByID(int id){
+        return getRecordByKind(jdbcTemplate, GET_PRESCRIPTION_PROPERTIES_SQL,
+                "Prescriptions", PrescriptionsModel.class, "id", id).get(0);
+    }
     public int save(List<VisitsModel> visits){
         visits.forEach( singlePer ->
                 jdbcTemplate.update(
@@ -71,24 +77,10 @@ public class VisitsRepository implements RepoInterface{
         return jdbcTemplate.update("DELETE FROM Visits WHERE id = ?", id);
     }
 
-    public int deletePrescription(int visitID){
-        if(!isElementOfLibrary(jdbcTemplate, "Prescriptions", "id_visit", visitID))
-            throw new NotFoundException("Prescriptions", visitID);
-        return jdbcTemplate.update("DELETE FROM Prescriptions WHERE id_visit = ?", visitID);
-    }
-    private List<VisitsModel> getVisitesByKind(String kind, Object object){
-        List<VisitsModel> visits = jdbcTemplate.query(GET_VISITS_PROPERTIES_SQL + " WHERE "
-                + kind + "=?", BeanPropertyRowMapper.newInstance(VisitsModel.class), object);
-
-        if (visits == null || visits.get(0) == null){
-            if (object.getClass().equals(String.class)) {
-                throw new NotFoundException("Visits", (String) object);
-            }
-            else {
-                throw new NotFoundException("Visits", (Integer) object);
-            }
-        }
-        return visits;
+    public int deletePrescription(int id){
+        if(!isElementOfLibrary(jdbcTemplate, "Prescriptions", "id", id))
+            throw new NotFoundException("Prescriptions", id);
+        return jdbcTemplate.update("DELETE FROM Prescriptions WHERE id = ?", id);
     }
 
     private List<VisitsModel> getNextVisits(String dbProperty, int id, String equality){
