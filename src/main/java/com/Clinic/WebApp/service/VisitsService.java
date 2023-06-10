@@ -34,6 +34,10 @@ public class VisitsService {
     public PrescriptionsModel getPrescriptionByID(int id){
         return visitsRepository.getPrescriptionByID(id);
     }
+
+    public PrescriptionsModel getPrescriptionByVisitID(int id){
+        return visitsRepository.getPrescriptionByVisitID(id);
+    }
     public int addPrescription(PrescriptionsModel prescription){
         return visitsRepository.savePrescription(prescription);
     }

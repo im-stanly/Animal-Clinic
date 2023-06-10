@@ -38,6 +38,11 @@ public class VisitsController {
         return visitsService.getPrescriptionByID(id);
     }
 
+    @GetMapping("/prescription/visit-id={id}")
+    public PrescriptionsModel getPrescriptionByVisitID(@PathVariable("id") int visitID){
+        return visitsService.getPrescriptionByVisitID(visitID);
+    }
+
     @PostMapping("")
     public int add(@RequestBody List<VisitsModel> newVisit){
         return visitsService.save(newVisit);
