@@ -70,6 +70,12 @@ public class VisitsRepository implements RepoInterface{
             throw new NotFoundException("Visits", id);
         return jdbcTemplate.update("DELETE FROM Visits WHERE id = ?", id);
     }
+
+    public int deletePrescription(int visitID){
+        if(!isElementOfLibrary(jdbcTemplate, "Prescriptions", "id_visit", visitID))
+            throw new NotFoundException("Prescriptions", visitID);
+        return jdbcTemplate.update("DELETE FROM Prescriptions WHERE id_visit = ?", visitID);
+    }
     private List<VisitsModel> getVisitesByKind(String kind, Object object){
         List<VisitsModel> visits = jdbcTemplate.query(GET_VISITS_PROPERTIES_SQL + " WHERE "
                 + kind + "=?", BeanPropertyRowMapper.newInstance(VisitsModel.class), object);

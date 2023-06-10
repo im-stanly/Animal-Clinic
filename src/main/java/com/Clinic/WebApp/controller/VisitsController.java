@@ -38,7 +38,7 @@ public class VisitsController {
         return visitsService.save(newVisit);
     }
 
-    @PostMapping("/add-prescription")
+    @PostMapping("/prescription")
     public int addPrescription(@RequestBody PrescriptionsModel prescription){
         return visitsService.addPrescription(prescription);
     }
@@ -55,6 +55,11 @@ public class VisitsController {
 
     @DeleteMapping("/id={id}")
     public int delete(@PathVariable("id") int id){
-        return visitsService.delete(id);
+        return visitsService.delete(id) != 1 ? 202 : 500;
+    }
+
+    @DeleteMapping("/prescription/id-visit={id}")
+    public int deletePrescription(@PathVariable("id") int visitID){
+        return visitsService.deletePrescription(visitID) != 1 ? 202 : 500;
     }
 }

@@ -48,7 +48,9 @@ public class VisitsService {
     public int delete(int id){
         return visitsRepository.delete(id);
     }
-
+    public int deletePrescription(int visitID){
+        return visitsRepository.deletePrescription(visitID);
+    }
     private int updateOrPatch(int id, VisitsModel updatedVisit, boolean isPatch){
         VisitsModel oldVisit = visitsRepository.getById(id);
 
