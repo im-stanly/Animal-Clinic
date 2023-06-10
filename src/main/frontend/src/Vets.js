@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import './Vets.css';
 
-const SpecjalizacjaSelector = ({ specjalizacje, onSpecjalizacjaChange }) => {
+const SpecializationSelector = ({ specializations, onSpecializationChange }) => {
   const handleChange = (e) => {
-    const selectedSpecjalizacja = e.target.value;
-    onSpecjalizacjaChange(selectedSpecjalizacja);
+    const selectedSpecialization = e.target.value;
+    onSpecializationChange(selectedSpecialization);
   };
 
   return (
     <div className="input-container">
-      <label htmlFor="specjalizacja">Wybierz specjalizację weterynarza:</label>
-      <select id="specjalizacja" onChange={handleChange}>
-        <option value="">-- Wybierz --</option>
-        {specjalizacje.map((specjalizacja) => (
-          <option key={specjalizacja} value={specjalizacja}>
-            {specjalizacja}
+      <label htmlFor="specialization">Select veterinarian specialization:</label>
+      <select id="specialization" onChange={handleChange}>
+        <option value="">-- Select --</option>
+        {specializations.map((specialization) => (
+          <option key={specialization} value={specialization}>
+            {specialization}
           </option>
         ))}
       </select>
@@ -22,7 +22,7 @@ const SpecjalizacjaSelector = ({ specjalizacje, onSpecjalizacjaChange }) => {
   );
 };
 
-const Kalendarz = ({ data, onDateChange }) => {
+const Calendar = ({ date, onDateChange }) => {
   const handleChange = (e) => {
     const selectedDate = e.target.value;
     onDateChange(selectedDate);
@@ -30,50 +30,50 @@ const Kalendarz = ({ data, onDateChange }) => {
 
   return (
     <div className="input-container">
-      <label htmlFor="data">Wybierz datę:</label>
-      <input type="date" id="data" onChange={handleChange} value={data} />
+      <label htmlFor="date">Select date:</label>
+      <input type="date" id="date" onChange={handleChange} value={date} />
     </div>
   );
 };
 
-const WeterynarzApp = () => {
-  const [selectedSpecjalizacja, setSelectedSpecjalizacja] = useState('');
+const VeterinarianApp = ({ handleReturn }) => {
+  const [selectedSpecialization, setSelectedSpecialization] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
-  const [specjalizacje, setSpecjalizacje] = useState([]);
-  const [weterynarze, setWeterynarze] = useState([]);
-  const [filteredWeterynarze, setFilteredWeterynarze] = useState([]);
+  const [specializations, setSpecializations] = useState([]);
+  const [veterinarians, setVeterinarians] = useState([]);
+  const [filteredVeterinarians, setFilteredVeterinarians] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/vets/specializations=${selectedSpecjalizacja}`);
+        const response = await fetch(`http://localhost:8080/vets/specializations=${selectedSpecialization}`);
         const data = await response.json();
-        setWeterynarze(data);
+        setVeterinarians(data);
       } catch (error) {
-        console.error('Błąd podczas pobierania weterynarzy:', error);
+        console.error('Error fetching veterinarians:', error);
       }
     };
 
     fetchData();
-  }, [selectedSpecjalizacja]);
+  }, [selectedSpecialization]);
 
   useEffect(() => {
-    const fetchSpecjalizacje = async () => {
+    const fetchSpecializations = async () => {
       try {
         const response = await fetch('http://localhost:8080/vets');
         const data = await response.json();
-        const uniqueSpecjalizacje = [...new Set(data.map((lekarz) => lekarz.specialization))];
-        setSpecjalizacje(uniqueSpecjalizacje);
+        const uniqueSpecializations = [...new Set(data.map((doctor) => doctor.specialization))];
+        setSpecializations(uniqueSpecializations);
       } catch (error) {
-        console.error('Błąd podczas pobierania specjalizacji:', error);
+        console.error('Error fetching specializations:', error);
       }
     };
 
-    fetchSpecjalizacje();
+    fetchSpecializations();
   }, []);
 
-  const handleSpecjalizacjaChange = (selectedSpecjalizacja) => {
-    setSelectedSpecjalizacja(selectedSpecjalizacja);
+  const handleSpecializationChange = (selectedSpecialization) => {
+    setSelectedSpecialization(selectedSpecialization);
   };
 
   const handleDateChange = (selectedDate) => {
@@ -81,45 +81,51 @@ const WeterynarzApp = () => {
   };
 
   const handleSearch = () => {
-    let filteredResults = [...weterynarze];
+    let filteredResults = [...veterinarians];
 
     if (selectedDate !== '') {
-      filteredResults = filteredResults.filter((weterynarz) => weterynarz.date === selectedDate);
+      filteredResults = filteredResults.filter((veterinarian) => veterinarian.date === selectedDate);
     }
 
-    setFilteredWeterynarze(filteredResults);
+    setFilteredVeterinarians(filteredResults);
   };
 
   return (
     <div className="app-container">
-      <h1 className="title">Wyszukiwanie weterynarzy</h1>
+      <h1 className="title">Find Veterinarians</h1>
 
       <div className="search-container">
-        <SpecjalizacjaSelector
-          specjalizacje={specjalizacje}
-          onSpecjalizacjaChange={handleSpecjalizacjaChange}
+        <SpecializationSelector
+          specializations={specializations}
+          onSpecializationChange={handleSpecializationChange}
         />
-        <Kalendarz data={selectedDate} onDateChange={handleDateChange} />
+        <Calendar date={selectedDate} onDateChange={handleDateChange} />
 
-        <button className="search-button" onClick={handleSearch}>Szukaj</button>
+        <button className="search-button" onClick={handleSearch}>Search</button>
       </div>
 
-      <h2 className="main-content">Wyniki wyszukiwania:</h2>
-      {filteredWeterynarze.length > 0 ? (
+      <h2 className="main-content">Search Results:</h2>
+      {filteredVeterinarians.length > 0 ? (
         <div className="result-container">
-          {filteredWeterynarze.map((weterynarz) => (
-            <div key={weterynarz.id} className="weterynarz">
-              <div className="name">{weterynarz.first_name} {weterynarz.last_name}</div>
-              <div className="info">Specjalizacja: {weterynarz.specialization}</div>
-              <div className="info">Telefon: {weterynarz.phone}</div>
+          {filteredVeterinarians.map((veterinarian) => (
+            <div key={veterinarian.id} className="veterinarian">
+              <div className="name">{veterinarian.first_name} {veterinarian.last_name}</div>
+              <div className="info">Specialization: {veterinarian.specialization}</div>
+              <div className="info">Phone: {veterinarian.phone}</div>
             </div>
           ))}
         </div>
       ) : (
-        <div className="no-results">Brak wyników.</div>
+        <div className="no-results">No results found.</div>
       )}
+
+      <div className="links">
+        <a className="link" href="/">
+          Go to Home Page
+        </a>
+      </div>
     </div>
   );
 };
 
-export default WeterynarzApp;
+export default VeterinarianApp;
