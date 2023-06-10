@@ -10,6 +10,7 @@ import VetPage from './js/VetPage';
 import PrescriptionPage from './js/PrescriptionPage';
 import PetPage from './js/PetPage';
 import PrescriptionListPage from './js/PrescriptionListPage';
+import AddPet from './js/AddPet';
 import './css/index.css';
 
 ReactDOM.render(
@@ -24,6 +25,7 @@ ReactDOM.render(
       <Route path="/prescriptionPage/:visitId" element={<PrescriptionPage />} />
       <Route path="/petPage/:petId" element={<PetPage />} />
       <Route path="/PrescriptionListPage/:visitId" element={<PrescriptionListPage />} />
+      <Route path="/AddPet" element={<AddPet />} />
     </Routes>
   </BrowserRouter>,
   document.getElementById('root')

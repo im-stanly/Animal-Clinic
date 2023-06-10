@@ -125,6 +125,10 @@ function App() {
     }
   };
 
+  const handleAddPetClick = () => {
+    navigate('/AddPet');
+  };
+
   return (
     <div className="app-container">
       <header className="header">
@@ -134,8 +138,7 @@ function App() {
             <a className="link" href="/registration">
               Sign Up
             </a>
-          ) : null
-          }
+          ) : null}
 
           {!token ? (
             <a className="link" onClick={handleLoginClick}>
@@ -146,9 +149,26 @@ function App() {
               Log Out
             </a>
           )}
-          {role === 'admin' && <a className="link" href="/employees">Employees</a>}
-          {role === 'employee' && <a className="link" href="/vetPage">Vet Page</a>}
-          {(role === 'user' || role === 'employee') && (<a className="link" href="/userPage">User Page</a> )}
+          {role === 'admin' && (
+            <a className="link" href="/employees">
+              Employees
+            </a>
+          )}
+          {role === 'employee' && (
+            <a className="link" href="/vetPage">
+              Vet Page
+            </a>
+          )}
+          {(role === 'user' || role === 'employee') && (
+            <a className="link" href="/userPage">
+              User Page
+            </a>
+          )}
+          {(role === 'admin' || role === 'employee') && (
+            <a className="link" href="/AddPet">
+              Add Pet
+            </a>
+          )}
         </div>
       </header>
       <main className="main-content">
@@ -157,7 +177,9 @@ function App() {
         </p>
         <p className="fun-fact">Fun fact of the day: {funFact}</p>
         <div className="search-vets-button">
-          <a className="link appointment-button" href="/vets">Schedule Appointment</a>
+          <a className="link appointment-button" href="/vets">
+            Schedule Appointment
+          </a>
         </div>
         <img className="animal-image" src="/animal-image.png" alt="Animal" />
         <p className="contact-info">
@@ -195,9 +217,7 @@ function App() {
           </div>
         </div>
       )}
-      <footer className="footer">
-        &copy; {new Date().getFullYear()} Animal Clinic. All rights reserved.
-      </footer>
+      <footer className="footer">&copy; {new Date().getFullYear()} Animal Clinic. All rights reserved.</footer>
     </div>
   );
 }
