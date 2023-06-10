@@ -27,6 +27,11 @@ public class AccountsController {
         return accountsService.getAccounts();
     }
 
+    @GetMapping("/id={id}")
+    public AccountsModel getById(@PathVariable("id") int id){
+        return accountsService.getByID(id);
+    }
+
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> loginUser(@RequestBody List<AccountsModel> newAccount) {
         String encryptedPassword = Security.encode(newAccount.get(0).getPassword());
