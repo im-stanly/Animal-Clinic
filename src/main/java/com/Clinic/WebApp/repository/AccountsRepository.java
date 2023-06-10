@@ -1,13 +1,17 @@
 package com.Clinic.WebApp.repository;
 
 import com.Clinic.WebApp.exception.*;
+import com.Clinic.WebApp.model.AccountPermissionDTO;
 import com.Clinic.WebApp.model.AccountsModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class AccountsRepository implements RepoInterface{
@@ -87,6 +91,21 @@ public class AccountsRepository implements RepoInterface{
         return jdbcTemplate.update("DELETE FROM Accounts WHERE id = ?", id);
     }
 
+    public int changePermission(AccountPermissionDTO perm){
+        final SimpleJdbcCall dbCall = new SimpleJdbcCall(jdbcTemplate).withFunctionName("grant_permissions");
+        final Map<String, Object> params = new HashMap<>();
+
+        params.put("account_id", perm.getId());
+        params.put("permission_type", perm.getPermissionLevel());
+
+        try{
+            dbCall.execute(params);
+        }
+        catch (Exception exception){
+            throw new UsernameNotFoundException();
+        }
+        return 202;
+    }
     private List<AccountsModel> getAccountsByKind(String kind, Object object){
         List<AccountsModel> accounts = jdbcTemplate.query(GET_ACCOUNTS_PROPERTIES_SQL + " WHERE "
                 + kind + "=?", BeanPropertyRowMapper.newInstance(AccountsModel.class), object);

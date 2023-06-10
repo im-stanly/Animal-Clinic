@@ -185,7 +185,7 @@ CREATE TABLE Accounts (
     email           VARCHAR(255)    NOT NULL UNIQUE,
     username        VARCHAR(50)     NOT NULL UNIQUE,
     password        VARCHAR(250)    NOT NULL,
-    user_permissions PERMISSION_TYPE   DEFAULT 'USER'
+    user_permissions VARCHAR(10)   DEFAULT 'USER'
 );
 
 COPY Persons (first_name, last_name, address, city, telephone, email, fav_animal) FROM stdin (Delimiter ',');
@@ -1033,7 +1033,8 @@ CREATE VIEW EmployeeDetails AS
 SELECT e.id, p.first_name, p.last_name, pos.name AS position, p.email, e.salary,
     e.date_start, e.date_fire, calculate_vet_rating(p.id) AS rating
 FROM Employees e
-JOIN Persons p ON e.person_id = p.id;
+JOIN Persons p ON e.person_id = p.id
+JOIN Positions pos ON e.position = pos.id;
 
 CREATE VIEW VetSchedule AS
 SELECT v.id, p.first_name, p.last_name, vs.name AS specialization
@@ -1044,7 +1045,7 @@ JOIN Vets_Specialities vs ON vs.vet_id = v.id;
 
 ----DAWANIE UPRAWNIEN
 
-CREATE OR REPLACE FUNCTION grant_permissions(account_id INT, permission_type PERMISSION_TYPE)
+CREATE OR REPLACE FUNCTION grant_permissions(account_id INT, permission_type VARCHAR(10))
 RETURNS VOID AS $$
 BEGIN
     UPDATE Accounts
