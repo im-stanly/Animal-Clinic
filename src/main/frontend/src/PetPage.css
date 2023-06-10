@@ -1,0 +1,17 @@
+.pet-page {
+  padding: 20px;
+}
+
+.pet-name {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.pet-details {
+  margin-bottom: 20px;
+}
+
+.pet-details p {
+  margin-bottom: 5px;
+}
