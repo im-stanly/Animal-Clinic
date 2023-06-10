@@ -169,6 +169,16 @@ function App() {
               Add Pet
             </a>
           )}
+          {(role === 'admin' || role === 'employee') && (
+            <a className="link" href="/AddPerson">
+              Add Person
+            </a>
+          )}
+          {(role === 'admin' || role === 'employee') && (
+            <a className="link" href="/PetOwners">
+              Add Pet Owner
+            </a>
+          )}
         </div>
       </header>
       <main className="main-content">
@@ -177,9 +187,11 @@ function App() {
         </p>
         <p className="fun-fact">Fun fact of the day: {funFact}</p>
         <div className="search-vets-button">
-          <a className="link appointment-button" href="/vets">
-            Schedule Appointment
-          </a>
+          {(role === 'admin' || role === 'employee') && (
+            <a className="link" href="/vets">
+              Schedule Appointment
+            </a>
+          )}
         </div>
         <img className="animal-image" src="/animal-image.png" alt="Animal" />
         <p className="contact-info">

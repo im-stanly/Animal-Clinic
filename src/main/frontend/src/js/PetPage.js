@@ -61,6 +61,7 @@ function PetPage() {
         <>
           <h2 className="pet-name">{petData.name}</h2>
           <div className="pet-details">
+            <p><strong>ID:</strong> {petData.id}</p>
             <p><strong>Species:</strong> {petData.species}</p>
             <p><strong>Sex:</strong> {petData.sex}</p>
             <p><strong>Birth date:</strong> {petData.birth_day}</p>

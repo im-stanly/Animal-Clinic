@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import '../css/Vets.css';
 
 const SpecializationSelector = ({ specializations, onSpecializationChange }) => {
@@ -110,8 +111,9 @@ const VeterinarianApp = ({ handleReturn }) => {
           {filteredVeterinarians.map((veterinarian) => (
             <div key={veterinarian.id} className="veterinarian">
               <div className="name">{veterinarian.first_name} {veterinarian.last_name}</div>
-              <div className="info">Specialization: {veterinarian.specialization}</div>
-              <div className="info">Phone: {veterinarian.phone}</div>
+              <Link to={`/addvisit/${veterinarian.id}`} className="add-visit-button">
+                Add Visit
+              </Link>
             </div>
           ))}
         </div>

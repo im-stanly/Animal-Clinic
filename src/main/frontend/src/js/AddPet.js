@@ -37,7 +37,7 @@ const AddPetForm = () => {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify([formData]) // Wrap formData in an array
+        body: JSON.stringify([formData])
       });
 
       console.log('Data sent:', JSON.stringify([formData]));
