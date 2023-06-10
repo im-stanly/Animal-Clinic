@@ -40,6 +40,6 @@ public class MedicineController {
 
     @DeleteMapping("/id={id}")
     public int delete(@PathVariable("id") int id){
-        return medicineService.delete(id);
+        return medicineService.delete(id) != 1 ? 202 : 500;
     }
 }

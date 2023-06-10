@@ -1,7 +1,9 @@
 package com.Clinic.WebApp.service;
 
 import com.Clinic.WebApp.model.PetsModel;
+import com.Clinic.WebApp.model.VisitsModel;
 import com.Clinic.WebApp.repository.PetsRepository;
+import com.Clinic.WebApp.repository.VisitsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,9 @@ public class PetsService {
     @Autowired
     private PetsRepository petsRepository;
 
+    @Autowired
+    private VisitsRepository visitsRepository;
+
     public List<PetsModel> getPets(){
         return petsRepository.getPets();
     }
@@ -22,6 +27,9 @@ public class PetsService {
         return petsRepository.getById(id);
     }
 
+    public List<VisitsModel> getVisitsHistory(int petId){
+        return visitsRepository.getPetVisitsHistory(petId);
+    }
     public int save(List<PetsModel> petsModels){
         return petsRepository.save(petsModels);
     }

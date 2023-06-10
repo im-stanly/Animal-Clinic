@@ -1,5 +1,6 @@
 package com.Clinic.WebApp.service;
 
+import com.Clinic.WebApp.model.AccountPermissionDTO;
 import com.Clinic.WebApp.model.AccountsModel;
 import com.Clinic.WebApp.repository.AccountsRepository;
 import lombok.AllArgsConstructor;
@@ -23,7 +24,6 @@ public class AccountsService {
     public boolean isUsernameTaken(String username){
         return accountsRepository.isUsernameTaken(username);
     }
-
     public AccountsModel findByUsername(String username){
         return accountsRepository.findByUsername(username);
     }
@@ -46,6 +46,10 @@ public class AccountsService {
 
     public int delete(int id){
         return accountsRepository.delete(id);
+    }
+
+    public int changePermissions(AccountPermissionDTO perm){
+        return accountsRepository.changePermission(perm);
     }
 
     private int updateOrPatch(int id, AccountsModel updatedAccount, boolean isPatch){

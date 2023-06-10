@@ -1,6 +1,7 @@
 package com.Clinic.WebApp.repository;
 
 import com.Clinic.WebApp.exception.NotFoundException;
+import com.Clinic.WebApp.model.PrescriptionsModel;
 import com.Clinic.WebApp.model.VisitsModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -21,10 +22,24 @@ public class VisitsRepository implements RepoInterface{
                 BeanPropertyRowMapper.newInstance(VisitsModel.class));
     }
 
+    public List<VisitsModel> getPetVisitsHistory(int petID){
+        return jdbcTemplate.query(GET_VISITS_PROPERTIES_SQL +
+                        " WHERE pet_id = ? AND visit_date < (SELECT NOW())",
+                BeanPropertyRowMapper.newInstance(VisitsModel.class), petID);
+    }
+
     public List<VisitsModel> getPetsNextVisits(int id){
         return getNextVisits("pet_id", id, " >= (SELECT NOW())");
     }
 
+    public int savePrescription(PrescriptionsModel pres){
+        jdbcTemplate.update("INSERT INTO Prescriptions(id_visit, med_id, amount, price, dosing) " +
+                " VALUES(?, ?, ?, ?, ?)",
+                pres.getId_visit(), pres.getMed_id(), pres.getAmount(),
+                pres.getPrice(), pres.getDosing());
+
+        return 202;
+    }
     public List<VisitsModel> getVetNextVisits(int id, LocalDate date){
         return getNextVisits("vet_id", id, " = '" + date + "'");
     }
@@ -54,6 +69,12 @@ public class VisitsRepository implements RepoInterface{
         if (!isElementOfLibrary(jdbcTemplate,"Visits", "id", id))
             throw new NotFoundException("Visits", id);
         return jdbcTemplate.update("DELETE FROM Visits WHERE id = ?", id);
+    }
+
+    public int deletePrescription(int visitID){
+        if(!isElementOfLibrary(jdbcTemplate, "Prescriptions", "id_visit", visitID))
+            throw new NotFoundException("Prescriptions", visitID);
+        return jdbcTemplate.update("DELETE FROM Prescriptions WHERE id_visit = ?", visitID);
     }
     private List<VisitsModel> getVisitesByKind(String kind, Object object){
         List<VisitsModel> visits = jdbcTemplate.query(GET_VISITS_PROPERTIES_SQL + " WHERE "

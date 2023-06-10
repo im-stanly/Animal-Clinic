@@ -1,11 +1,14 @@
 package com.Clinic.WebApp.service;
 
 import com.Clinic.WebApp.model.PersonsModel;
+import com.Clinic.WebApp.model.PetsModel;
 import com.Clinic.WebApp.repository.PersonRepository;
+import com.Clinic.WebApp.repository.PetsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
@@ -15,8 +18,21 @@ public class PersonService {
     @Autowired
     private PersonRepository personRepository;
 
+    @Autowired
+    private PetsRepository petsRepository;
+
     public List<PersonsModel> getPersons(){
         return personRepository.getPersons();
+    }
+
+    public List<PetsModel> getMyPets(int idOwner){
+        List<Integer> ownPetsIDs = petsRepository.getPetsByOwnerID(idOwner);
+        List<PetsModel> pets = new LinkedList<>();
+
+        for(int tmp : ownPetsIDs){
+            pets.add(petsRepository.getById(tmp));
+        }
+        return pets;
     }
 
     public PersonsModel getById(int id){

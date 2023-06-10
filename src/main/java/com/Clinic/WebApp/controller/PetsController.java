@@ -29,6 +29,10 @@ public class PetsController {
         return petsService.getById(id);
     }
 
+    @GetMapping("visits-history/id={id}")
+    public List<VisitsModel> getVisitsHistory(@PathVariable("id") int petId){
+        return petsService.getVisitsHistory(petId);
+    }
     @GetMapping("/next-visits/id={id}")
     public List<VisitsModel> getNextVisitsForPet(@PathVariable("id") int id){
         return visitsService.getPetsNextVisits(id);
@@ -51,6 +55,6 @@ public class PetsController {
 
     @DeleteMapping("/id={id}")
     public int delete(@PathVariable("id") int id){
-        return petsService.delete(id);
+        return petsService.delete(id) != 1 ? 202 : 500;
     }
 }

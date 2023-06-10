@@ -1,5 +1,6 @@
 package com.Clinic.WebApp.controller;
 
+import com.Clinic.WebApp.model.PrescriptionsModel;
 import com.Clinic.WebApp.model.VisitsModel;
 import com.Clinic.WebApp.service.VisitsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,11 @@ public class VisitsController {
         return visitsService.save(newVisit);
     }
 
+    @PostMapping("/prescription")
+    public int addPrescription(@RequestBody PrescriptionsModel prescription){
+        return visitsService.addPrescription(prescription);
+    }
+
     @PatchMapping("/id={id}")
     public int patch(@PathVariable("id") int id, @RequestBody VisitsModel newVisit){
         return visitsService.patch(id, newVisit);
@@ -49,6 +55,11 @@ public class VisitsController {
 
     @DeleteMapping("/id={id}")
     public int delete(@PathVariable("id") int id){
-        return visitsService.delete(id);
+        return visitsService.delete(id) != 1 ? 202 : 500;
+    }
+
+    @DeleteMapping("/prescription/id-visit={id}")
+    public int deletePrescription(@PathVariable("id") int visitID){
+        return visitsService.deletePrescription(visitID) != 1 ? 202 : 500;
     }
 }
