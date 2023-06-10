@@ -7,6 +7,8 @@ import EmployeeList from './EmployeeList';
 import Vets from './Vets';
 import UserPage from './UserPage';
 import VetPage from './VetPage';
+import PrescriptionPage from './PrescriptionPage';
+import PetPage from './PetPage';
 import './index.css';
 
 ReactDOM.render(
@@ -18,6 +20,8 @@ ReactDOM.render(
       <Route path="/vets" element={<Vets />} />
       <Route path="/userPage" element={<UserPage />} />
       <Route path="/vetPage" element={<VetPage />} />
+      <Route path="/prescriptionPage/:visitId" element={<PrescriptionPage />} />
+      <Route path="/petPage/:petId" element={<PetPage />} />
     </Routes>
   </BrowserRouter>,
   document.getElementById('root')
