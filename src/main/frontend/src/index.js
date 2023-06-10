@@ -11,6 +11,9 @@ import PrescriptionPage from './js/PrescriptionPage';
 import PetPage from './js/PetPage';
 import PrescriptionListPage from './js/PrescriptionListPage';
 import AddPet from './js/AddPet';
+import AddPerson from './js/AddPerson';
+import PetOwners from './js/PetOwners';
+import AddVisit from './js/AddVisit';
 import './css/index.css';
 
 ReactDOM.render(
@@ -26,6 +29,9 @@ ReactDOM.render(
       <Route path="/petPage/:petId" element={<PetPage />} />
       <Route path="/PrescriptionListPage/:visitId" element={<PrescriptionListPage />} />
       <Route path="/AddPet" element={<AddPet />} />
+      <Route path="/AddPerson" element={<AddPerson />} />
+      <Route path="/PetOwners" element={<PetOwners />} />
+      <Route path="/AddVisit/:vetId" element={<AddVisit />} />
     </Routes>
   </BrowserRouter>,
   document.getElementById('root')
