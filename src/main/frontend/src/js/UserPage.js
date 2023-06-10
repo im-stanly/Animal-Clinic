@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './UserPage.css';
+import '../css/UserPage.css';
 
 function UserPage() {
   const [token, setToken] = useState(localStorage.getItem('token'));

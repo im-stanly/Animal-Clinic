@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import './App.css';
+import '../css/App.css';
 import { useNavigate } from 'react-router-dom';
-import { decodeRoleFromToken } from './utils/tokenUtils';
+import { decodeRoleFromToken } from '../utils/tokenUtils';
 
 function App() {
   const [showLogin, setShowLogin] = useState(false);
@@ -130,9 +130,13 @@ function App() {
       <header className="header">
         <h1 className="title">Animal Clinic</h1>
         <div className="links">
-          <a className="link" href="/registration">
-            Sign Up
-          </a>
+          {!token ? (
+            <a className="link" href="/registration">
+              Sign Up
+            </a>
+          ) : null
+          }
+
           {!token ? (
             <a className="link" onClick={handleLoginClick}>
               Log In
@@ -144,7 +148,7 @@ function App() {
           )}
           {role === 'admin' && <a className="link" href="/employees">Employees</a>}
           {role === 'employee' && <a className="link" href="/vetPage">Vet Page</a>}
-          {role === 'user' || role === 'employee' && (<a className="link" href="/userPage">User Page</a> )}
+          {(role === 'user' || role === 'employee') && (<a className="link" href="/userPage">User Page</a> )}
         </div>
       </header>
       <main className="main-content">

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './Vets.css';
+import '../css/Vets.css';
 
 const SpecializationSelector = ({ specializations, onSpecializationChange }) => {
   const handleChange = (e) => {

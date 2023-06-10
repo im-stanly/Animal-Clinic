@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import './EmployeesList.css';
-import { decodeRoleFromToken } from './utils/tokenUtils';
+import '../css/EmployeesList.css';
+import { decodeRoleFromToken } from '../utils/tokenUtils';
 
 const EmployeeList = () => {
   const [token, setToken] = useState(localStorage.getItem('token'));

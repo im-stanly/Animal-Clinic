@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './VetPage.css';
-import { decodeRoleFromToken } from './utils/tokenUtils';
+import '../css/VetPage.css';
+import { decodeRoleFromToken } from '../utils/tokenUtils';
 
 function VetPage() {
   const [token, setToken] = useState(localStorage.getItem('token'));

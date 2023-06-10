@@ -1,15 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import App from './App';
-import RegistrationForm from './RegistrationForm';
-import EmployeeList from './EmployeeList';
-import Vets from './Vets';
-import UserPage from './UserPage';
-import VetPage from './VetPage';
-import PrescriptionPage from './PrescriptionPage';
-import PetPage from './PetPage';
-import './index.css';
+import App from './js/App';
+import RegistrationForm from './js/RegistrationForm';
+import EmployeeList from './js/EmployeeList';
+import Vets from './js/Vets';
+import UserPage from './js/UserPage';
+import VetPage from './js/VetPage';
+import PrescriptionPage from './js/PrescriptionPage';
+import PetPage from './js/PetPage';
+import PrescriptionListPage from './js/PrescriptionListPage';
+import './css/index.css';
 
 ReactDOM.render(
   <BrowserRouter>
@@ -22,6 +23,7 @@ ReactDOM.render(
       <Route path="/vetPage" element={<VetPage />} />
       <Route path="/prescriptionPage/:visitId" element={<PrescriptionPage />} />
       <Route path="/petPage/:petId" element={<PetPage />} />
+      <Route path="/PrescriptionListPage/:visitId" element={<PrescriptionListPage />} />
     </Routes>
   </BrowserRouter>,
   document.getElementById('root')
