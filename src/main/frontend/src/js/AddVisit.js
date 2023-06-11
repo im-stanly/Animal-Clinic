@@ -9,7 +9,7 @@ const AddVisitForm = () => {
   const [token, setToken] = useState(localStorage.getItem('token'));
 
   useEffect(() => {
-    if (!token || (decodeRoleFromToken(token) !== 'employee' && decodeRoleFromToken(token) !== 'admin')) {
+    if (!token || (decodeRoleFromToken(token) !== 'EMPLOYEE' && decodeRoleFromToken(token) !== 'ADMIN')) {
       navigate('/NotFoundPage');
     }
   }, [token]);

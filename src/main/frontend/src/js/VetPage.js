@@ -23,7 +23,7 @@ function VetPage() {
   }
 
   useEffect(() => {
-    if (!token || decodeRoleFromToken(token) !== 'employee') {
+    if (!token || decodeRoleFromToken(token) !== 'EMPLOYEE') {
       navigate('/NotFoundPage');
     } else {
       fetchUserData();

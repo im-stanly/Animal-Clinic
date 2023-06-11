@@ -179,14 +179,14 @@ CREATE TABLE Vets_Specialities (
 );
 
 DROP TYPE IF EXISTS PERMISSION_TYPE CASCADE;
-CREATE TYPE PERMISSION_TYPE AS ENUM ('admin', 'employee', 'user');
+CREATE TYPE PERMISSION_TYPE AS ENUM ('ADMIN', 'EMPLOYEE', 'USER');
 
 CREATE TABLE Accounts (
     id              SERIAL          PRIMARY KEY,
     email           VARCHAR(255)    NOT NULL UNIQUE,
     username        VARCHAR(50)     NOT NULL UNIQUE,
     password        VARCHAR(250)    NOT NULL,
-    user_permissions VARCHAR(10)   DEFAULT 'user'
+    user_permissions VARCHAR(10)   DEFAULT 'USER'
 );
 
 COPY Persons (first_name, last_name, address, city, telephone, email, fav_animal) FROM stdin (Delimiter ',');
@@ -1117,16 +1117,16 @@ COPY Vaxx (pet_id, period_start, period_end, done, type) FROM stdin (Delimiter '
 \.
 
 COPY Accounts(email,username,password,user_permissions) FROM stdin (Delimiter ',');
-rishi.sunak.mp@parliament.uk,rishi.sunak,d701a5343fa2bcaef5aaf79c4e325c7c987e08ebb3558b40df097a28605cf84c,employee
-bojoforpm@gmail.com,boris.jansen,5f4526ea50df81ea950beb4e5634b4c7fc339f2c9db2a78c4393a7b034e453ed,employee
-mahpun@yahoo.com,mahava.punja,ad751879245cdf85f51b8efe4cdea7de430b9ff97fd05646eb83c30c4365b41f,employee
-buchmanna@gmail.com,anna.buchmann,51fdba97d8161d35e15b85dcfb3e5b5548589175232b3dedf316cad0d3fd9228,employee
-danielwilson@example.com,daniel.wilson,430579e231aaf3b8cc78889fe9dae4c805aa5042b97478854de9ffb4e853a6e5,employee
-oliviataylor@example.com,olivia.taylor,0f9c774876349a4dac3258449793dd96ede87ba6f6ef136cbf572d76b7df0d39,employee
-matthewanderson@example.com,matthew.anderson,575069fa4cfeb351b234d2e44f87ea55f36be16c0564d4e5f342a5d57c4241a9,employee
-robertjohnson@example.com,robert.johnson,aa2b49b651c0c9cdd1957170154a2e286f4d595503737a55e01a1ec27b754d4b,employee
-jenniferdavis@example.com,jennifer.davis,e4190161c79ab161130e6b339d11417dad81c9706ef7f909425fba3c1d906859,employee
-admin@wp.pl,admin,8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918,admin
+rishi.sunak.mp@parliament.uk,rishi.sunak,d701a5343fa2bcaef5aaf79c4e325c7c987e08ebb3558b40df097a28605cf84c,EMPLOYEE
+bojoforpm@gmail.com,boris.jansen,5f4526ea50df81ea950beb4e5634b4c7fc339f2c9db2a78c4393a7b034e453ed,EMPLOYEE
+mahpun@yahoo.com,mahava.punja,ad751879245cdf85f51b8efe4cdea7de430b9ff97fd05646eb83c30c4365b41f,EMPLOYEE
+buchmanna@gmail.com,anna.buchmann,51fdba97d8161d35e15b85dcfb3e5b5548589175232b3dedf316cad0d3fd9228,EMPLOYEE
+danielwilson@example.com,daniel.wilson,430579e231aaf3b8cc78889fe9dae4c805aa5042b97478854de9ffb4e853a6e5,EMPLOYEE
+oliviataylor@example.com,olivia.taylor,0f9c774876349a4dac3258449793dd96ede87ba6f6ef136cbf572d76b7df0d39,EMPLOYEE
+matthewanderson@example.com,matthew.anderson,575069fa4cfeb351b234d2e44f87ea55f36be16c0564d4e5f342a5d57c4241a9,EMPLOYEE
+robertjohnson@example.com,robert.johnson,aa2b49b651c0c9cdd1957170154a2e286f4d595503737a55e01a1ec27b754d4b,EMPLOYEE
+jenniferdavis@example.com,jennifer.davis,e4190161c79ab161130e6b339d11417dad81c9706ef7f909425fba3c1d906859,EMPLOYEE
+admin@wp.pl,admin,8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918,ADMIN
 \.
 
 ----OBLICZNIE OCENY WETERYNARZA

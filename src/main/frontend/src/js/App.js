@@ -57,7 +57,7 @@ function App() {
           message: 'Logged in successfully.'
         });
 
-        setShowLogin(false); // Ukrycie panelu logowania po udanym zalogowaniu
+        setShowLogin(false);
       } else if (response.status === 401) {
         setLoginResult({
           success: false,
@@ -141,32 +141,32 @@ function App() {
               Log Out
             </a>
           )}
-          {role === 'admin' && (
+          {role === 'ADMIN' && (
             <a className="link" href="/employees">
               Employees
             </a>
           )}
-          {role === 'employee' && (
+          {role === 'EMPLOYEE' && (
             <a className="link" href="/vetPage">
               Vet Page
             </a>
           )}
-          {(role === 'user' || role === 'employee') && (
+          {(role === 'USER' || role === 'EMPLOYEE') && (
             <a className="link" href="/userPage">
               User Page
             </a>
           )}
-          {(role === 'admin' || role === 'employee') && (
+          {(role === 'ADMIN' || role === 'EMPLOYEE') && (
             <a className="link" href="/AddPet">
               Add Pet
             </a>
           )}
-          {(role === 'admin' || role === 'employee') && (
+          {(role === 'ADMIN' || role === 'EMPLOYEE') && (
             <a className="link" href="/AddPerson">
               Add Person
             </a>
           )}
-          {(role === 'admin' || role === 'employee') && (
+          {(role === 'ADMIN' || role === 'EMPLOYEE') && (
             <a className="link" href="/PetOwners">
               Add Pet Owner
             </a>
@@ -179,7 +179,7 @@ function App() {
         </p>
         <p className="fun-fact">Fun fact of the day: {funFact}</p>
         <div className="search-vets-button">
-          {(role === 'admin' || role === 'employee') && (
+          {(role === 'ADMIN' || role === 'EMPLOYEE') && (
             <a className="link" href="/vets">
               Schedule Appointment
             </a>
