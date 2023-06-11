@@ -1,12 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../css/Vets.css';
+import { decodeRoleFromToken } from '../utils/tokenUtils';
 
 const SpecializationSelector = ({ specializations, onSpecializationChange }) => {
   const handleChange = (e) => {
     const selectedSpecialization = e.target.value;
     onSpecializationChange(selectedSpecialization);
   };
+
+  const navigate = useNavigate();
+  const [token, setToken] = useState(localStorage.getItem('token'));
+
+  useEffect(() => {
+    if (!token || (decodeRoleFromToken(token) !== 'employee' && decodeRoleFromToken(token) !== 'admin')) {
+      navigate('/');
+    }
+  }, [token]);
 
   return (
     <div className="input-container">
