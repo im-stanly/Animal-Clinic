@@ -5,13 +5,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class WorkHoursModel {
-    private Integer worker_id;
+    private Integer employee_id;
     private String weekDay;
-    private LocalDate start_date;
-    private LocalDate end_date;
+    private LocalTime start_time;
+    private LocalTime end_time;
 }
