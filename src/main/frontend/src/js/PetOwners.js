@@ -11,7 +11,7 @@ const AddPetOwner = () => {
   const navigate = useNavigate();
   const [token, setToken] = useState(localStorage.getItem('token'));
   useEffect(() => {
-    if (!token || decodeRoleFromToken(token) !== 'EMPLOYEE') {
+    if (!token || ((decodeRoleFromToken(token) !== 'EMPLOYEE') && (decodeRoleFromToken(token) !== 'ADMIN'))) {
       navigate('/NotFoundPage');
     }
   }, [token]);
@@ -32,12 +32,19 @@ const AddPetOwner = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch('http://localhost:8080/pet_owners', {
+      const requestBody = {
+        person_id: formData.personId,
+        pet_id: formData.petId
+      };
+
+      console.log('Sending JSON:', JSON.stringify(requestBody));
+
+      const response = await fetch('http://localhost:8080/persons/add-pet', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(requestBody)
       });
 
       if (response.ok) {
@@ -53,6 +60,8 @@ const AddPetOwner = () => {
       console.error(error);
     }
   };
+
+
 
   return (
     <div>
