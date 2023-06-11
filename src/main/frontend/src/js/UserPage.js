@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import '../css/UserPage.css';
 
 function UserPage() {
   const [token, setToken] = useState(localStorage.getItem('token'));
@@ -20,9 +21,7 @@ function UserPage() {
   }
 
   useEffect(() => {
-    if (!token) {
-      navigate('/');
-    } else if (decodeRoleFromToken(token) !== 'user') {
+    if (!token || (decodeRoleFromToken(token) !== 'user' && decodeRoleFromToken(token) !== 'employee')) {
       navigate('/');
     } else {
       fetchUserData();
@@ -36,16 +35,15 @@ function UserPage() {
       .then(data => {
         const matchingUser = data.find(user => user.email === email);
         setUserData(matchingUser);
-        //if (matchingUser) {
-        //  fetchUserAnimals(matchingUser.id);
-        //}
+        if (matchingUser) {
+          fetchUserAnimals(matchingUser.id);
+        }
       })
       .catch(error => console.error('Błąd pobierania danych użytkownika:', error));
   };
 
-
   const fetchUserAnimals = (personId) => {
-    fetch(`http://localhost:8080/pet_owners?personId=${personId}`)
+    fetch(`http://localhost:8080/persons/my-pets/ownerID=${personId}`)
       .then(response => response.json())
       .then(data => {
         setUserAnimals(data);
@@ -53,14 +51,8 @@ function UserPage() {
       .catch(error => console.error('Błąd pobierania zwierząt użytkownika:', error));
   };
 
-  const fetchAnimalVisits = (animalId) => {
-    fetch(`http://localhost:8080/pets/next-visits?id=${animalId}`)
-      .then(response => response.json())
-      .then(data => {
-        // Obsłuż pobrane wizyty dla zwierzęcia
-        console.log(data);
-      })
-      .catch(error => console.error('Błąd pobierania wizyt dla zwierzęcia:', error));
+  const navigateToPetPage = (petId) => {
+    navigate(`/petPage/${petId}`);
   };
 
   const decodeEmailFromToken = (token) => {
@@ -80,22 +72,36 @@ function UserPage() {
     navigate('/');
   };
 
+  const handleGoToHomePage = () => {
+    navigate('/');
+  };
+
   return (
-    <div>
+    <div className="app-container">
       {userData && (
-        <h2>Welcome {userData.first_name} {userData.last_name}</h2>
+        <h2 className="header">Welcome {userData.first_name} {userData.last_name}</h2>
       )}
 
-      <h3>Your pets:</h3>
-      <ul>
-        {userAnimals.map(animal => (
-          <li key={animal.id}>
-            {animal.nazwa}
-            <button onClick={() => fetchAnimalVisits(animal.id)}>Pokaż wizyty</button>
-          </li>
-        ))}
-      </ul>
-      <button onClick={handleLogout}>Logout</button>
+      <div className="links">
+        <a className="link" href="/">
+          Go to Home Page
+        </a>
+        <a className="link" onClick={handleLogout}>
+          Logout
+        </a>
+      </div>
+
+      <div className="main-content">
+        <h3>Your pets:</h3>
+        <ul>
+          {userAnimals.map(animal => (
+            <li key={animal.id}>
+              {animal.name}
+              <button className="pet-button" onClick={() => navigateToPetPage(animal.id)}>Go to Pet Page</button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }

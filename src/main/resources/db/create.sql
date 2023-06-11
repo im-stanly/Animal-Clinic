@@ -190,19 +190,19 @@ CREATE TABLE Accounts (
 );
 
 COPY Persons (first_name, last_name, address, city, telephone, email, fav_animal) FROM stdin (Delimiter ',');
-David, O Connor,65 Hudson St,Dulford,070218230685,daveoc@gmail.com,Bobby
+David, O Connor,65 Hudson St,Dulford,070218230685,daveoc@gmail.com,Firefly
 Elisabeth,Kowalski,79 Holgate Rd,Rannoch School,07789721317,LizSmith743@yahoo.com,Dog
-Rishi,Sunak,10 Downing St,London,02072195437,rishi.sunak.mp@parliament.uk,Cos
-Barbara,Richards,90 Balsham St,Harrogate,07017505023,barbararichards1937@gmail.com,Triss
-Boris, Jansen,52 Holgate Rd, Rainham, 07924955449, bojoforpm@gmail.com,Cos
-Mahava, Punja,7 Church Way,Bradfield,07751675751,mahpun@yahoo.com,Joe Biden
-Bernard, Rodriguez,74 Great North Road,Alticry,07025371694,bendriguez17@yahoo.com,Cos
-Barry, British,24 St Andrews Lane,Dail Mor,07887136485,scoresamgowls@gmail.com,Luna
-Anna, Buchmann,3 Town Lane, Sourton,07009283724,buchmanna@gmail.com,Milo
-Daniele, Liberman,90 Mounthoollie Lane,Sutton,07979163114,danieleliberman342@gmail.com,Willow
-John,Doe,123 Main St,New York City,555123123,johndoe@example.com,Dog
+Rishi,Sunak,10 Downing St,London,02072195437,rishi.sunak.mp@parliament.uk,Penguin
+Barbara,Richards,90 Balsham St,Harrogate,07017505023,barbararichards1937@gmail.com,Cobra
+Boris,Jansen,52 Holgate Rd, Rainham, 07924955449, bojoforpm@gmail.com,Narwhale
+Mahava,Punja,7 Church Way,Bradfield,07751675751,mahpun@yahoo.com,Hedgehog
+Bernard,Rodriguez,74 Great North Road,Alticry,07025371694,bendriguez17@yahoo.com,Platypus
+Barry,British,24 St Andrews Lane,Dail Mor,07887136485,scoresamgowls@gmail.com,Rhinoceros
+Anna,Buchmann,3 Town Lane, Sourton,07009283724,buchmanna@gmail.com,Giraffe
+Daniele,Liberman,90 Mounthoollie Lane,Sutton,07979163114,danieleliberman342@gmail.com,Panther
+John,Doe,123 Main St,New York City, 555123123,johndoe@example.com,Dog
 Jane,Smith,456 Elm St,Los Angeles,555567567,janesmith@example.com,Cat
-Michael,Johnson,789 Oak Ave,Chicago,555901901,michaeljohnson@example.com,Bird
+Michael,Johnson,789 Oak Ave,Chicago,555901901,michaeljohnson@example.com,Eagle
 Emily,Williams,321 Pine Rd,Miami,555345345,emilywilliams@example.com,Horse
 David,Brown,987 Cedar Lane,San Francisco,555789789,davidbrown@example.com,Rabbit
 Sarah,Miller,654 Maple Dr,Boston,555234234,sarahmiller@example.com,Turtle
@@ -212,14 +212,21 @@ Matthew,Anderson,753 Walnut Way,Phoenix,555456456,matthewanderson@example.com,El
 Sophia,Thompson,951 Ash Street,Houston,555890890,sophiathompson@example.com,Dolphin
 Robert,Johnson,246 Oak St,Chicago,555111222,robertjohnson@example.com,Cat
 Elizabeth,Brown,789 Pine Ave,Los Angeles,555333444,elizabethbrown@example.com,Dog
-William,Miller,654 Elm Rd,Miami,555555666,williammiller@example.com,Bird
+William,Miller,654 Elm Rd,Miami,555555666,williammiller@example.com,Stork
 Jennifer,Davis,852 Maple Blvd,New York City,555777888,jenniferdavis@example.com,Horse
 Christopher,Anderson,123 Cedar Lane,San Francisco,555999000,christopheranderson@example.com,Rabbit
 Jessica,Wilson,456 Birch Ct,Seattle,555222333,jessicawilson@example.com,Turtle
 David,Taylor,951 Spruce Ave,Dallas,555444555,davidtaylor@example.com,Lion
 Ashley,Thomas,753 Walnut Way,Phoenix,555666777,ashleythomas@example.com,Monkey
 Michael,Jackson,159 Ash Street,Houston,555888999,michaeljackson@example.com,Elephant
-Samantha,Clark,357 Elm St,Boston,555000111,samanthaclark@example.com,Dolphin
+Elizabth,Windsor,SW1A 1AA,London,3031237300,queenlizzy@uk.com,Dog
+Steve,Bajeev,14 Elmo Lane,Boobooland,7218537657,stevobevo@example.com,Beaver
+Jane,Dane,222 Blurgh St,Copenhagen,1255373756,tripleane@example.com,Crane
+Joseph,Ironsky,13 Kittycat Ave,Tbilisi,12753765468,joeiroe@example.com,Bear
+Pierre,Pierre,35 rue CDG,Paris,35372154656,pipierer@example.com,Dog
+Sam,Palm,42 Helm St,Cleveland,4450304641,sambamdam@gmail.com,Whale
+Dana,Local,37 Lutherstrasse,Berlin,525507781,idksomething@example.com,Cat
+Bobby,Steve,3 Street Avenue Lane,New York City,16329579788,bobsteve@yahoo.com,Goose
 \.
 
 COPY Species (name, avg_lifespan, healthy_weight_low, healthy_weight_high) FROM stdin (Delimiter ',');
@@ -303,77 +310,71 @@ Receptionist,2000.00
 Animal Caretaker,1800.00
 \.
 
-COPY Employees (id,person_id,position,salary,date_start) FROM stdin (Delimiter ',');
-1,1,2,5000.00,2021-01-01
-2,2,3,6000.00,2021-02-15
-3,3,1,4500.00,2021-03-10
-4,4,2,5500.00,2021-04-05
-5,5,3,6500.00,2021-05-20
-6,6,1,4000.00,2021-06-15
-7,7,2,5500.00,2021-07-10
-8,8,3,7000.00,2021-08-25
-9,9,1,4200.00,2021-09-20
-10,10,2,5800.00,2021-10-15
-11,11,3,7200.00,2021-11-10
-12,12,1,4300.00,2021-12-05
-13,13,2,6100.00,2022-01-20
-14,14,3,7500.00,2022-02-15
-15,15,1,4400.00,2022-03-10
-16,16,2,6300.00,2022-04-25
-17,17,3,7800.00,2022-05-20
-18,18,1,4600.00,2022-06-15
-19,19,2,6600.00,2022-07-10
-20,20,3,8200.00,2022-08-25
-21,21,1,4800.00,2022-09-20
-22,22,2,6900.00,2022-10-15
-23,23,3,8600.00,2022-11-10
-24,24,1,5000.00,2022-12-05
-25,25,2,7200.00,2023-01-20
+COPY Employees (person_id,position,salary,date_start) FROM stdin (Delimiter ',');
+1,2,5000.00,2021-01-01
+2,3,6000.00,2021-02-15
+3,1,4500.00,2021-03-10
+4,2,5500.00,2021-04-05
+5,1,6500.00,2021-05-20
+6,1,4000.00,2021-06-15
+7,2,5500.00,2021-07-10
+8,5,7000.00,2021-08-25
+9,1,4200.00,2021-09-20
+10,2,5800.00,2021-10-15
+11,3,7200.00,2021-11-10
+12,5,4300.00,2021-12-05
+13,2,6100.00,2022-01-20
+14,3,7500.00,2022-02-15
+15,4,4400.00,2022-03-10
+16,2,6300.00,2022-04-25
+17,1,7800.00,2022-05-20
+18,1,4600.00,2022-06-15
+19,1,6600.00,2022-07-10
+20,3,8200.00,2022-08-25
+21,1,4800.00,2022-09-20
+22,2,6900.00,2022-10-15
+23,3,8600.00,2022-11-10
+24,1,5000.00,2022-12-05
+37,2,7200.00,2023-01-20
 \.
 
 COPY Vets(id, office) FROM stdin (Delimiter ',');
-1,Room 101
-2,Room 205
-3,Room 302
-4,Room 410
-5,Room 512
-6,Room 623
-7,Room 718
-8,Room 821
-9,Room 935
-10,Room 104
-11,Room 205
-12,Room 312
-13,Room 417
-14,Room 520
-15,Room 633
+3,Room 101
+5,Room 103
+6,Room 205
+9,Room 302
+17,Room 334
+18,Room 410
+19,Room 508
+21,Room 512
+24,Room 623
 \.
 
 COPY Vets_Specialities(vet_id,name,date_start) FROM stdin (Delimiter ',');
-1,Surgery,2022-01-01
-1,Dermatology,2023-03-15
-2,Dermatology,2021-07-15
-2,Internal Medicine,2022-05-20
-2,Cardiology,2023-01-10
-3,Internal Medicine,2023-03-10
-4,Cardiology,2022-09-30
-5,Ophthalmology,2023-01-20
-5,Neurology,2022-11-05
-5,Radiology,2023-02-15
+3,Surgery,2022-01-01
+3,Dermatology,2023-03-15
+5,Dermatology,2021-07-15
+6,Internal Medicine,2022-05-20
+6,Cardiology,2023-01-10
+5,Internal Medicine,2023-03-10
+9,Cardiology,2022-09-30
+9,Ophthalmology,2023-01-20
+19,Neurology,2022-11-05
+3,Radiology,2023-02-15
 6,Surgery,2022-03-10
-6,Orthopedics,2022-08-15
-7,Dermatology,2021-09-20
-8,Internal Medicine,2023-01-05
-9,Cardiology,2022-07-01
-10,Ophthalmology,2023-02-10
-11,Dermatology,2023-04-05
-11,Radiology,2022-12-15
-12,Internal Medicine,2021-08-20
-12,Oncology,2022-06-10
-13,Cardiology,2023-03-01
-14,Neurology,2022-10-05
-15,Internal Medicine,2023-01-15
-15,Endocrinology,2023-05-10
+17,Orthopedics,2022-08-15
+18,Dermatology,2021-09-20
+18,Internal Medicine,2023-01-05
+18,Cardiology,2022-07-01
+17,Ophthalmology,2023-02-10
+21,Dermatology,2023-04-05
+21,Radiology,2022-12-15
+21,Internal Medicine,2021-08-20
+19,Oncology,2022-06-10
+19,Cardiology,2023-03-01
+24,Neurology,2022-10-05
+24,Internal Medicine,2023-01-15
+24,Endocrinology,2023-05-10
 \.
 
 COPY WorkHours(employee_id,"WeekDay",start_time,end_time) FROM stdin (Delimiter ',');
@@ -559,50 +560,56 @@ COPY Races (id, species, race) FROM stdin (Delimiter ',');
 
 COPY Pets (name, sex, type, birth_day, weight, dangerous, estimate) FROM stdin (Delimiter ',');
 Luna,F,1,2018-05-12,4.5,false,true
-Max,M,3,2019-02-28,8.2,false,false
-Bella,F,2,2020-09-15,3.7,false,false
-Charlie,M,5,2017-11-03,5.1,false,false
-Lucy,F,4,2020-01-19,6.8,false,false
-Cooper,M,2,2016-08-10,9.3,false,false
+Max,M,32,2019-02-28,8.2,false,false
+Bella,F,24,2020-09-15,3.7,false,false
+Charlie,M,50,2017-11-03,5.1,false,false
+Lucy,F,48,2020-01-19,6.8,false,false
+Cooper,M,21,2016-08-10,9.3,false,false
 Molly,F,3,2019-07-06,3.9,false,true
 Simba,M,1,2017-09-22,5.7,false,false
 Lola,F,2,2018-12-10,4.2,false,false
-Rocky,M,3,2019-06-17,6.1,false,false
+Rocky,M,37,2019-06-17,6.1,false,false
 Daisy,F,4,2016-03-05,7.8,false,true
 Oscar,M,5,2020-04-02,3.4,false,false
-Mia,F,1,2017-11-28,6.5,false,false
+Mia,F,11,2017-11-28,6.5,false,false
 Bailey,M,2,2018-08-14,9.9,false,true
-Buddy,M,3,2019-03-12,5.6,false,false
-Sadie,F,4,2017-06-25,8.3,false,false
+Buddy,M,33,2019-03-12,5.6,false,false
+Sadie,F,41,2017-06-25,8.3,false,false
 Milo,M,5,2018-10-09,3.9,false,false
-Coco,F,1,2020-02-15,4.7,false,true
+Coco,F,18,2020-02-15,4.7,false,true
 Maximus,M,2,2016-12-01,7.2,false,false
 Ruby,F,3,2019-08-18,5.4,false,false
-Leo,M,4,2017-04-09,9.1,false,true
+Leo,M,49,2017-04-09,9.1,false,true
 Lucky,M,1,2018-07-23,6.8,false,false
 Luna,F,2,2019-04-17,4.5,false,true
-Rocky,M,3,2020-01-10,7.3,false,false
+Rocky,M,35,2020-01-10,7.3,false,false
 Charlie,M,5,2016-05-20,3.6,false,false
 Molly,F,1,2019-11-12,5.2,false,false
 Max,M,2,2018-03-28,9.7,false,true
-Simba,M,3,2017-10-15,6.2,false,false
-Lucy,F,4,2018-06-08,7.9,false,false
-Oliver,M,5,2019-01-02,4.1,false,false
-Lola,F,1,2016-04-17,5.8,false,true
+Simba,M,37,2017-10-15,6.2,false,false
+Lucy,F,47,2018-06-08,7.9,false,false
+Oliver,M,50,2019-01-02,4.1,false,false
+Lola,F,12,2016-04-17,5.8,false,true
 Maximus,M,2,2020-08-22,8.5,false,false
-Bella,F,3,2017-02-10,3.3,false,false
-Cooper,M,4,2018-09-05,9.2,false,false
+Bella,F,38,2017-02-10,3.3,false,false
+Cooper,M,43,2018-09-05,9.2,false,false
 Daisy,F,5,2019-05-12,3.7,false,false
-Charlie,M,1,2018-08-28,6.4,false,false
+Charlie,M,15,2018-08-28,6.4,false,false
 Luna,F,2,2017-03-14,8.9,false,true
 Max,M,3,2016-09-09,4.3,false,false
-Molly,F,4,2020-04-26,7.6,false,false
+Molly,F,49,2020-04-26,7.6,false,false
 Rocky,M,5,2017-12-03,5.5,false,false
 Bella,F,1,2018-07-19,9.4,false,true
-Simba,M,2,2019-06-11,4.8,false,false
+Simba,M,22,2019-06-11,4.8,false,false
 Lola,F,3,2020-03-25,7.2,false,false
 Rocky,M,4,2017-01-08,5.9,false,false
-Bella,F,5,2018-08-03,3.5,false,false
+Bella,F,12,2018-08-03,3.5,false,false
+Joe,M,5,2018-07-01,3.5,false,false
+Stevey,M,3,2018-09-02,32.1,false,false
+Fromage,F,42,2014-01-12,13.2, true,false
+Omelette,F,1,2013-08-13,12.1,false,false
+Parsley,M,24,2002-02-02,4.6,false,false
+Khachapuri,F,1,2011-09-11,8.9,false,false
 \.
 
 
@@ -780,76 +787,179 @@ Pet Adoption,0
 \.
 
 COPY Org_reps(Org_id, Rep_id) FROM stdin (Delimiter ',');
-2,17
-5,3
-3,25
-1,8
-6,14
-4,22
-7,6
+2,26
+5,32
+3,37
+1,28
+6,29
+4,33
+7,36
 \.
 
-COPY Visits (id, pet_id, vet_id, visit_date, visit_time, type_id, description, rate) FROM stdin (Delimiter ',');
-1, 2, 1, 2023-06-01, 09:00:00, 4, Annual check-up, 4.5
-2, 3, 2, 2023-06-02, 14:30:00, 1, Vaccination, 4.8
-3, 1, 5, 2023-06-03, 10:15:00, 2, Dental cleaning, 4.7
-4, 4, 1, 2023-06-04, 11:30:00, 3, Physical examination, 4.6
-5, 3, 3, 2023-06-05, 15:45:00, 5, Surgery, 4.9
-6, 2, 4, 2023-06-06, 16:30:00, 2, Nail trimming, 4.3
-7, 5, 1, 2023-06-07, 11:00:00, 4, Microchipping, 4.2
-8, 1, 3, 2023-06-08, 13:45:00, 3, Physical examination, 4.9
-9, 4, 2, 2023-06-09, 15:00:00, 5, Surgery, 4.7
-10, 3, 5, 2023-06-10, 10:30:00, 1, Vaccination, 4.6
-11, 2, 3, 2023-06-11, 14:15:00, 3, Physical examination, 4.4
-12, 5, 4, 2023-06-12, 09:45:00, 1, Vaccination, 4.8
-13, 1, 2, 2023-06-13, 11:30:00, 2, Dental cleaning, 4.6
-14, 4, 5, 2023-06-14, 13:00:00, 4, Microchipping, 4.2
-15, 3, 1, 2023-06-15, 15:30:00, 5, Surgery, 4.7
-16, 4, 1, 2023-06-16, 10:00:00, 2, Dental cleaning, 4.5
-17, 3, 2, 2023-06-17, 12:30:00, 3, Physical examination, 4.3
-18, 2, 5, 2023-06-18, 14:45:00, 4, Microchipping, 4.1
-19, 1, 4, 2023-06-19, 16:15:00, 5, Surgery, 4.6
-20, 5, 3, 2023-06-20, 09:30:00, 1, Vaccination, 4.4
-21, 3, 5, 2023-06-21, 11:00:00, 2, Dental cleaning, 4.2
-22, 1, 3, 2023-06-22, 13:30:00, 3, Physical examination, 4.7
-23, 4, 2, 2023-06-23, 15:45:00, 4, Microchipping, 4.4
-24, 2, 1, 2023-06-24, 09:15:00, 5, Surgery, 4.3
-25, 5, 4, 2023-06-25, 11:45:00, 1, Vaccination, 4.6
-26, 2, 4, 2023-06-26, 10:30:00, 2, Dental cleaning, 4.1
-27, 3, 1, 2023-06-27, 14:15:00, 3, Physical examination, 4.8
-28, 4, 5, 2023-06-28, 16:30:00, 4, Microchipping, 4.5
-29, 5, 2, 2023-06-29, 09:45:00, 5, Surgery, 4.4
-30, 1, 3, 2023-06-30, 12:00:00, 1, Vaccination, 4.7
-31, 6, 4, 2023-07-01, 11:00:00, 2, Dental cleaning, 4.3
-32, 7, 1, 2023-07-02, 13:45:00, 3, Physical examination, 4.9
-33, 8, 5, 2023-07-03, 15:30:00, 4, Microchipping, 4.6
-34, 9, 2, 2023-07-04, 08:45:00, 5, Surgery, 4.5
-35, 10, 3, 2023-07-05, 11:30:00, 1, Vaccination, 4.8
-36, 11, 6, 2023-07-06, 10:15:00, 2, Dental cleaning, 4.4
-37, 12, 7, 2023-07-07, 14:30:00, 3, Physical examination, 4.7
-38, 13, 8, 2023-07-08, 16:45:00, 4, Microchipping, 4.2
-39, 14, 9, 2023-07-09, 09:30:00, 5, Surgery, 4.1
-40, 15, 10, 2023-07-10, 12:00:00, 1, Vaccination, 4.6
-41, 16, 11, 2023-07-11, 11:30:00, 2, Dental cleaning, 4.3
-42, 17, 12, 2023-07-12, 15:45:00, 3, Physical examination, 4.8
-43, 18, 13, 2023-07-13, 17:30:00, 4, Microchipping, 4.6
-44, 19, 14, 2023-07-14, 10:00:00, 5, Surgery, 4.4
-45, 20, 15, 2023-07-15, 13:15:00, 1, Vaccination, 4.7
-46, 21, 6, 2023-07-16, 14:30:00, 2, Dental cleaning, 4.2
-47, 22, 7, 2023-07-17, 16:45:00, 3, Physical examination, 4.9
-48, 23, 8, 2023-07-18, 09:30:00, 4, Microchipping, 4.7
-49, 24, 9, 2023-07-19, 11:00:00, 5, Surgery, 4.5
-50, 25, 2, 2023-07-20, 12:15:00, 1, Vaccination, 4.6
-51, 26, 2, 2023-07-21, 15:30:00, 2, Dental cleaning, 4.3
-52, 27, 2, 2023-07-22, 17:15:00, 3, Physical examination, 4.8
-53, 28, 3, 2023-07-23, 10:45:00, 4, Microchipping, 4.6
-54, 29, 4, 2023-07-24, 13:30:00, 5, Surgery, 4.4
-55, 30, 5, 2023-07-25, 14:45:00, 1, Vaccination, 4.5
-56, 31, 6, 2023-07-26, 11:00:00, 2, Dental cleaning, 4.7
-57, 32, 7, 2023-07-27, 14:30:00, 3, Physical examination, 4.9
-58, 33, 8, 2023-07-28, 16:45:00, 4, Microchipping, 4.3
-59, 34, 9, 2023-07-29, 9:15:00, 5, Surgery, 4.5
-60, 35, 3, 2023-07-30, 12:30:00, 1, Vaccination, 4.2
+COPY Visits (pet_id, vet_id, visit_date, visit_time, type_id, description, rate) FROM stdin (Delimiter ',');
+2, 3, 2023-06-01, 09:00:00, 4, Annual check-up, 4.5
+3, 6, 2023-06-02, 14:30:00, 1, Vaccination, 4.8
+1, 5, 2023-06-03, 10:15:00, 2, Dental cleaning, 4.7
+4, 3, 2023-06-04, 11:30:00, 3, Physical examination, 4.6
+3, 3, 2023-06-05, 15:45:00, 5, Surgery, 4.9
+2, 9, 2023-06-06, 16:30:00, 2, Nail trimming, 4.3
+5, 3, 2023-06-07, 11:00:00, 4, Microchipping, 4.2
+1, 3, 2023-06-08, 13:45:00, 3, Physical examination, 4.9
+4, 6, 2023-06-09, 15:00:00, 5, Surgery, 4.7
+3, 5, 2023-06-10, 10:30:00, 1, Vaccination, 4.6
+2, 3, 2023-06-11, 14:15:00, 3, Physical examination, 4.4
+3, 21, 2023-06-17, 12:30:00, 3, Physical examination, 4.3
+2, 3, 2023-06-18, 14:45:00, 4, Microchipping, 4.1
+1, 24, 2023-06-19, 16:15:00, 5, Surgery, 4.6
+5, 3, 2023-06-20, 09:30:00, 1, Vaccination, 4.4
+3, 3, 2023-06-21, 11:00:00, 2, Dental cleaning, 4.2
+1, 19, 2023-06-22, 13:30:00, 3, Physical examination, 4.7
+4, 3, 2023-06-23, 15:45:00, 4, Microchipping, 4.4
+2, 17, 2023-06-24, 09:15:00, 5, Surgery, 4.3
+5, 24, 2023-06-25, 11:45:00, 1, Vaccination, 4.6
+2, 18, 2023-06-26, 10:30:00, 2, Dental cleaning, 4.1
+3, 3, 2023-06-27, 14:15:00, 3, Physical examination, 4.8
+4, 5, 2023-06-28, 16:30:00, 4, Microchipping, 4.5
+5, 24, 2023-06-29, 09:45:00, 5, Surgery, 4.4
+1, 3, 2023-06-30, 12:00:00, 1, Vaccination, 4.7
+6, 18, 2023-07-01, 11:00:00, 2, Dental cleaning, 4.3
+7, 19, 2023-07-02, 13:45:00, 3, Physical examination, 4.9
+8, 5, 2023-07-03, 15:30:00, 4, Microchipping, 4.6
+9, 3, 2023-07-04, 08:45:00, 5, Surgery, 4.5
+10, 3, 2023-07-05, 11:30:00, 1, Vaccination, 4.8
+11, 3, 2023-07-06, 10:15:00, 2, Dental cleaning, 4.4
+12, 17, 2023-07-07, 14:30:00, 3, Physical examination, 4.7
+13, 18, 2023-07-08, 16:45:00, 4, Microchipping, 4.2
+14, 9, 2023-07-09, 09:30:00, 5, Surgery, 4.1
+15, 3, 2023-07-10, 12:00:00, 1, Vaccination, 4.6
+16, 17, 2023-07-11, 11:30:00, 2, Dental cleaning, 4.3
+17, 18, 2023-07-12, 15:45:00, 3, Physical examination, 4.8
+18, 17, 2023-07-13, 17:30:00, 4, Microchipping, 4.6
+19, 18, 2023-07-14, 10:00:00, 5, Surgery, 4.4
+20, 19, 2023-07-15, 13:15:00, 1, Vaccination, 4.7
+21, 24, 2023-07-16, 14:30:00, 2, Dental cleaning, 4.2
+22, 21, 2023-07-17, 16:45:00, 3, Physical examination, 4.9
+23, 21, 2023-07-18, 09:30:00, 4, Microchipping, 4.7
+24, 9, 2023-07-19, 11:00:00, 5, Surgery, 4.5
+25, 21, 2023-07-20, 12:15:00, 1, Vaccination, 4.6
+26, 21, 2023-07-21, 15:30:00, 2, Dental cleaning, 4.3
+27, 21, 2023-07-22, 17:15:00, 3, Physical examination, 4.8
+28, 3, 2023-07-23, 10:45:00, 4, Microchipping, 4.6
+29, 3, 2023-07-24, 13:30:00, 5, Surgery, 4.4
+30, 9, 2023-07-25, 14:45:00, 1, Vaccination, 4.5
+31, 17, 2023-07-26, 11:00:00, 2, Dental cleaning, 4.7
+32, 18, 2023-07-27, 14:30:00, 3, Physical examination, 4.9
+33, 19, 2023-07-28, 16:45:00, 4, Microchipping, 4.3
+34, 9, 2023-07-29, 9:15:00, 5, Surgery, 4.5
+35, 3, 2023-07-30, 12:30:00, 1, Vaccination, 4.2
+37, 3, 2023-07-30, 13:30:00, 1, Microchipping, 4.3
+38, 3, 2023-07-30, 14:45:00, 1, Surgery, 4.1
+40, 21, 2023-07-30, 12:00:00, 1, Physical examination, 4.8
+39, 3, 2023-07-30, 11:30:00, 1, Surgery, 4.0
+39, 9, 2023-07-30, 10:30:00, 1, Vaccination, 4.9
+1, 3, 2023-06-12, 09:00:00, 1, General check-up,\N
+2, 3, 2023-06-12, 11:30:00, 4, Vaccination,\N
+3, 3, 2023-06-12, 14:00:00, 7, Dental cleaning,\N
+4, 5, 2023-06-12, 10:00:00, 2, Consultation,\N
+5, 5, 2023-06-12, 12:30:00, 5, X-ray,\N
+6, 5, 2023-06-12, 15:00:00, 8, Blood test,\N
+7, 6, 2023-06-12, 09:30:00, 3, Ultrasound,\N
+8, 6, 2023-06-12, 12:00:00, 6, Surgery,\N
+9, 6, 2023-06-12, 14:30:00, 9, Vaccination,\N
+10, 9, 2023-06-12, 10:30:00, 4, Dental cleaning,\N
+11, 9, 2023-06-12, 13:00:00, 7, General check-up,\N
+12, 9, 2023-06-12, 15:30:00, 10, X-ray,\N
+13, 17, 2023-06-12, 09:30:00, 5, Blood test,\N
+14, 17, 2023-06-12, 12:00:00, 8, Ultrasound,\N
+15, 17, 2023-06-12, 14:30:00, 11, Surgery,\N
+16, 18, 2023-06-12, 10:00:00, 6, Dental cleaning,\N
+17, 18, 2023-06-12, 12:30:00, 9, General check-up,\N
+18, 18, 2023-06-12, 15:00:00, 12, Vaccination,\N
+19, 19, 2023-06-12, 09:00:00, 7, X-ray,\N
+20, 19, 2023-06-12, 11:30:00, 10, Blood test,\N
+21, 19, 2023-06-12, 14:00:00, 13, Ultrasound,\N
+22, 21, 2023-06-12, 10:30:00, 8, Surgery,\N
+23, 21, 2023-06-12, 13:00:00, 11, Dental cleaning,\N
+24, 21, 2023-06-12, 15:30:00, 14, General check-up,\N
+25, 24, 2023-06-12, 09:00:00, 12, X-ray,\N
+26, 24, 2023-06-12, 11:30:00, 15, Blood test,\N
+27, 24, 2023-06-12, 14:00:00, 1, Ultrasound,\N
+28, 3, 2023-06-13, 09:00:00, 2, Surgery,\N
+29, 3, 2023-06-13, 11:30:00, 5, Dental cleaning,\N
+30, 3, 2023-06-13, 14:00:00, 8, General check-up,\N
+31, 5, 2023-06-13, 10:00:00, 3, X-ray,\N
+32, 5, 2023-06-13, 12:30:00, 6, Blood test,\N
+33, 5, 2023-06-13, 15:00:00, 9, Ultrasound,\N
+34, 6, 2023-06-13, 09:30:00, 4, Vaccination,\N
+35, 6, 2023-06-13, 12:00:00, 7, Dental cleaning,\N
+36, 6, 2023-06-13, 14:30:00, 10, General check-up,\N
+37, 9, 2023-06-13, 10:30:00, 5, X-ray,\N
+38, 9, 2023-06-13, 13:00:00, 8, Blood test,\N
+39, 9, 2023-06-13, 15:30:00, 11, Ultrasound,\N
+40, 17, 2023-06-13, 09:30:00, 6, Surgery,\N
+41, 17, 2023-06-13, 12:00:00, 9, Dental cleaning,\N
+42, 17, 2023-06-13, 14:30:00, 12, General check-up,\N
+43, 18, 2023-06-13, 10:00:00, 7, Vaccination,\N
+44, 18, 2023-06-13, 12:30:00, 10, X-ray,\N
+45, 18, 2023-06-13, 15:00:00, 13, Blood test,\N
+46, 19, 2023-06-13, 09:00:00, 8, Ultrasound,\N
+47, 19, 2023-06-13, 11:30:00, 11, Surgery,\N
+48, 19, 2023-06-13, 14:00:00, 14, Dental cleaning,\N
+49, 21, 2023-06-13, 10:30:00, 9, General check-up,\N
+50, 21, 2023-06-13, 13:00:00, 12, Vaccination,\N
+51, 21, 2023-06-13, 15:30:00, 15, X-ray,\N
+22, 24, 2023-06-13, 09:00:00, 1, Blood test,\N
+23, 24, 2023-06-13, 11:30:00, 4, Ultrasound,\N
+4, 24, 2023-06-13, 14:00:00, 7, Surgery,\N
+15, 3, 2023-06-14, 09:00:00, 4, Dental cleaning,\N
+26, 3, 2023-06-14, 11:30:00, 7, General check-up,\N
+37, 3, 2023-06-14, 14:00:00, 10, X-ray,\N
+38, 5, 2023-06-14, 10:00:00, 5, Blood test,\N
+39, 5, 2023-06-14, 12:30:00, 8, Ultrasound,\N
+10, 5, 2023-06-14, 15:00:00, 11, Surgery,\N
+11, 6, 2023-06-14, 09:30:00, 6, Dental cleaning,\N
+12, 6, 2023-06-14, 12:00:00, 9, General check-up,\N
+13, 6, 2023-06-14, 14:30:00, 12, Vaccination,\N
+14, 9, 2023-06-14, 10:30:00, 7, X-ray,\N
+15, 9, 2023-06-14, 13:00:00, 10, Blood test,\N
+16, 9, 2023-06-14, 15:30:00, 13, Ultrasound,\N
+17, 17, 2023-06-14, 09:30:00, 8, Surgery,\N
+18, 17, 2023-06-14, 12:00:00, 11, Dental cleaning,\N
+19, 17, 2023-06-14, 14:30:00, 14, General check-up,\N
+20, 18, 2023-06-14, 10:00:00, 9, Vaccination,\N
+21, 18, 2023-06-14, 12:30:00, 12, X-ray,\N
+22, 18, 2023-06-14, 15:00:00, 15, Blood test,\N
+23, 19, 2023-06-14, 09:00:00, 10, Ultrasound,\N
+24, 19, 2023-06-14, 11:30:00, 13, Surgery,\N
+25, 19, 2023-06-14, 14:00:00, 1, Dental cleaning,\N
+26, 21, 2023-06-14, 10:30:00, 11, General check-up,\N
+27, 21, 2023-06-14, 13:00:00, 14, Vaccination,\N
+28, 21, 2023-06-14, 15:30:00, 2, X-ray,\N
+29, 24, 2023-06-15, 09:00:00, 12, Blood test,\N
+30, 24, 2023-06-15, 11:30:00, 15, Ultrasound,\N
+31, 24, 2023-06-15, 14:00:00, 1, Surgery,\N
+32, 3, 2023-06-15, 09:00:00, 5, Dental cleaning,\N
+33, 3, 2023-06-15, 11:30:00, 8, General check-up,\N
+34, 3, 2023-06-15, 14:00:00, 11, X-ray,\N
+35, 5, 2023-06-15, 10:00:00, 6, Blood test,\N
+36, 5, 2023-06-15, 12:30:00, 9, Ultrasound,\N
+37, 5, 2023-06-15, 15:00:00, 12, Surgery,\N
+38, 6, 2023-06-15, 09:30:00, 7, Dental cleaning,\N
+39, 6, 2023-06-15, 12:00:00, 10, General check-up,\N
+40, 6, 2023-06-15, 14:30:00, 13, Vaccination,\N
+41, 9, 2023-06-15, 10:30:00, 8, X-ray,\N
+42, 9, 2023-06-15, 13:00:00, 11, Blood test,\N
+43, 9, 2023-06-15, 15:30:00, 14, Ultrasound,\N
+44, 17, 2023-06-15, 09:30:00, 9, Surgery,\N
+45, 17, 2023-06-15, 12:00:00, 12, Dental cleaning,\N
+46, 17, 2023-06-15, 14:30:00, 15, General check-up,\N
+47, 18, 2023-06-15, 10:00:00, 10, Vaccination,\N
+48, 18, 2023-06-15, 12:30:00, 13, X-ray,\N
+49, 18, 2023-06-15, 15:00:00, 1, Blood test,\N
+10, 19, 2023-06-15, 09:00:00, 11, Ultrasound,\N
+11, 19, 2023-06-15, 11:30:00, 14, Surgery,\N
+12, 19, 2023-06-15, 14:00:00, 2, Dental cleaning,\N
+13, 21, 2023-06-15, 10:30:00, 13, General check-up,\N
 \.
 
 COPY Prescriptions (id_visit, med_id, amount, price, dosing) FROM stdin (Delimiter ',');
@@ -1006,6 +1116,18 @@ COPY Vaxx (pet_id, period_start, period_end, done, type) FROM stdin (Delimiter '
 26, 2027-03-10, 2027-04-10, false, 1
 \.
 
+COPY Accounts(email,username,password,user_permissions) FROM stdin (Delimiter ',');
+rishi.sunak.mp@parliament.uk,rishi.sunak,d701a5343fa2bcaef5aaf79c4e325c7c987e08ebb3558b40df097a28605cf84c,employee
+bojoforpm@gmail.com,boris.jansen,5f4526ea50df81ea950beb4e5634b4c7fc339f2c9db2a78c4393a7b034e453ed,employee
+mahpun@yahoo.com,mahava.punja,ad751879245cdf85f51b8efe4cdea7de430b9ff97fd05646eb83c30c4365b41f,employee
+elizabethbrown@example.com,elizabeth.brown,7f7a6ede61d3c1f70d2ba9c5bd0185a64564833aba3ba072fb5146a6b68ed6b4,employee
+williammiller@example.com,william.miller,3e45a331bc734dcfd6e2a2c0819f1a07aa2af203f9569fc18ef0380678152d39,employee
+jenniferdavis@example.com,jennifer.davis,e4190161c79ab161130e6b339d11417dad81c9706ef7f909425fba3c1d906859,employee
+davidtaylor@example.com,david.taylor,2ce7251a977eb9a4f0efc15eda3d619b8c5de0100d6d33f501c6f31940dcca6d,employee
+bobsteve@yahoo.com,bobby.steve,55467e6d917123837623bbc776a0e417dff63a9ebb77ef95a1f79ceb56e9ba01,employee
+admin@wp.pl,admin,8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918,admin
+\.
+
 ----OBLICZNIE OCENY WETERYNARZA
 
 CREATE OR REPLACE FUNCTION calculate_vet_rating(search_id INTEGER)
@@ -1083,7 +1205,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- DODAJ PRACOWNIKA FUNKAJA
+-- DODAJ PRACOWNIKA FUNKCJA
 CREATE OR REPLACE FUNCTION add_employee_with_person(
   p_first_name VARCHAR(20),
   p_last_name VARCHAR(40),

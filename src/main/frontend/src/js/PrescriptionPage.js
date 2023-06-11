@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import './PrescriptionPage.css';
+import '../css/PrescriptionPage.css';
+import { decodeRoleFromToken } from '../utils/tokenUtils';
 
 function PrescriptionPage() {
   const [medicineName, setMedicineName] = useState('');
   const [dosage, setDosage] = useState('');
-  const [prescriptions, setPrescriptions] = useState([]);
   const [medicineData, setMedicineData] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
+  const [prescriptions, setPrescriptions] = useState([]);
 
   const navigate = useNavigate();
   const { visitId } = useParams();
@@ -19,25 +20,55 @@ function PrescriptionPage() {
       .catch((error) => console.log(error));
   }, []);
 
-  const handleFormSubmit = (event) => {
+  useEffect(() => {
+    fetch(`http://localhost:8080/visits/prescription/visit-id=${visitId}`)
+      .then((response) => response.json())
+      .then((data) => {
+        const updatedPrescriptions = data.map((prescription) => {
+          const matchedMedicine = medicineData.find((medicine) => medicine.id === prescription.med_id);
+          return {
+            ...prescription,
+            medicine: matchedMedicine ? matchedMedicine.name : 'Unknown',
+          };
+        });
+        setPrescriptions(updatedPrescriptions);
+      })
+      .catch((error) => console.log(error));
+  }, [visitId, medicineData]);
+
+  const handleFormSubmit = async (event) => {
     event.preventDefault();
 
     const selectedMedicine = medicineData.find((medicine) => medicine.name === medicineName);
 
     if (selectedMedicine) {
-      const newPrescription = {
-        medicineName,
-        medicineType: selectedMedicine.type,
-        medicineCompany: selectedMedicine.company,
-        dosage,
+      const prescriptionData = {
+        id_visit: visitId,
+        med_id: selectedMedicine.id,
+        amount: 1,
         price: selectedMedicine.basePrice,
-        id: Date.now().toString()
+        dosing: dosage,
       };
 
-      setPrescriptions([...prescriptions, newPrescription]);
+      try {
+        const response = await fetch('http://localhost:8080/visits/prescription', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(prescriptionData),
+        });
+
+        const data = await response.json();
+        console.log(data);
+
+        const updatedPrescriptions = [...prescriptions, { ...data, medicine: selectedMedicine.name }];
+        setPrescriptions(updatedPrescriptions);
+      } catch (error) {
+        console.log(error);
+      }
     }
 
-    // Reset form inputs
     setMedicineName('');
     setDosage('');
     setSuggestions([]);
@@ -45,11 +76,6 @@ function PrescriptionPage() {
 
   const handleCancel = () => {
     navigate('/vetPage');
-  };
-
-  const handleRemovePrescription = (id) => {
-    const updatedPrescriptions = prescriptions.filter((prescription) => prescription.id !== id);
-    setPrescriptions(updatedPrescriptions);
   };
 
   const handleInputChange = (event) => {
@@ -66,9 +92,25 @@ function PrescriptionPage() {
     setSuggestions([]);
   };
 
-  const handlePrintPrescription = () => {
-    navigate('/vetPage');
+  const handleDeletePrescription = (prescriptionId) => {
+    fetch(`http://localhost:8080/visits/prescription/id=${prescriptionId}`, {
+      method: 'DELETE',
+    })
+      .then(() => {
+        const updatedPrescriptions = prescriptions.filter((prescription) => prescription.id !== prescriptionId);
+        setPrescriptions(updatedPrescriptions);
+      })
+      .catch((error) => console.log(error));
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const role = decodeRoleFromToken(token);
+
+    if (role !== 'admin' && role !== 'employee') {
+      navigate('/');
+    }
+  }, []);
 
   return (
     <div className="prescription-page">
@@ -116,48 +158,23 @@ function PrescriptionPage() {
           <button type="button" className="cancel-button" onClick={handleCancel}>
             Exit
           </button>
-          {prescriptions.length > 0 && (
-            <button type="button" className="print-button" onClick={handlePrintPrescription}>
-              Print Prescription
-            </button>
-          )}
         </div>
       </form>
 
-      {prescriptions.length > 0 && (
-        <div className="prescription-list">
-          <h3>Prescriptions:</h3>
-          <ul>
-            {prescriptions.map((prescription) => (
-              <li key={prescription.id} className="prescription-item">
-                <div className="prescription-item-details">
-                  <div>
-                    <strong>Medicine Name:</strong> {prescription.medicineName}
-                  </div>
-                  <div>
-                    <strong>Medicine Type:</strong> {prescription.medicineType}
-                  </div>
-                  <div>
-                    <strong>Medicine Company:</strong> {prescription.medicineCompany}
-                  </div>
-                  <div>
-                    <strong>Dosage:</strong> {prescription.dosage}
-                  </div>
-                  <div>
-                    <strong>Price:</strong> ${prescription.price.toFixed(2)}
-                  </div>
-                </div>
-                <button
-                  className="cancel-prescription-item"
-                  onClick={() => handleRemovePrescription(prescription.id)}
-                >
-                  Cancel
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      <div className="prescriptions-list">
+        <h3>Existing Prescriptions:</h3>
+        {prescriptions.map((prescription) => (
+          <div className="prescription-item" key={prescription.id}>
+            <div className="medicine-info">
+              <p>Medicine: {prescription.medicine}</p>
+              <p>Dosage: {prescription.dosing}</p>
+            </div>
+            <button className="cancel-button" onClick={() => handleDeletePrescription(prescription.id)}>
+              Delete
+            </button>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

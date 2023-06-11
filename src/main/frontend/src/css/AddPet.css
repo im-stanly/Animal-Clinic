@@ -1,0 +1,49 @@
+.add-pet-form-container {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.add-pet-form-container h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.add-pet-form-container form {
+  display: flex;
+  flex-direction: column;
+}
+
+.add-pet-form-container div {
+  margin-bottom: 15px;
+}
+
+.add-pet-form-container label {
+  font-weight: bold;
+}
+
+.add-pet-form-container input[type="text"],
+.add-pet-form-container input[type="number"],
+.add-pet-form-container select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.add-pet-form-container input[type="checkbox"] {
+  margin-top: 5px;
+}
+
+.add-pet-form-container button[type="submit"] {
+  padding: 10px 16px;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.add-pet-form-container button[type="submit"]:hover {
+  background-color: #45a049;
+}

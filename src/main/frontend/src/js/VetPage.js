@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './VetPage.css';
+import '../css/VetPage.css';
+import { decodeRoleFromToken } from '../utils/tokenUtils';
 
 function VetPage() {
   const [token, setToken] = useState(localStorage.getItem('token'));
@@ -8,18 +9,6 @@ function VetPage() {
   const [vetVisits, setVetVisits] = useState([]);
   const navigate = useNavigate();
   const sortedVisits = vetVisits.sort((a, b) => new Date(a.visit_time) - new Date(b.visit_time));
-
-  function decodeRoleFromToken(token) {
-    try {
-      const tokenParts = token.split('.');
-      const payload = JSON.parse(atob(tokenParts[1]));
-
-      return payload.role;
-    } catch (error) {
-      console.error('Token decoding error:', error);
-      return null;
-    }
-  }
 
   function decodeEmailFromToken(token) {
     try {
@@ -59,7 +48,6 @@ function VetPage() {
 
   const fetchVetVisits = (vetId) => {
     const today = new Date().toISOString().split('T')[0];
-    console.log(vetId);
     if (vetId) {
       fetch(`http://localhost:8080/visits/vet-next-visits/id=${vetId}/${today}`)
         .then(response => response.json())
@@ -112,7 +100,14 @@ function VetPage() {
         <p className="no-visits-text">No scheduled visits for today.</p>
       )}
 
-      <button className="logout-button" onClick={handleLogout}>Logout</button>
+      <div className="links">
+        <a className="link" href="/">
+          Go to Home Page
+        </a>
+        <a className="link" onClick={handleLogout}>
+          Logout
+        </a>
+      </div>
     </div>
   );
 }

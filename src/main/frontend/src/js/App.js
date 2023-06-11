@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import './App.css';
+import '../css/App.css';
 import { useNavigate } from 'react-router-dom';
+import { decodeRoleFromToken } from '../utils/tokenUtils';
 
 function App() {
   const [showLogin, setShowLogin] = useState(false);
@@ -9,6 +10,7 @@ function App() {
   const [searchData, setSearchData] = useState({ specialization: '', date: '' });
   const [token, setToken] = useState(null);
   const [funFact, setFunFact] = useState('');
+  const [role, setRole] = useState('');
   const navigate = useNavigate();
 
   const handleLoginClick = () => {
@@ -29,18 +31,6 @@ function App() {
     setSearchData({ ...searchData, [name]: value });
   };
 
-  function decodeRoleFromToken(token) {
-    try {
-      const tokenParts = token.split('.');
-      const payload = JSON.parse(atob(tokenParts[1]));
-
-      return payload.role;
-    } catch (error) {
-      console.error('Token decoding error:', error);
-      return null;
-    }
-  }
-
   const handleLoginSubmit = async (event) => {
     event.preventDefault();
 
@@ -60,14 +50,7 @@ function App() {
         setToken(data.token);
 
         const role = decodeRoleFromToken(data.token);
-        console.log(role);
-        if (role === 'admin') {
-          navigate('/employees');
-        } else if (role === 'user') {
-          navigate('/userPage');
-        } else if (role === 'employee') {
-          navigate('/vetPage');
-        }
+        setRole(role);
 
         setLoginResult({
           success: true,
@@ -98,6 +81,7 @@ function App() {
   const handleLogout = () => {
     localStorage.removeItem('token');
     setToken(null);
+    setRole('');
   };
 
   useEffect(() => {
@@ -107,11 +91,7 @@ function App() {
       setToken(storedToken);
 
       const role = decodeRoleFromToken(storedToken);
-      if (role === 'admin') {
-        navigate('/employees');
-      } else if (role === 'user') {
-        navigate('/userPage');
-      }
+      setRole(role);
     }
   }, []);
 
@@ -135,14 +115,31 @@ function App() {
     fetchRandomFunFact();
   }, []);
 
+  const handleRedirect = () => {
+    if (role === 'admin') {
+      navigate('/employees');
+    } else if (role === 'employee') {
+      navigate('/vetPage');
+    } else if (role === 'user') {
+      navigate('/userPage');
+    }
+  };
+
+  const handleAddPetClick = () => {
+    navigate('/AddPet');
+  };
+
   return (
     <div className="app-container">
       <header className="header">
         <h1 className="title">Animal Clinic</h1>
         <div className="links">
-          <a className="link" href="/registration">
-            Sign Up
-          </a>
+          {!token ? (
+            <a className="link" href="/registration">
+              Sign Up
+            </a>
+          ) : null}
+
           {!token ? (
             <a className="link" onClick={handleLoginClick}>
               Log In
@@ -152,6 +149,36 @@ function App() {
               Log Out
             </a>
           )}
+          {role === 'admin' && (
+            <a className="link" href="/employees">
+              Employees
+            </a>
+          )}
+          {role === 'employee' && (
+            <a className="link" href="/vetPage">
+              Vet Page
+            </a>
+          )}
+          {(role === 'user' || role === 'employee') && (
+            <a className="link" href="/userPage">
+              User Page
+            </a>
+          )}
+          {(role === 'admin' || role === 'employee') && (
+            <a className="link" href="/AddPet">
+              Add Pet
+            </a>
+          )}
+          {(role === 'admin' || role === 'employee') && (
+            <a className="link" href="/AddPerson">
+              Add Person
+            </a>
+          )}
+          {(role === 'admin' || role === 'employee') && (
+            <a className="link" href="/PetOwners">
+              Add Pet Owner
+            </a>
+          )}
         </div>
       </header>
       <main className="main-content">
@@ -159,6 +186,13 @@ function App() {
           Welcome to our cozy veterinary clinic, where we care about the health and well-being of animals.
         </p>
         <p className="fun-fact">Fun fact of the day: {funFact}</p>
+        <div className="search-vets-button">
+          {(role === 'admin' || role === 'employee') && (
+            <a className="link" href="/vets">
+              Schedule Appointment
+            </a>
+          )}
+        </div>
         <img className="animal-image" src="/animal-image.png" alt="Animal" />
         <p className="contact-info">
           Contact us at phone number: 123-456-789 or via email address: info@animalclinic.com
@@ -195,9 +229,7 @@ function App() {
           </div>
         </div>
       )}
-      <footer className="footer">
-        &copy; {new Date().getFullYear()} Animal Clinic. All rights reserved.
-      </footer>
+      <footer className="footer">&copy; {new Date().getFullYear()} Animal Clinic. All rights reserved.</footer>
     </div>
   );
 }

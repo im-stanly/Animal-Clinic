@@ -18,7 +18,7 @@ public class PersonRepository implements RepoInterface {
     private final String TABLE_NAME = "Persons";
 
     public List<PersonsModel> getPersons(){
-        return jdbcTemplate.query(GET_PERSON_PROPERTIES_SQL + " LIMIT 20",
+        return jdbcTemplate.query(GET_PERSON_PROPERTIES_SQL,
                 BeanPropertyRowMapper.newInstance(PersonsModel.class));
     }
     public PersonsModel getById(int id){
