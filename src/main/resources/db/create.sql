@@ -1152,7 +1152,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-DROP VIEW EmployeeDetails;
+DROP VIEW IF EXISTS EmployeeDetails;
 CREATE VIEW EmployeeDetails AS
 SELECT e.id, p.first_name, p.last_name, pos.name AS position, p.email, e.salary,
     e.date_start, e.date_fire, calculate_vet_rating(p.id) AS rating
@@ -1160,7 +1160,7 @@ FROM Employees e
 JOIN Persons p ON e.person_id = p.id
 JOIN Positions pos ON e.position = pos.id;
 
-DROP VIEW VetSchedule;
+DROP VIEW IF EXISTS VetSchedule;
 CREATE VIEW VetSchedule AS
 SELECT v.id, p.first_name, p.last_name, vs.name AS specialization
 FROM Employees e
