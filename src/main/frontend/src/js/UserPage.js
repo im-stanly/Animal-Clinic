@@ -22,7 +22,7 @@ function UserPage() {
 
   useEffect(() => {
     if (!token || (decodeRoleFromToken(token) !== 'user' && decodeRoleFromToken(token) !== 'employee')) {
-      navigate('/');
+      navigate('/NotFoundPage');
     } else {
       fetchUserData();
     }

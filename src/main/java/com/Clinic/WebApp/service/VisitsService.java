@@ -41,16 +41,16 @@ public class VisitsService {
     public int addPrescription(PrescriptionsModel prescription){
         return visitsRepository.savePrescription(prescription);
     }
-    public int save(List<VisitsModel> medicineModels){
-        return visitsRepository.save(medicineModels);
+    public int save(VisitsModel visit){
+        return visitsRepository.save(visit);
     }
 
-    public int patch(int id, VisitsModel medicine){
-        return updateOrPatch(id, medicine, true);
+    public int patch(int id, VisitsModel visit){
+        return updateOrPatch(id, visit, true);
     }
 
-    public int update(int id, VisitsModel medicine){
-        return updateOrPatch(id, medicine, false);
+    public int update(int id, VisitsModel visit){
+        return updateOrPatch(id, visit, false);
     }
     public int delete(int id){
         return visitsRepository.delete(id);

@@ -23,10 +23,8 @@ function VetPage() {
   }
 
   useEffect(() => {
-    if (!token) {
-      navigate('/');
-    } else if (decodeRoleFromToken(token) !== 'employee') {
-      navigate('/');
+    if (!token || decodeRoleFromToken(token) !== 'employee') {
+      navigate('/NotFoundPage');
     } else {
       fetchUserData();
     }

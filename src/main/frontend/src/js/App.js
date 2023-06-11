@@ -56,6 +56,8 @@ function App() {
           success: true,
           message: 'Logged in successfully.'
         });
+
+        setShowLogin(false); // Ukrycie panelu logowania po udanym zalogowaniu
       } else if (response.status === 401) {
         setLoginResult({
           success: false,
@@ -114,16 +116,6 @@ function App() {
   useEffect(() => {
     fetchRandomFunFact();
   }, []);
-
-  const handleRedirect = () => {
-    if (role === 'admin') {
-      navigate('/employees');
-    } else if (role === 'employee') {
-      navigate('/vetPage');
-    } else if (role === 'user') {
-      navigate('/userPage');
-    }
-  };
 
   const handleAddPetClick = () => {
     navigate('/AddPet');

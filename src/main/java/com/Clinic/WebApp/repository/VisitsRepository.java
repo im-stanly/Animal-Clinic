@@ -25,12 +25,12 @@ public class VisitsRepository implements RepoInterface{
 
     public List<VisitsModel> getPetVisitsHistory(int petID){
         return jdbcTemplate.query(GET_VISITS_PROPERTIES_SQL +
-                        " WHERE pet_id = ? AND visit_date < (SELECT NOW())",
+                        " WHERE pet_id = ? AND visit_date < (CURRENT_TIMESTAMP - INTERVAL '1 day')",
                 BeanPropertyRowMapper.newInstance(VisitsModel.class), petID);
     }
 
     public List<VisitsModel> getPetsNextVisits(int id){
-        return getNextVisits("pet_id", id, " >= (SELECT NOW())");
+        return getNextVisits("pet_id", id, " >= (CURRENT_TIMESTAMP - INTERVAL '1 day')");
     }
 
     public int savePrescription(PrescriptionsModel pres){
@@ -58,14 +58,13 @@ public class VisitsRepository implements RepoInterface{
         return getRecordByKind(jdbcTemplate, GET_PRESCRIPTION_PROPERTIES_SQL,
                 "Prescriptions", PrescriptionsModel.class, "id_visit", id);
     }
-    public int save(List<VisitsModel> visits){
-        visits.forEach( singlePer ->
-                jdbcTemplate.update(
-                        "INSERT INTO Visits(pet_id, vet_id, visit_date, visit_time, type_id, description, rate) VALUES(?, ?, ?, ?, ?, ?, ?)",
-                        singlePer.getPet_id(), singlePer.getVet_id(), singlePer.getVisit_date(),
-                        singlePer.getVisit_time(), singlePer.getType_id(), singlePer.getDescription(),
-                        singlePer.getRate()
-                ));
+    public int save(VisitsModel visit){
+        jdbcTemplate.update(
+                "INSERT INTO Visits(pet_id, vet_id, visit_date, visit_time, type_id, description, rate) VALUES(?, ?, ?, ?, ?, ?, ?)",
+                visit.getPet_id(), visit.getVet_id(), visit.getVisit_date(),
+                visit.getVisit_time(), visit.getType_id(), visit.getDescription(),
+                visit.getRate()
+        );
         return 202;
     }
 

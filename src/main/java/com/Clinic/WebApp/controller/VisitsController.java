@@ -44,7 +44,7 @@ public class VisitsController {
     }
 
     @PostMapping("")
-    public int add(@RequestBody List<VisitsModel> newVisit){
+    public int add(@RequestBody VisitsModel newVisit){
         return visitsService.save(newVisit);
     }
 

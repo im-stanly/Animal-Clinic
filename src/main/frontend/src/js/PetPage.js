@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import '../css/PetPage.css';
+import { decodeRoleFromToken } from '../utils/tokenUtils';
 
 function PetPage() {
   const { petId } = useParams();

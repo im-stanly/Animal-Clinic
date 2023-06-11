@@ -10,7 +10,7 @@ const EmployeeList = () => {
 
   useEffect(() => {
     if (!token || decodeRoleFromToken(token) !== 'admin') {
-      navigate("/");
+      navigate("/NotFoundPage");
     } else {
       fetchEmployees();
     }
@@ -143,8 +143,6 @@ const EmployeeList = () => {
       console.error(error);
     }
   };
-
-
 
   return (
     <div className="employee-list-container">

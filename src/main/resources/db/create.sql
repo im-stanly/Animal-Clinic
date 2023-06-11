@@ -179,14 +179,14 @@ CREATE TABLE Vets_Specialities (
 );
 
 DROP TYPE IF EXISTS PERMISSION_TYPE CASCADE;
-CREATE TYPE PERMISSION_TYPE AS ENUM ('ADMIN', 'EMPLOYEE', 'USER');
+CREATE TYPE PERMISSION_TYPE AS ENUM ('admin', 'employee', 'user');
 
 CREATE TABLE Accounts (
     id              SERIAL          PRIMARY KEY,
     email           VARCHAR(255)    NOT NULL UNIQUE,
     username        VARCHAR(50)     NOT NULL UNIQUE,
     password        VARCHAR(250)    NOT NULL,
-    user_permissions VARCHAR(10)   DEFAULT 'USER'
+    user_permissions VARCHAR(10)   DEFAULT 'user'
 );
 
 COPY Persons (first_name, last_name, address, city, telephone, email, fav_animal) FROM stdin (Delimiter ',');
@@ -194,7 +194,7 @@ David, O Connor,65 Hudson St,Dulford,070218230685,daveoc@gmail.com,Firefly
 Elisabeth,Kowalski,79 Holgate Rd,Rannoch School,07789721317,LizSmith743@yahoo.com,Dog
 Rishi,Sunak,10 Downing St,London,02072195437,rishi.sunak.mp@parliament.uk,Penguin
 Barbara,Richards,90 Balsham St,Harrogate,07017505023,barbararichards1937@gmail.com,Cobra
-Boris,Jansen,52 Holgate Rd, Rainham, 07924955449, bojoforpm@gmail.com,Narwhale
+Boris,Jansen,52 Holgate Rd, Rainham, 07924955449,bojoforpm@gmail.com,Narwhale
 Mahava,Punja,7 Church Way,Bradfield,07751675751,mahpun@yahoo.com,Hedgehog
 Bernard,Rodriguez,74 Great North Road,Alticry,07025371694,bendriguez17@yahoo.com,Platypus
 Barry,British,24 St Andrews Lane,Dail Mor,07887136485,scoresamgowls@gmail.com,Rhinoceros
@@ -1017,42 +1017,42 @@ COPY Pet_Owners (Pet_id, Person_id, Org_id, Period_start, Period_end) FROM stdin
 2,\N,3,2021-03-01,\N
 4,\N,1,2019-08-10,2022-12-31
 6,2,\N,2020-05-15,\N
-1,\N,2,2018-12-01,2021-09-30
-3,1,\N,2017-06-20,2023-03-31
-5,\N,3,2019-01-15,\N
-7,3,\N,2022-04-10,2023-11-30
-2,\N,3,2021-03-01,\N
-4,\N,1,2019-08-10,2022-12-31
-6,2,\N,2020-05-15,\N
-1,\N,2,2018-12-01,2021-09-30
-3,1,\N,2017-06-20,2023-03-31
-5,\N,3,2019-01-15,\N
-7,3,\N,2022-04-10,2023-11-30
-3,\N,2,2018-11-15,2022-09-30
-4,\N,3,2019-05-10,\N
-5,2,\N,2020-08-01,2023-04-30
-6,\N,1,2017-04-25,2022-08-31
-2,1,\N,2019-01-05,\N
-7,\N,2,2021-02-10,2023-12-31
-1,3,\N,2018-06-20,2021-11-30
-2,12,\N,2022-01-01,\N
-4,\N,6,2021-08-15,2023-03-31
-6,25,\N,2019-05-10,\N
-1,\N,9,2020-12-01,2022-09-30
-3,14,\N,2018-06-20,\N
-5,\N,2,2019-11-15,\N
-7,19,\N,2021-03-10,2023-12-31
-3,\N,15,2018-11-15,2022-09-30
+11,\N,2,2018-12-01,2021-09-30
+13,1,\N,2017-06-20,2023-03-31
+15,\N,3,2019-01-15,\N
+17,3,\N,2022-04-10,2023-11-30
+12,\N,3,2021-03-01,\N
+14,\N,1,2019-08-10,2022-12-31
+16,2,\N,2020-05-15,\N
+11,\N,2,2018-12-01,2021-09-30
+13,1,\N,2017-06-20,2023-03-31
+25,\N,3,2019-01-15,\N
+27,3,\N,2022-04-10,2023-11-30
+23,\N,2,2018-11-15,2022-09-30
+24,\N,3,2019-05-10,\N
+25,2,\N,2020-08-01,2023-04-30
+26,\N,1,2017-04-25,2022-08-31
+22,1,\N,2019-01-05,\N
+27,\N,2,2021-02-10,2023-12-31
+21,3,\N,2018-06-20,2021-11-30
+32,12,\N,2022-01-01,\N
+34,\N,6,2021-08-15,2023-03-31
+36,25,\N,2019-05-10,\N
+31,\N,9,2020-12-01,2022-09-30
+33,14,\N,2018-06-20,\N
+35,\N,2,2019-11-15,\N
+37,19,\N,2021-03-10,2023-12-31
+30,\N,15,2018-11-15,2022-09-30
 4,\N,10,2020-05-10,\N
 5,24,\N,2019-08-01,2023-04-30
 6,\N,8,2017-04-25,2022-08-31
 2,23,\N,2019-01-05,\N
 7,\N,6,2021-02-10,2023-12-31
-1,15,\N,2018-06-20,2021-11-30
+10,15,\N,2018-06-20,2021-11-30
 2,18,\N,2021-01-01,\N
 4,\N,12,2019-08-15,2022-03-31
 6,29,\N,2020-06-10,\N
-1,\N,8,2018-12-01,2021-09-30
+10,\N,8,2018-12-01,2021-09-30
 3,25,\N,2017-06-20,\N
 5,\N,2,2019-01-15,2023-04-30
 7,9,\N,2022-02-10,2023-11-30
@@ -1120,11 +1120,12 @@ COPY Accounts(email,username,password,user_permissions) FROM stdin (Delimiter ',
 rishi.sunak.mp@parliament.uk,rishi.sunak,d701a5343fa2bcaef5aaf79c4e325c7c987e08ebb3558b40df097a28605cf84c,employee
 bojoforpm@gmail.com,boris.jansen,5f4526ea50df81ea950beb4e5634b4c7fc339f2c9db2a78c4393a7b034e453ed,employee
 mahpun@yahoo.com,mahava.punja,ad751879245cdf85f51b8efe4cdea7de430b9ff97fd05646eb83c30c4365b41f,employee
-elizabethbrown@example.com,elizabeth.brown,7f7a6ede61d3c1f70d2ba9c5bd0185a64564833aba3ba072fb5146a6b68ed6b4,employee
-williammiller@example.com,william.miller,3e45a331bc734dcfd6e2a2c0819f1a07aa2af203f9569fc18ef0380678152d39,employee
+buchmanna@gmail.com,anna.buchmann,51fdba97d8161d35e15b85dcfb3e5b5548589175232b3dedf316cad0d3fd9228,employee
+danielwilson@example.com,daniel.wilson,430579e231aaf3b8cc78889fe9dae4c805aa5042b97478854de9ffb4e853a6e5,employee
+oliviataylor@example.com,olivia.taylor,0f9c774876349a4dac3258449793dd96ede87ba6f6ef136cbf572d76b7df0d39,employee
+matthewanderson@example.com,matthew.anderson,575069fa4cfeb351b234d2e44f87ea55f36be16c0564d4e5f342a5d57c4241a9,employee
+robertjohnson@example.com,robert.johnson,aa2b49b651c0c9cdd1957170154a2e286f4d595503737a55e01a1ec27b754d4b,employee
 jenniferdavis@example.com,jennifer.davis,e4190161c79ab161130e6b339d11417dad81c9706ef7f909425fba3c1d906859,employee
-davidtaylor@example.com,david.taylor,2ce7251a977eb9a4f0efc15eda3d619b8c5de0100d6d33f501c6f31940dcca6d,employee
-bobsteve@yahoo.com,bobby.steve,55467e6d917123837623bbc776a0e417dff63a9ebb77ef95a1f79ceb56e9ba01,employee
 admin@wp.pl,admin,8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918,admin
 \.
 

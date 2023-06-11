@@ -1,6 +1,7 @@
 package com.Clinic.WebApp.controller;
 
 import com.Clinic.WebApp.model.VetScheduleModelDTO;
+import com.Clinic.WebApp.model.WorkHoursModel;
 import com.Clinic.WebApp.service.VetScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,5 +21,9 @@ public class VetScheduleController {
     @GetMapping("/specializations={specialization}")
     public List<VetScheduleModelDTO> getSpecialization(@PathVariable("specialization") String specialization){
         return vetScheduleService.getSpecialization(specialization);
+    }
+    @GetMapping("/workhours/id={id}")
+    public List<WorkHoursModel> getWorkHours(@PathVariable("id") int employee_id) {
+        return vetScheduleService.getWorkHours(employee_id);
     }
 }
