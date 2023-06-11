@@ -15,6 +15,7 @@ import AddPerson from './js/AddPerson';
 import PetOwners from './js/PetOwners';
 import AddVisit from './js/AddVisit';
 import NotFoundPage from './js/NotFoundPage';
+import Charts from './js/Charts';
 import './css/index.css';
 
 ReactDOM.render(
@@ -33,6 +34,7 @@ ReactDOM.render(
       <Route path="/AddPerson" element={<AddPerson />} />
       <Route path="/PetOwners" element={<PetOwners />} />
       <Route path="/AddVisit/:vetId" element={<AddVisit />} />
+      <Route path="/Charts" element={<Charts />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   </BrowserRouter>,

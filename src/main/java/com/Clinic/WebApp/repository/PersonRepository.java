@@ -2,6 +2,7 @@ package com.Clinic.WebApp.repository;
 
 import com.Clinic.WebApp.exception.NotFoundException;
 import com.Clinic.WebApp.model.PersonsModel;
+import com.Clinic.WebApp.model.PetOwnerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -38,6 +39,14 @@ public class PersonRepository implements RepoInterface {
                     singlePer.getFirst_name(), singlePer.getLast_name(), singlePer.getAddress(),
                     singlePer.getCity(), singlePer.getTelephone(), singlePer.getEmail(), singlePer.getFavAnimal()
             ));
+        return 202;
+    }
+
+    public int addOwner(PetOwnerDTO newOwner) {
+        jdbcTemplate.update(
+                        "INSERT INTO Pet_Owners(Pet_id, Person_id, Period_start) VALUES(?, ?, CURRENT_DATE)",
+                            newOwner.getPet_id(), newOwner.getPerson_id()
+        );
         return 202;
     }
 

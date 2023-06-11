@@ -146,6 +146,11 @@ function App() {
               Employees
             </a>
           )}
+          {role === 'ADMIN' && (
+            <a className="link" href="/Charts">
+              Charts
+            </a>
+          )}
           {role === 'EMPLOYEE' && (
             <a className="link" href="/vetPage">
               Vet Page

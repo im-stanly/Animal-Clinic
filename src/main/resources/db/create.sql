@@ -1152,6 +1152,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP VIEW EmployeeDetails;
 CREATE VIEW EmployeeDetails AS
 SELECT e.id, p.first_name, p.last_name, pos.name AS position, p.email, e.salary,
     e.date_start, e.date_fire, calculate_vet_rating(p.id) AS rating
@@ -1159,6 +1160,7 @@ FROM Employees e
 JOIN Persons p ON e.person_id = p.id
 JOIN Positions pos ON e.position = pos.id;
 
+DROP VIEW VetSchedule;
 CREATE VIEW VetSchedule AS
 SELECT v.id, p.first_name, p.last_name, vs.name AS specialization
 FROM Employees e
@@ -1169,6 +1171,7 @@ WHERE e.date_fire IS NULL;
 
 ----DAWANIE UPRAWNIEN
 
+DROP FUNCTION IF EXISTS grant_permissions;
 CREATE OR REPLACE FUNCTION grant_permissions(account_id INT, permission_type VARCHAR(10))
 RETURNS VOID AS $$
 BEGIN
@@ -1181,6 +1184,7 @@ $$ LANGUAGE plpgsql;
 
 --CZY DOKTOR DOSTEPNY W PRZEDZIALE CZASU
 
+DROP FUNCTION IF EXISTS check_doctor_availability;
 CREATE OR REPLACE FUNCTION check_doctor_availability(
     spec_name VARCHAR(50),
     start_date DATE,
@@ -1208,6 +1212,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- DODAJ PRACOWNIKA FUNKCJA
+DROP FUNCTION IF EXISTS add_employee_with_person;
 CREATE OR REPLACE FUNCTION add_employee_with_person(
   p_first_name VARCHAR(20),
   p_last_name VARCHAR(40),

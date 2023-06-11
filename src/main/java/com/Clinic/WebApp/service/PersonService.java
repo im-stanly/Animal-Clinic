@@ -1,6 +1,7 @@
 package com.Clinic.WebApp.service;
 
 import com.Clinic.WebApp.model.PersonsModel;
+import com.Clinic.WebApp.model.PetOwnerDTO;
 import com.Clinic.WebApp.model.PetsModel;
 import com.Clinic.WebApp.repository.PersonRepository;
 import com.Clinic.WebApp.repository.PetsRepository;
@@ -48,6 +49,8 @@ public class PersonService {
     public int save(List<PersonsModel> personsModels){
         return personRepository.save(personsModels);
     }
+
+    public int addOwner(PetOwnerDTO newOwner) { return personRepository.addOwner(newOwner); }
 
     public int patch(int id, PersonsModel person){
         return updateOrPatch(id, person, true);

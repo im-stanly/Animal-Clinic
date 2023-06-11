@@ -1,6 +1,7 @@
 package com.Clinic.WebApp.controller;
 
 import com.Clinic.WebApp.model.PersonsModel;
+import com.Clinic.WebApp.model.PetOwnerDTO;
 import com.Clinic.WebApp.model.PetsModel;
 import com.Clinic.WebApp.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,9 @@ public class PersonController {
     public int add(@RequestBody List<PersonsModel> newPerson){
         return personService.save(newPerson);
     }
+
+    @PostMapping("/add-pet")
+    public int add(@RequestBody PetOwnerDTO newOwner) { return personService.addOwner(newOwner); }
 
     @PatchMapping("/id={id}")
     public int patch(@PathVariable("id") int id, @RequestBody PersonsModel newPerson){
