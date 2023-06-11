@@ -9,7 +9,7 @@ const EmployeeList = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!token || decodeRoleFromToken(token) !== 'admin') {
+    if (!token || decodeRoleFromToken(token) !== 'ADMIN') {
       navigate("/NotFoundPage");
     } else {
       fetchEmployees();
@@ -119,12 +119,12 @@ const EmployeeList = () => {
   const handlePermissionChange = async (event) => {
     event.preventDefault();
 
-    const personId = event.target.elements.employeeId.value;
+    const id = event.target.elements.id.value;
     const permissionLevel = event.target.elements.permissionLevel.value;
 
     try {
       const data = {
-        person_id: personId,
+        id: id,
         permissionLevel: permissionLevel
       };
 
@@ -207,11 +207,11 @@ const EmployeeList = () => {
 
       <h2>Assign Permissions</h2>
       <form className="assign-permission-form" onSubmit={handlePermissionChange}>
-        <label htmlFor="employeeId">Account ID:</label>
+        <label htmlFor="id">ID:</label>
         <input
           type="text"
-          id="employeeId"
-          name="employeeId"
+          id="id"
+          name="id"
           required
         />
         <label htmlFor="permissionLevel">Permission Level:</label>
@@ -220,9 +220,9 @@ const EmployeeList = () => {
           id="permissionLevel"
           required
         >
-          <option value="user">User</option>
-          <option value="employee">Employee</option>
-          <option value="admin">Administrator</option>
+          <option value="USER">User</option>
+          <option value="EMPLOYEE">Employee</option>
+          <option value="ADMIN">Administrator</option>
         </select>
         <button type="submit">Assign Permissions</button>
       </form>

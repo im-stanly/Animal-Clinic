@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import '../css/PetPage.css';
-import { decodeRoleFromToken } from '../utils/tokenUtils';
 
 function PetPage() {
   const { petId } = useParams();
@@ -110,12 +109,6 @@ function PetPage() {
                 <p><strong>Date:</strong> {visit.visit_date}</p>
                 <p><strong>Reason:</strong> {visit.description}</p>
                 <p><strong>Doctor:</strong> {visit.vet_id}</p>
-                <button
-                  className="prescription-button"
-                  onClick={() => handleViewPrescription(visit.id)}
-                >
-                  View Prescription
-                </button>
               </li>
             ))}
           </ul>

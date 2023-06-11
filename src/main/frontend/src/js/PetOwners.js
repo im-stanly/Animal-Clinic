@@ -11,7 +11,7 @@ const AddPetOwner = () => {
   const navigate = useNavigate();
   const [token, setToken] = useState(localStorage.getItem('token'));
   useEffect(() => {
-    if (!token || decodeRoleFromToken(token) !== 'employee') {
+    if (!token || decodeRoleFromToken(token) !== 'EMPLOYEE') {
       navigate('/NotFoundPage');
     }
   }, [token]);
