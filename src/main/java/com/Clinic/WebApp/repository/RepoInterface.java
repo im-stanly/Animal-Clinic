@@ -1,7 +1,6 @@
 package com.Clinic.WebApp.repository;
 
 import com.Clinic.WebApp.exception.NotFoundException;
-import lombok.var;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 

@@ -19,7 +19,7 @@
     </Appenders>
     <Loggers>
         <!--  to control the logging level of the agent log files, change "level" attribute. level="all|trace|debug|info|warn|error"-->
-        <Root level="DEBUG">
+        <Root level="info">
             <AppenderRef ref="Console" />
             <AppenderRef ref="RollingFile" />
         </Root>
