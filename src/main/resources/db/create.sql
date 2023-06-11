@@ -1164,7 +1164,8 @@ SELECT v.id, p.first_name, p.last_name, vs.name AS specialization
 FROM Employees e
 JOIN Persons p ON e.person_id = p.id
 JOIN Vets v ON v.id = e.id
-JOIN Vets_Specialities vs ON vs.vet_id = v.id;
+JOIN Vets_Specialities vs ON vs.vet_id = v.id
+WHERE e.date_fire IS NULL;
 
 ----DAWANIE UPRAWNIEN
 
