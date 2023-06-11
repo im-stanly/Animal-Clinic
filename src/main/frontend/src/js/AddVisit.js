@@ -1,10 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { decodeRoleFromToken } from '../utils/tokenUtils';
 import '../css/AddVisit.css';
 
 const AddVisitForm = () => {
   const navigate = useNavigate();
   const vet_id = window.location.pathname.split('/').pop();
+  const [token, setToken] = useState(localStorage.getItem('token'));
+
+  useEffect(() => {
+    if (!token || (decodeRoleFromToken(token) !== 'employee' && decodeRoleFromToken(token) !== 'admin')) {
+      navigate('/NotFoundPage');
+    }
+  }, [token]);
 
   const [formData, setFormData] = useState({
     pet_id: 0,

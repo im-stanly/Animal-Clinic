@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { decodeRoleFromToken } from '../utils/tokenUtils';
 import '../css/AddPet.css';
 
 const AddPetForm = () => {
@@ -14,6 +15,13 @@ const AddPetForm = () => {
   });
 
   const navigate = useNavigate();
+  const [token, setToken] = useState(localStorage.getItem('token'));
+
+  useEffect(() => {
+    if (!token || (decodeRoleFromToken(token) !== 'employee' && decodeRoleFromToken(token) !== 'admin')) {
+      navigate('/NotFoundPage');
+    }
+  }, [token]);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;

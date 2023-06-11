@@ -108,7 +108,7 @@ function PrescriptionPage() {
     const role = decodeRoleFromToken(token);
 
     if (role !== 'admin' && role !== 'employee') {
-      navigate('/');
+      navigate('/NotFoundPage');
     }
   }, []);
 

@@ -14,7 +14,7 @@ const SpecializationSelector = ({ specializations, onSpecializationChange }) => 
 
   useEffect(() => {
     if (!token || (decodeRoleFromToken(token) !== 'employee' && decodeRoleFromToken(token) !== 'admin')) {
-      navigate('/');
+      navigate('/NotFoundPage');
     }
   }, [token]);
 

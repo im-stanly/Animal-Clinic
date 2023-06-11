@@ -24,7 +24,7 @@ function VetPage() {
 
   useEffect(() => {
     if (!token || decodeRoleFromToken(token) !== 'employee') {
-      navigate('/');
+      navigate('/NotFoundPage');
     } else {
       fetchUserData();
     }
