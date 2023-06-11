@@ -37,7 +37,7 @@ const AddVisitForm = () => {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify([visitData])
+        body: JSON.stringify(visitData)
       });
 
       console.log('Data sent:', JSON.stringify(visitData));
