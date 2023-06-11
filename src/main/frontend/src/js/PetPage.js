@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import '../css/PetPage.css';
+import { decodeRoleFromToken } from '../utils/tokenUtils';
 
 function PetPage() {
   const { petId } = useParams();
@@ -10,6 +11,8 @@ function PetPage() {
   const [nextVisits, setNextVisits] = useState([]);
   const [showVisitHistory, setShowVisitHistory] = useState(false);
   const [showNextVisits, setShowNextVisits] = useState(false);
+  const [ratings, setRatings] = useState({});
+  const [token, setToken] = useState(localStorage.getItem('token'));
 
   useEffect(() => {
     fetchPetData();
@@ -54,6 +57,40 @@ function PetPage() {
     navigate(`/PrescriptionListPage/${visitId}`);
   };
 
+  const handleRatingChange = (visitId, rating) => {
+    setRatings(prevState => ({
+      ...prevState,
+      [visitId]: rating,
+    }));
+  };
+
+  const handleSubmitRating = (visitId) => {
+    const rating = ratings[visitId];
+
+    const requestOptions = {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        id: visitId,
+        rate: rating
+      })
+    };
+
+    console.log('Sending JSON:', requestOptions.body);
+
+    fetch(`http://localhost:8080/visits/id=${visitId}`, requestOptions)
+      .then(response => {
+        if (response.ok) {
+          console.log(`Rating ${rating} submitted for visit ${visitId}`);
+        } else {
+          console.error('Error submitting rating:', response.status);
+        }
+      })
+      .catch(error => console.error('Error submitting rating:', error));
+  };
+
+
+
   return (
     <div className="pet-page">
       <button className="back-button" onClick={goBack}>Go Back</button>
@@ -84,6 +121,24 @@ function PetPage() {
                 <p><strong>Date:</strong> {visit.visit_date}</p>
                 <p><strong>Reason:</strong> {visit.description}</p>
                 <p><strong>Doctor:</strong> {visit.vet_id}</p>
+                {decodeRoleFromToken(token) === 'USER' && (
+                  <>
+                    <input
+                      type="number"
+                      min="1"
+                      max="5"
+                      placeholder="Rate the visit"
+                      value={ratings[visit.id] || ''}
+                      onChange={(e) => handleRatingChange(visit.id, e.target.value)}
+                    />
+                    <button
+                      className="rating-submit-button"
+                      onClick={() => handleSubmitRating(visit.id)}
+                    >
+                      Submit Rating
+                    </button>
+                  </>
+                )}
                 <button
                   className="prescription-button"
                   onClick={() => handleViewPrescription(visit.id)}
