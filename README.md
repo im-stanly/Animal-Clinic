@@ -3,6 +3,8 @@ A sample project to show some skills with the team at uni
 
 ## Prerequisites
 - [Java JDK](https://www.oracle.com/pl/java/technologies/javase-downloads.html) version 11+
+- [Spring Boot](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle) version 3.0.0+
+- [PostgreSQL](https://www.postgresql.org/download) version 13
 
 ## Libraries
 | Library name                                                                                                     | Description                                                                                                                          |
@@ -17,7 +19,7 @@ A sample project to show some skills with the team at uni
 1. Clone this repository to your computer.
 
 2. Set up the PostgreSQL database:
-   - Open the PostgreSQL database management tool.
+   - Open the PostgreSQL database management tool or terminal.
    - Create a new database.
 
 3. Configure the `application.properties` file:
@@ -36,13 +38,14 @@ A sample project to show some skills with the team at uni
    - Use your PostgreSQL database management tool to import the `create.sql` file into the created database. This will set up the necessary schema for the application.
 
 5. Start the Java server:
-   - Go to the root directory of the application in the command line.
+   - Open the terminal and go to the root directory of the application in the command line.
    - Run the command `mvn clean install`
    - Run the command to start the Java application (e.g., `java -jar WebApp.jar`).
 
 6. Start the React application:
-   - Go to the `src/main/frontend` directory.
+   - Open the terminal and go to the `src/main/frontend` directory.
    - Run `npm install` to install the project dependencies.
+   - Run `npm install chart.js react-chartjs-2` and `npm install randomcolor` to install extensions for charts.
    - After the installation is complete, run `npm start` to start the React application.
 
 7. Accessing the application:
